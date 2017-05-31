@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<base href="{baseurl}" />
+
+<title>{webpagetitle}</title>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta data-timeforpageload="{timeforpageload}">
+
+<link href="css/reset.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Comfortaa|Lato|Muli|Varela+Round" rel="stylesheet">
+<link href="css/font.css" rel="stylesheet">
+<link href="css/basic.css" rel="stylesheet">
+<link href="css/moviequack.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<script src="javascript/jqueryui.min.js"></script>
+<script src="javascript/touchpunch.min.js"></script>
+<script src="javascript/typeahead.min.js"></script>
+<script src="javascript/expandelements.js?v=2.1"></script>
+<script src="javascript/functions.js?v=2.1"></script>
+<script src="javascript/emojione.min.js"></script>
+
+</head>
+
+<body>
+
+<div style="{topsearchbarstyle}" class="topsearchbar">
+
+<div class="topmenu">
+<div class="centercontent">
+  <a id="tophomelink" href="">
+<h1 class="inblock">movie<span class="red">quack</span></h1>
+  </a>
+<div class="togglesearch"><i class="material-icons">search</i></div>
+</div>
+</div>
+
+<form style="display:none" id="searchmovieform" method="get" action="searchpage.php">
+  <div class="searchfieldholder">
+    <input id="searchfield" placeholder="search moviequack.com" class="padding typeahead searchfield" type='name' name='q'/>
+  </div>
+<input value="go" class="searchbutton" type="submit"/>
+</form>
+</div>
+
+<nav id="mainnav">
+  <div class="centercontent narrow">
+    <ul>
+      <li><a href=""><i class="material-icons">home</i><span class="navdesc">Home</span></a></li>
+      <li><a href="profile.php"><i class="material-icons">person</i><span class="navdesc">Profile</span></a></li>
+      <li><a href="list.php"><i class="material-icons">list</i><span class="navdesc">Lists</span></a></li>
+      <li><a href="feed.php"><i class="material-icons">forum</i><span class="navdesc">Feed</span></a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="mobilecontent">
+
+
+
+
+
+<div id="main">
+
+
+  {content}
+</div>
+
+</div>
+
+<div style="display:none;" class="selectemoji">
+
+</div>
+
+<footer id="footer" class="footer centeralign grey">
+<h1 class="marginbottom white">movie<span class="grey">quack</span></h1>
+<div class="centercontent">
+<div class="third padding2">Info</div>
+<div class="third padding2">About</div>
+<div class="third padding2">Info</div>
+v0.1
+</div>
+</footer>
+
+</body>
+
+</html>

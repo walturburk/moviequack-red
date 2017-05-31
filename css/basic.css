@@ -1,0 +1,260 @@
+h1, h2, h3, h4 {
+	font-family: 'Varela Round', sans-serif;
+}
+h1 {
+	font-size:2.9em;
+}
+h2 {
+	font-size:2.5em;
+}
+h3 {
+	font-size:2em;
+}
+h4 {
+	font-size:1.5em;
+}
+.round {
+	border-radius:12px;
+}
+.rouded {
+	border-radius:6px;
+}
+.relative {
+	position:relative;
+}
+.textshadow {
+	text-shadow: 0 0 12px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.1);
+}
+.large {
+	font-size:1.2em;
+}
+.xlarge {
+	font-size:1.5em;
+}
+.material-icons.xlarge {
+	font-size:2em;
+}
+.small {
+	font-size:14px;
+}
+.margin {
+	margin:16px;
+}
+.margin0 {
+	margin:8px;
+}
+.margintop {
+	margin-top:16px !IMPORTANT;
+}
+.margintop0 {
+	margin-top:8px;
+}
+.marginbottom0 {
+	margin-bottom:8px;
+}
+.marginbottom {
+	margin-bottom:16px;
+}
+.marginleft {
+	margin-left:16px;
+}
+.marginright {
+	margin-right:16px;
+}
+.marginright0 {
+	margin-right:8px;
+}
+.paddingtop {
+	padding-top:16px;
+}
+.paddingtop2 {
+	padding-top:32px !IMPORTANT;
+}
+.paddingbottom {
+	padding-bottom:16px;
+}
+.paddingleft {
+	padding-left:16px !IMPORTANT;
+}
+.paddingleft2 {
+	padding-left:32px !IMPORTANT;
+}
+.nopadding {
+	padding:0 !IMPORTANT;
+}
+.padding0 {
+	padding:8px !IMPORTANT;
+}
+.padding {
+	padding:16px !IMPORTANT;
+}
+.padding2 {
+	padding:32px;
+}
+.padding3 {
+	padding:64px;
+}
+.clear {
+	clear:both;
+}
+.floatleft {
+	float:left;
+}
+.floatright {
+	float:right;
+}
+.inblock {
+	display:inline-block;
+}
+.half {
+	float:left;
+	width:50%;
+}
+.third {
+	float:left;
+	width:33%;
+	position:relative;
+}
+.twothirds {
+	float:left;
+	width:66%;
+}
+.white {
+	color:white !IMPORTANT;
+}
+.grey {
+	color:#999 !IMPORTANT;
+}
+.black {
+	color:#000 !IMPORTANT;
+}
+.blackback {
+	background-color:black;
+}
+.lightgreyback {
+	background-color:#d5d5d5;
+	color:black;
+}
+.greyback {
+	background-color:#c5c5c5;
+	color:black;
+}
+.redback {
+	background-color:#a13647;
+	color:white;
+}
+.gradientredback {
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#a13647+0,9b0d03+100 */
+	background: #a13647; /* Old browsers */
+	background: -moz-linear-gradient(top, #a13647 0%, #9b0d03 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, #a13647 0%,#9b0d03 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, #a13647 0%,#9b0d03 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a13647', endColorstr='#9b0d03',GradientType=0 ); /* IE6-9 */
+}
+.whiteback {
+	background-color:white;
+}
+.greytext {
+	color:#aaa;
+}
+.red, a:visited.red {
+	color:#a13647;
+}
+.green {
+	color:green;
+}
+.centercontent {
+	max-width:1280px;
+	margin:auto;
+}
+.narrow, .content.narrow {
+	max-width:800px;
+}
+.contentholder img {
+	max-width:100%;
+}
+.row {
+	display:table-row;
+}
+.cell {
+	display:table-cell;
+}
+.smalltext {
+	font-size:0.9em;
+}
+.centeralign {
+	text-align:center;
+}
+.leftalign {
+	text-align:left;
+}
+.rightalign {
+	text-align:right;
+}
+
+@media screen and (max-width: 769px) {
+
+	.third {
+		width:100%;
+	}
+	.half {
+		width:100%;
+	}
+
+}
+
+
+/*NECESSARY CSS FOR EXPANDS*/
+.expandparent {
+
+}
+.expandchild {
+  display:none;
+  position:relative;
+  z-index:2;
+
+}
+.backdrop {
+  display:none;
+  background:rgba(0,0,0,0.7);
+  position:fixed;
+  height:100%;
+  width:100%;
+  top:0;
+  left:0;
+  z-index:1;
+  pointer-events:none;
+}
+.expandchild.absolute {
+  position:absolute;
+}
+.expandchild.fixed {
+  position:fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+	max-width:100%;
+	max-height:100%;
+	overflow:auto;
+}
+.expandchild.fixed.maxwidth {
+	top: 0;
+	left: 0;
+	transform: translate(0, 0);
+}
+.expandchild.maxwidth {
+	width:100%;
+}
+.expandchild > * {
+  position:relative;
+}
+.closebtn {
+  position:absolute;
+  top:0;
+  right:0;
+}
+input[type="submit"] {
+	-webkit-appearance:none;
+	-moz-appearance:none;
+	appearance:none;
+}

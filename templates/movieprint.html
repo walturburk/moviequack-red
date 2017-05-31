@@ -1,0 +1,48 @@
+<div class="contentholder whiteback">
+<div class="content">
+<div class='half centeralign'>
+<a class='poster mobilehide' style="min-height:260px" href='movie.php?id={movieid}'><img src='{posterurl}'></a>
+
+</div>
+<div class='half'>
+
+<a class='floatleft marginright desktophide' style="min-height:120px" href='movie.php?id={movieid}'><img src='{thumburl}'></a>
+<h3 class="grey marginbottom">Have you seen <span class="red">{title}</span>?</h3>
+
+<div class="clear paddingtop marginbottom lockmessage">
+<div class="postmessageqsmile inblock">
+<div style="" class="selectedemoji" data-emoji="{emojicode}">
+{emoji}
+</div>
+</div>
+
+<form class='postmessage smileymessage msgandbtn' name="postmessage" method="post">
+<fieldset>
+
+<input placeholder="comment this" class="input" type='text' name='message' id='message' maxlength="200" />
+<input type='hidden' name='movieid' id='movieid' value="{movieid}" />
+
+<input id="submit" class="smallbtn submit material-icons" type='submit' name='submit' value='&#xE163;' />
+
+</fieldset>
+</form>
+
+</div>
+
+<div id='movierating' class='ratemovie darkrating marginbottom'>
+  {rating}
+</div>
+
+<div data-list="{recommendlist}" data-item="{movieid}" class="floatleft addtolist marginright button greybtn roundbutton"><i class="material-icons">favorite</i></div>
+<div data-list="{watchlist}" data-item="{movieid}" class="floatleft addtolist marginright button greybtn roundbutton"><i class="material-icons">bookmark</i></div>
+<div id='skipmoviesug' data-movieid='{movieid}' class='floatright skipmovie marginright'><span style="display:none;" class="inblock large red paddingright">Show next</span> <div class="marginleft button redbtn roundbutton "><i class='material-icons'>skip_next</i> </div>
+</div>
+
+
+
+
+
+</div>
+<div class="clear"></div>
+</div>
+</div>

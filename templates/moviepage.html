@@ -1,0 +1,123 @@
+<meta data-itemid="{imdbid}">
+<div class="gradientredback">
+<header style="background-image:url({backdrop})" class="movieheader contentholder">
+<div class="darkwindow">
+
+
+<div class="centercontent centeralign">
+
+<div class="half">
+	<div class="poster posterlarge margin">
+			<img src="{posterurl}"/>
+		 </div>
+	 </div>
+
+<div class="half">
+
+
+
+<div class="narrow movieinfowindow">
+
+	<div class="poster postersmall">
+			<img src="{posterurl}"/>
+		 </div>
+
+<div class="movievote voteparent fullwidth" data-postid="{movieid}">
+	<div class="movievoteopt">
+		<div data-list="{recommendlist}" data-item="{movieid}" class="button roundbutton {isinrl}"><i class="material-icons">favorite</i></div>
+	</div>
+	<div class="movievoteopt">
+		<div data-list="{watchlist}" data-item="{movieid}" class="button roundbutton {isinwl}"><i class="material-icons">bookmark</i></div>
+	</div>
+	<div style="clear:none" class="movievoteopt expandparent">
+		<div class="button roundbutton expandbtn"><i class="material-icons">playlist_add</i></div>
+		<div class="card verydarkwindow fixed expandchild listsmenu">{lists}</div>
+	</div>
+	<div class="clear"></div>
+</div>
+
+
+
+<div style="padding:0 32px" class="">
+
+		 <div class="">
+		<h3>{movietitle} ({year})</h3>
+
+		<div id="movierating" class="relative ratemovie redrating padding">
+		{movierating}
+	</div>
+		<p style="line-height:1.5; text-align:left;">{plot}</p>
+	</div>
+
+
+	</div>
+
+
+	<div class="expandparent padding" id="tags">
+	<span id="tagscontent">{tags}</span>
+
+
+		<div class="newtagbtn expandbtn small"><i class="material-icons">add</i></div>
+		<div class="card verydarkwindow fixed expandchild addtags">
+
+			<form id='addtag' class='addtag' name="addtag" method="post">
+				<fieldset>
+					<input class='input' type='text' name='tag' id='tag' maxlength="20" />
+					<input type='hidden' name='movieid' id='movieid' value="{movieid}" />
+					<input id="submit" class="grey smallbtn submit material-icons" type='submit' name='submit' value='&#xE163;' />
+				</fieldset>
+			</form>
+
+		{taglist}
+		</div>
+	</div>
+
+	<div id="streams" class="streams white padding">
+	{streams}
+	</div>
+
+</div>
+
+
+
+
+
+</div>
+
+<div class="clear"></div>
+
+
+
+  </div>
+  </div>
+
+</header>
+</div>
+<div style="padding:16px 0">
+	<div class="centercontent narrow padding0">
+	<div class="postmessageqsmile inblock">
+	<div style="" class="selectedemoji" data-emoji="{emojicode}">
+	{emoji}
+	</div>
+	</div>
+
+	<form class='postmessage smileymessage msgandbtn' name="postmessage" method="post">
+	<fieldset>
+
+	<input placeholder="comment this" class="input" type='text' name='message' id='message' maxlength="200" />
+	<input type='hidden' name='movieid' id='movieid' value="{movieid}" />
+
+	<input id="submit" class="smallbtn submit material-icons" type='submit' name='submit' value='&#xE163;' />
+
+	</fieldset>
+	</form>
+
+</div>
+</div>
+<div class="centercontent narrow">
+
+
+  <section class="movieposts">
+    {posts}
+  </section>
+  </div>

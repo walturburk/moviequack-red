@@ -1,0 +1,55 @@
+<div id="{postid}" class="quack voteparent addremparent" data-timestamp="{rawtimestamp}" title="{timestamp}" alt="{timestamp}" id="q{snop}" data-postid="{postid}">
+
+<span class="qtoprow">
+	<span class="qusername"><a href="profile.php?id={userid}">{username}</a></span>
+	<a class="qmovielink floatright" href="movie.php?id={movieid}">{movietitle} ({movieyear})</a>
+</span>
+
+<div class="msgpart">
+	<div class="qsmile padding0">{msgemoji}</div>
+
+	<div class="qmsg padding0 ">
+	<div class="bubble padding">
+      <div style="font-size: {quacksize}px" class="quacktext">{message}</div>
+
+      <span class="smalltext grey"></span>
+	  </div>
+
+
+
+	</div>
+	<div class="clear"></div>
+</div>
+
+
+	<div class="qoptions">
+		<span class="qoptpane smallbtn upvote votebtn {upvoteactive}"><span class="votenr votedisplay">{upvotes}</span> <i class="material-icons">thumb_up</i></span>
+		<span class="qoptpane smallbtn downvote votebtn {downvoteactive}"><span class="votenr votedisplay">{downvotes}</span> <i class="material-icons">thumb_down</i></span>
+		<a href="quack.php?id={postid}" class="qoptpane smallbtn"><i class="material-icons">chat_bubble</i></a>
+		<span data-expand="options{postid}" class="qoptpane smallbtn"><i class="material-icons">more_horiz</i></span>
+		<div class="smalloptionsbox whitecard nopadding options{postid}" style="display:none">
+			{removepostbtn}
+			<a href="http://www.moviequack.com/movie.php?id={movieid}#{postid}" class="simplebtn">Link to quack</a>
+		</div>
+	</div>
+
+	<div style="display:none" class="reply{postid}">
+	<div class="replyzone">
+
+		<div class="replies">{replies}</div>
+
+	<form class='postmessage' name="postmessage" method="post">
+	<fieldset>
+
+	<input class='input' type='text' name='message' id='message' maxlength="250" />
+	<input type='hidden' name='movieid' id='movieid' value="{movieid}" />
+	<input id="submit" class="smallbtn submit material-icons" type='submit' name='submit' value='&#xE163;' />
+
+	</fieldset>
+	</form>
+
+</div>
+</div>
+
+
+</div>
