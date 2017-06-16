@@ -18,7 +18,7 @@ if ($_SESSION["loggedin"] == true) {
 } else {
 	$logoutbutton = "";
 	$l = new Template("templates/loginpage.html");
-	$toplogin .= '<span class="expandparent">
+	$toplogin = '<span class="expandparent">
 	<span class="toprowbutton expandbtn">sign in</span>
 	<div class="expandchild fixed pop whitecard centeralign" style="display:none" id="register">
 	<div id="login">

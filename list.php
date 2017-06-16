@@ -8,7 +8,7 @@ $username = $_SESSION["username"];
 $selectedlist = $_REQUEST["id"];
 
 if ($_SESSION["loggedin"] != true) {
-	header("Location: /register.php");
+	header("Location: register.php");
 }
 
 setcookie("selectedlist", $selectedlist, time() + (86400 * 30), "/");

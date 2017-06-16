@@ -8,6 +8,8 @@ define("dbname", $config["dbname"]);
 $locale = "en_SE";
 date_default_timezone_set('Europe/Stockholm');
 
+error_reporting(E_ALL & ~E_NOTICE);
+
 function getUserIp() {
 
     $client  = @$_SERVER['HTTP_CLIENT_IP'];

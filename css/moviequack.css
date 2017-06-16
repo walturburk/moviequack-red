@@ -1,6 +1,6 @@
 html {
-	background-color:#F0EEEE;
-	color:#353535;
+	background-color:#A13647;
+	color:#fff;
 	overflow-x:hidden;
 }
 body {
@@ -14,7 +14,7 @@ a:visited {
 
 }
 a:hover {
-	color:#ccc;
+	color:#00ffc6;
 }
 img {
 
@@ -290,9 +290,6 @@ span.tag {
 .button.addtolistbtn.activebtn {
 	background:none;
 }
-.smallbtn.activebtn {
-	color:#353535;
-}
 .roundbutton {
 	border-radius:50%;
 }
@@ -300,7 +297,7 @@ span.tag {
 	vertical-align:top;
 }
 .smallbtn.activebtn, .qoptions .smallbtn.activebtn:hover {
-	color:#a13647;
+	color:#00FFC6;
 }
 .btn {
 	cursor:pointer;
@@ -457,11 +454,13 @@ footer.footer .third {
 	width:100%;
 	clear:both;
 	margin:auto;
-	margin-bottom:8px;
-	background:white;
+	margin-bottom:1em;
+	background:rgba(0,0,0,0.1);
 	transition:.5s;
 	text-align:left;
-	border-radius:0;
+	border-radius:2px;
+	padding:6px;
+	box-shadow:0px 2px 0px 0px rgba(0,0,0,0.3);
 }
 .quackslim .qtoprow .qdatetime, .quackslim .qoptions {
 	opacity:0;
@@ -525,8 +524,9 @@ select.select {
 	font-size:14px;
 	clear:both;
 	padding:16px;
-	color:#aaa;
+	color:#fff;
 	display:inline-block;
+	font-weight:bold;
 }
 .qdatetime {
 	float:right;
@@ -560,7 +560,7 @@ select.select {
 }
 .qoptions {
 	font-size:0.8em;
-	color:#353535;
+	color:#fff;
 	text-align:center;
 	white-space:nowrap;
 	position:relative;
@@ -602,11 +602,11 @@ form.addtag input#submit {
 }
 .smallbtn {
 	cursor:pointer;
-	color:#ddd;
+	color:#a13647;
 	transition:.3s;
 }
 .smallbtn:hover {
-	color:#666;
+	color:#000;
 }
 .selectemoji {
 	background-color:rgba(0,0,0,0.8);
@@ -632,7 +632,7 @@ nav#mainnav {
 	width:100%;
 	text-align:center;
 	margin:auto;
-	background-color:#fff;
+	background-color:#a13647;
 	z-index:11;
 	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
@@ -643,7 +643,7 @@ nav#mainnav ul li {
 nav#mainnav ul li a {
 	display:inline-block;
 	padding:8px;
-	color:#999;
+	color:#fff;
 	width:100%;
 }
 nav#mainnav ul li a:hover {
@@ -849,8 +849,10 @@ i.material-icons.small {
 	cursor:pointer;
 }
 .searchbutton:hover, .searchbutton:active {
-	background-color:darkred;
+	background-color:#00ffc6;
 	color:white;
+	cursor:pointer;
+	transition:.3s;
 }
 input {
 	border:0;
@@ -862,17 +864,23 @@ input {
 .topsearchbar {
 	float:left;
 	width:100%;
-	background-color:white;
 	text-align:center;
 }
 .topmenu h1 {
 	padding:16px;
 	font-size:50px;
+	color:white;
 }
 .topmenu .togglesearch {
 	float:right;
 	padding:16px;
-	color:#ccc;
+	color:rgba(0,0,0,0.35);
+	transition:.2s;
+	cursor:pointer;
+}
+.topmenu .togglesearch:hover {
+	background:#00ffc6;
+	color:#fff;
 }
 .topmenu .togglesearch i.material-icons {
 	font-size:50px;

@@ -7,7 +7,7 @@ $t = new Template("templates/feed.html");
 $layout = new Template("templates/layout.html");
 
 if ($_SESSION["loggedin"] != true) {
-	header("Location: /register.php");
+	header("Location: register.php");
 }
 
 $id = $_REQUEST["id"];
