@@ -104,7 +104,7 @@ $listitems .= "</td>";
 			$listitems .= "<td class=''><div class=''>";
 			$tags = getTagsByUser($item["item"], $userid);
 			if ($tags) {
-				$listitems .= printTags($tags);
+				$listitems .= printTags($tags, $item["item"]);
 			} else {
 				$listitems .= "";
 			}

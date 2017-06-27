@@ -34,8 +34,8 @@ saveStreams($movie["id"], $movie["title"], $movie["year"]);
 $movieid = $movie["id"];
 $movietitle = $movie["title"];
 $year = $movie["year"];
-$poster = $baseposterurl.$movie["poster"];
-$posterurl = checkImage($poster);
+$posterurl = baseposterurl.$movie["poster"];
+//$posterurl = checkImage($poster);
 $backdrop = $basebackdropurl.$movie["backdrop"];
 
 $runtime = $movie["runtime"];
@@ -82,7 +82,7 @@ if ($_SESSION["loggedin"] != true) {
 
 
 if ($posts == "") {
-	$posts = "<div class='centeralign padding2 large grey marginbottom'>Be the first to review ".$movie["title"]."!</div>";
+	$posts = "<div class='centeralign padding2 large grey marginbottom'>Be the first to write about ".$movie["title"]."!</div>";
 }
 
 $webpagetitle = $movietitle;

@@ -51,7 +51,7 @@ $downvoteactive = getVotebtnActive($movieid, false);
 $emojicode = ":bust_in_silhouette:";
 $emoji = getEmoji($emojicode);
 $lists = printAddToList($movieid);
-$posts = printReplies(getReplies($id));
+$replies = printReplies(getReplies($postid));
 
 $listarr = getLists($user);
 

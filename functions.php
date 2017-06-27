@@ -224,7 +224,7 @@ function getMessages($movie) {
 	reply.reply,
 	user.username AS user1, user.id AS user1id,
 	post.timestamp AS timestamp, post.emoji,
-	post.id, post.message, post.userid, post.movieid,
+	post.id, post.message, post.userid, post.movieid, movie.year AS movieyear, movie.poster AS poster,
 (SUM((10+od.upvote-od.downvote)*1000/(UNIX_TIMESTAMP()-post.timestamp)))
 	AS votes
 	FROM user
@@ -234,6 +234,8 @@ function getMessages($movie) {
 	ON post.id = od.post
 	LEFT JOIN reply
 	ON reply.reply = post.id
+	LEFT JOIN movie
+	ON post.movieid = movie.id
 	WHERE post.movieid = '$movie' AND reply.reply IS NULL
 	GROUP BY post.id
 	ORDER BY `votes` DESC
@@ -342,6 +344,7 @@ function printMessage($postsarray) {
 		$replies = printReplies(getReplies($post["id"]));
 		$upact = getVotebtnActive($post["id"], true);
 		$downact = getVotebtnActive($post["id"], false);
+		$q->set("tinyposter", basethumburl.$post["poster"]);
 		$q->set("replies", $replies);
 		$q->set("username", $post["user1"]);
 		$q->set("userid", $post["user1id"]);
@@ -1221,7 +1224,7 @@ function getPostsFeed($user = null) {
 		} else if (isset($user) && $user != "") {
 			$postusersql = " OR userid = '$user'";
 		} else if ($user == null) {
-			$postusersql = " OR userid != 'q'";
+			$postusersql = " OR userid != 'q') AND (reply.reply IS NULL";
 		}
 
 		$sql = "SELECT movie.title AS movietitle, movie.id AS movieid, movie.year AS movieyear, movie.poster AS poster, reply.original AS origmsg,

@@ -16,17 +16,18 @@ jQuery(document).on("click", "[data-expand]", function() {
 
 jQuery(document).on("click", ".togglesearch", function() {
   var smf = jQuery("#searchmovieform");
-  smf.find("input.searchfield").focus();
-  jQuery(".topmenu").hide();
-  smf.show();
-  smf.find("input.searchfield").focus();
+  if (smf.is(":visible")) {
+    smf.hide();
+  } else {
+    smf.show();
+    smf.find("input.searchfield").focus();
+  }
 });
 
 jQuery(document).click(function(e) {
   var target = $(e.target);
   if (!target.parents(".topsearchbar").hasClass("topsearchbar")) {
   var smf = jQuery("#searchmovieform");
-  jQuery(".topmenu").show();
   smf.hide();
 
 }
@@ -262,7 +263,7 @@ jQuery(document).on("click", ".postmessage .submit", function(e) {
 		var emoji = jQuery(".selectedemoji").attr("data-emoji");
 		var message = forme.find("#message").val();
 		var movie = forme.find("#movieid").val();
-    var replyto = forme.parents(".quack").attr("data-postid");
+    var replyto = forme.attr("data-postid");
     if (forme.hasClass("smileymessage")) {
       var smileymessage = true;
     }

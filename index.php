@@ -75,7 +75,7 @@ $toplogin = "";
 
 $rawfeed = getPostsFeed();
 $printedfeed = printMessage($rawfeed);
-$randommovie = printRandomMovie();
+//$randommovie = printRandomMovie();
 
 $t = new Template("templates/indexpage.html");
 $content .= $t->output();

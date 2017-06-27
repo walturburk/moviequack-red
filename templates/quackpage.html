@@ -51,8 +51,8 @@
 		<div class="qsmile padding0">{msgemoji}</div>
 
 		<div class="qmsg padding0 ">
-		<div class="bubble padding">
-	      <div style="font-size: {quacksize}px" class="quacktext">{message}</div>
+		<div class="padding">
+	      <div style="" class="quacktext">{message}</div>
 
 	      <span class="smalltext grey"></span>
 		  </div>
@@ -82,9 +82,7 @@
 		<div class="reply{postid}">
 		<div class="replyzone">
 
-			<div class="replies">{replies}</div>
-
-		<form class='postmessage' name="postmessage" method="post">
+		<form class='postmessage' name="postmessage" method="post" data-postid="{postid}">
 		<fieldset>
 
 		<input class='input' type='text' name='message' id='message' maxlength="250" />
@@ -93,6 +91,8 @@
 
 		</fieldset>
 		</form>
+
+		<div class="replies">{replies}</div>
 
 	</div>
 	</div>

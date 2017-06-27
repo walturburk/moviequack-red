@@ -136,8 +136,8 @@ h4 {
 	color:black;
 }
 .greyback {
-	background-color:#c5c5c5;
-	color:black;
+	background-color:rgba(0,0,0,0.5);
+	color:white;
 }
 .redback {
 	background-color:#a13647;

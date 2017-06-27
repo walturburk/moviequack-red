@@ -1,28 +1,26 @@
 <div id="{postid}" class="quack voteparent addremparent" data-timestamp="{rawtimestamp}" title="{timestamp}" alt="{timestamp}" id="q{snop}" data-postid="{postid}">
 
-<span class="qtoprow">
-	<span class="qusername"><a href="profile.php?id={userid}">{username}</a></span>
-	<a class="qmovielink floatright" href="movie.php?id={movieid}">{movietitle} ({movieyear})</a>
-</span>
+<div class="floatleft quackpartwidth">
+	<span class="qtoprow">
+		<span class="qusername"><a href="profile.php?id={userid}">{username}</a></span>
+	</span>
 
-<div class="msgpart">
-	<div class="qsmile padding0">{msgemoji}</div>
+	<div class="msgpart">
+		<div class="qsmile padding0">{msgemoji}</div>
 
-	<div class="qmsg padding0 ">
-	<div class="bubble padding">
-      <div style="font-size: {quacksize}px" class="quacktext">{message}</div>
+		<div class="qmsg padding0 ">
 
-      <span class="smalltext grey"></span>
-	  </div>
+	      <div class="quacktext">{message}</div>
 
 
-
+		</div>
+		<div class="clear"></div>
 	</div>
-	<div class="clear"></div>
 </div>
 
+<a class="qmovielink floatright padding" href="movie.php?id={movieid}"><img alt="{movietitle} ({movieyear})" src="{tinyposter}"></a>
 
-	<div class="qoptions">
+	<div class="qoptions quackpartwidth floatleft">
 		<span class="qoptpane smallbtn upvote votebtn {upvoteactive}"><span class="votenr votedisplay">{upvotes}</span> <i class="material-icons">thumb_up</i></span>
 		<span class="qoptpane smallbtn downvote votebtn {downvoteactive}"><span class="votenr votedisplay">{downvotes}</span> <i class="material-icons">thumb_down</i></span>
 		<a href="quack.php?id={postid}" class="qoptpane smallbtn"><i class="material-icons">chat_bubble</i></a>
@@ -33,7 +31,7 @@
 		</div>
 	</div>
 
-	
 
 
+<div class="clear"></div>
 </div>
