@@ -3,11 +3,7 @@
 include("db_functions.php");
 include("functions.php");
 
-/*
-$latestmessage = printSpecMessage(1);
-$trendingmessage = printSpecMessage(2);
-$topmessage = printSpecMessage(3);
-*/
+print_r($config);
 
 $registerbtnclass = "redbtn";
 $loginlinkclass = "red";
