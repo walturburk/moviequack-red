@@ -3,7 +3,6 @@
 include("db_functions.php");
 include("functions.php");
 
-print_r($config);
 
 $registerbtnclass = "redbtn";
 $loginlinkclass = "red";
