@@ -64,12 +64,12 @@ foreach ($listarr AS $list) {
 $inlists = getListsForUserItem($user, $movieid);
 
 
-if (in_array($watchlist, $inlists)) {
+if (is_array($inlists) && in_array($watchlist, $inlists)) {
 	$isinwl = " removefromlist activebtn ";
 } else {
 	$isinwl = " addtolist ";
 }
-if (in_array($recommendlist, $inlists)) {
+if (is_array($inlists) && in_array($recommendlist, $inlists)) {
 	$isinrl = " removefromlist activebtn ";
 } else {
 	$isinrl = " addtolist ";

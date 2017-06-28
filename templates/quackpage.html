@@ -41,7 +41,7 @@
 
 <div class="centercontent narrow">
 
-	<div style="background-color:rgba(0,0,0,0)" id="{postid}" class="quack voteparent addremparent paddingbottom" data-timestamp="{rawtimestamp}" title="{timestamp}" alt="{timestamp}" id="q{snop}" data-postid="{postid}">
+	<div style="background-color:rgba(0,0,0,0)" id="{postid}" class="quack nomargin voteparent addremparent paddingbottom" data-timestamp="{rawtimestamp}" title="{timestamp}" alt="{timestamp}" id="q{snop}" data-postid="{postid}">
 
 	<span class="qtoprow">
 		<span class="qusername"><a href="profile.php?id={userid}">{username}</a></span>
@@ -75,26 +75,25 @@
 </header>
 </div>
 
-<div class="centercontent narrow">
-
 
   <section class="movieposts">
 		<div class="reply{postid}">
 		<div class="replyzone">
+			<div class="widemsgholder">
 
 		<form class='postmessage' name="postmessage" method="post" data-postid="{postid}">
 		<fieldset>
 
-		<input class='input' type='text' name='message' id='message' maxlength="250" />
+		<input placeholder="reply to {username}" class='widemsgtext input' type='text' name='message' id='message' maxlength="250" />
 		<input type='hidden' name='movieid' id='movieid' value="{movieid}" />
-		<input id="submit" class="smallbtn submit material-icons" type='submit' name='submit' value='&#xE163;' />
+		<input id="submit" class="widemsgsubmit submit material-icons" type='submit' name='submit' value='&#xE163;' />
 
 		</fieldset>
 		</form>
+		</div>
 
-		<div class="replies">{replies}</div>
+		<div class="centercontent narrow replies">{replies}</div>
 
 	</div>
 	</div>
   </section>
-  </div>

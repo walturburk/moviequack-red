@@ -37,6 +37,9 @@ h4 {
 .small {
 	font-size:14px;
 }
+.nomargin {
+	margin:0 !IMPORTANT;
+}
 .margin {
 	margin:16px;
 }

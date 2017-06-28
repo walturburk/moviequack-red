@@ -444,9 +444,6 @@ footer.footer .third {
 	padding:8px;
 	float:left;
 }
-.movieposts {
-	margin-top:8px;
-}
 .msgpart {
 	padding: 0 8px;
 	min-height:84px;
@@ -491,33 +488,48 @@ select.select {
 .replymsg a.small {
 	color:#aaa;
 }
-.replyzone {
-	display:inline-block;
-	width:100%;
-	padding:16px;
-}
-.replyzone .postmessage {
-	width:100%;
-}
-.replyzone .postmessage input#message {
-	border:3px solid #aaa;
-	padding:8px;
-	width:calc(100% - 56px);
-}
-.replyzone .postmessage input#submit {
-	background:#aaa;
-	padding:12px;
-	font-size:20px;
-	height:42px;
-}
 .qsmile {
 	float:left;
 	width:86px;
 }
 .postmessageqsmile {
-	display: inline-block;
-	text-align: center;
-	vertical-align: top;
+	float:left;
+	padding:0px;
+	max-width:67px;
+}
+.widemsgholder {
+	width:100%;
+	background:white;
+	float:left;
+}
+.widemsgholder .postmessage {
+	float:right;
+	width:100%;
+}
+.widemsgholder.emojiwidemsgholder .postmessage {
+	width:calc(100% - 67px);
+	float:right;
+}
+input.widemsgtext {
+	border-radius:0;
+	border:0;
+	font-size:20px;
+	padding:22px;
+	width:calc(100% - 67px);
+	float:left;
+}
+input.widemsgsubmit {
+	float:right;
+	font-size:31px;
+	padding:18px;
+	background:#00ffc6;
+	color:white;
+	text-shadow:2px 2px 0 rgba(0,0,0,0.2);
+	border-radius:0;
+}
+input.widemsgsubmit:hover {
+	text-shadow:3px 3px 0 rgba(0,0,0,0.3);
+	background:#00BE94;
 }
 .qtoprow {
 	width:100%;
@@ -564,11 +576,6 @@ select.select {
 .quackpartwidth {
 	width:calc(100% - 124px);
 }
-.postmessage {
-	display:inline-block;
-	width:calc(100% - 68px);
-	padding:6px 0;
-}
 form.addtag input[type="text"] {
 	padding:6px;
 	font-size:14px;
@@ -583,21 +590,6 @@ form.addtag input#submit {
 	position: absolute;
     top: 0;
     right: 0;
-}
-.msgandbtn input[type="text"] {
-	padding:12px;
-	min-width:130px;
-	width:calc(100% - 70px);
-}
-.msgandbtn input[type="submit"] {
-	background:#fafafa;
-	padding:12px;
-	vertical-align:top;
-	font-size:26px;
-}
-.msgandbtn input[type="submit"]:hover {
-	background:#a13647;
-	color:#353535;
 }
 .smallbtn {
 	cursor:pointer;

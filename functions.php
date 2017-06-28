@@ -153,10 +153,10 @@ function postMessage($id, $emoji, $movie, $msg, $user) {
 	$notallowed = explode($file, ", ");
 	foreach ($proptags AS $tag) {
 		$tag = strtolower($tag);
-		if (in_array($tag, $notallowed)) {
-
-		} else {
-			addTag("", $tag);
+		if (is_array($notallowed)) {
+			if (!in_array($tag, $notallowed)) {
+				addTag("", $tag);
+			}
 		}
 	}
 
@@ -922,7 +922,7 @@ function getTags($movie) {
 	}
 
 	foreach ($tags2 AS $tag2) {
-			if (in_array($tag2["tag"], $alreadyadded)) {
+			if (is_array($areadyadded) && in_array($tag2["tag"], $alreadyadded)) {
 				$entry["movie"] = $tag2["movie"];
 				$entry["user"] = $tag2["user"];
 				$entry["tag"] = $tag2["tag"];
@@ -1216,7 +1216,7 @@ ORDER BY l.timestamp DESC
 }
 
 function getPostsFeed($user = null) {
-
+	$order = "ORDER BY `post`.`timestamp` DESC";
 		if (is_array($user)) {
 			foreach ($user AS $u) {
 				$postusersql .= " OR userid = '$u'";
@@ -1225,10 +1225,35 @@ function getPostsFeed($user = null) {
 			$postusersql = " OR userid = '$user'";
 		} else if ($user == null) {
 			$postusersql = " OR userid != 'q') AND (reply.reply IS NULL";
+			$order = "ORDER BY `votes` DESC";
 		}
 
+		/*
+		SELECT
+		reply.reply,
+		user.username AS user1, user.id AS user1id,
+		post.timestamp AS timestamp, post.emoji,
+		post.id, post.message, post.userid, post.movieid, movie.year AS movieyear, movie.poster AS poster,
+	(SUM((10+od.upvote-od.downvote)*1000/(UNIX_TIMESTAMP()-post.timestamp)))
+		AS votes
+		FROM user
+		LEFT JOIN post
+		ON user.id = post.userid
+		LEFT JOIN vote od
+		ON post.id = od.post
+		LEFT JOIN reply
+		ON reply.reply = post.id
+		LEFT JOIN movie
+		ON post.movieid = movie.id
+		WHERE post.movieid = '$movie' AND reply.reply IS NULL
+		GROUP BY post.id
+		ORDER BY `votes` DESC
+		*/
+
 		$sql = "SELECT movie.title AS movietitle, movie.id AS movieid, movie.year AS movieyear, movie.poster AS poster, reply.original AS origmsg,
-		user.username AS user1, user.id AS user1id, post.message, post.emoji, post.timestamp AS timestamp, post.id AS id
+		user.username AS user1, user.id AS user1id, post.message, post.emoji, post.timestamp AS timestamp, post.id AS id,
+		(SUM((10+od.upvote-od.downvote)*1000/(UNIX_TIMESTAMP()-post.timestamp)))
+			AS votes
 		FROM `post`
 		LEFT JOIN movie
 		ON post.movieid = movie.id
@@ -1236,8 +1261,11 @@ function getPostsFeed($user = null) {
 		ON post.userid = user.id
 		LEFT JOIN reply
 		ON post.id = reply.reply
+		LEFT JOIN vote od
+		ON post.id = od.post
 		WHERE (userid = 'start' $postusersql)
-		ORDER BY `post`.`timestamp` DESC
+		GROUP BY post.id
+		$order
 		LIMIT 30";
 		$feed = db_select($sql);
 
@@ -1524,7 +1552,7 @@ function printAddToList($item) {
 	$print = "<h3 class='marginbottom'>Add to</h3>";//print_r($inlists, true);
 
 	foreach ($lists AS $list) {
-		if (in_array($list["listid"], $inlists)) {
+		if (is_array($inlists) && in_array($list["listid"], $inlists)) {
 			$print .= "<div class='button addtolistbtn activebtn removefromlist' data-item='".$item."' data-list='".$list["listid"]."'>".$list["name"]."</div>";
 		} else {
 			$print .= "<div class='button addtolistbtn addtolist' data-item='".$item."' data-list='".$list["listid"]."'>".$list["name"]."</div>";
