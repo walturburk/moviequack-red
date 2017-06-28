@@ -7,7 +7,6 @@ $email = db_escape($_REQUEST["email"]);
 $rawusername = $_REQUEST["username"];
 $username = db_escape($rawusername);
 
-echo "<h1>".$_REQUEST["password"]."</h1>";
 $password = db_escape($_REQUEST["password"]);
 $password2 = db_escape($_REQUEST["password2"]);
 
