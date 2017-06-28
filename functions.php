@@ -339,11 +339,27 @@ function printMessage($postsarray) {
 	$q = new Template("templates/quack.html");
 	$posts = "";
 	foreach ($postsarray AS $post) {
+
+		$followbtn = "";
+		if ($post["user1id"] == $_SESSION["user"]) {
+		  $isownprofile = true;
+		} else {
+		  $userid = $post["user1id"];
+		  $alreadyfollows = checkiffollows($_SESSION["user"], $userid);
+		  if ($alreadyfollows) {
+		    $activebtn = "activebtn";
+		  } else {
+		    $activebtn = "";
+		  }
+		  $followbtn = '<div class="smallbtn inblock followbtn '.$activebtn.'" data-followedid="'.$post["user1id"].'"><i style="font-size:17px; vertical-align:top" class="material-icons">person_add</i></div>';
+		}
+
 		$upact = "";
 		$downact = "";
 		$replies = printReplies(getReplies($post["id"]));
 		$upact = getVotebtnActive($post["id"], true);
 		$downact = getVotebtnActive($post["id"], false);
+		$q->set("followbtn", $followbtn);
 		$q->set("tinyposter", basethumburl.$post["poster"]);
 		$q->set("replies", $replies);
 		$q->set("username", $post["user1"]);

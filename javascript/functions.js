@@ -110,44 +110,6 @@ jQuery(document).on("click", ".replybutton", function() {
 	console.log(expand);
 });
 
-jQuery(document).on("click", ".selectemoji ul.emojiboard li", function() {
-	var emoji = jQuery(this).attr("data-emoji");
-	var emojisrc = jQuery(this).find("img").attr("src");
-	var selectedemoji = jQuery(".selectedemoji");
-	selectedemoji.find("img").attr("src", emojisrc);
-	selectedemoji.attr("data-emoji", emoji);
-  jQuery(".selectemoji").fadeOut();
-});
-
-jQuery(document).on("click", ".selectedemoji", function() {
-  showemojiselector();
-});
-
-function showemojiselector() {
-
-  var selectemoji = jQuery(".selectemoji");
-  var isactive = selectemoji.find(".emojiboard").hasClass(".emojiboard");
-
-  if (selectemoji.is(":visible")) {
-    selectemoji.fadeOut();
-  } else {
-    selectemoji.fadeIn();
-  }
-
-  if (!isactive) {
-
-    var obj = {
-      mode: "GETEMOJIBOARD"
-      };
-
-    var returned = postAjaxPhp(obj).done(function(result) {
-      selectemoji.html(result);
-    });
-
-  }
-
-}
-
 function postAjaxPhp(message, page) {
 
 	page = typeof page !== 'undefined' ? page : "ajax.php";
@@ -411,6 +373,7 @@ jQuery(document).on("click", ".postmessage .submit", function(e) {
 
 		var follows = jQuery(this).attr("data-followedid");
     var isactive = jQuery(this).hasClass("activebtn");
+    var allfollowbuttons = jQuery(".followbtn[data-followedid='"+follows+"']");
 
 		var obj = {
 			mode: "FOLLOW",
@@ -418,9 +381,9 @@ jQuery(document).on("click", ".postmessage .submit", function(e) {
 			};
 
       if (isactive) {
-        jQuery(this).removeClass("activebtn");
+        allfollowbuttons.removeClass("activebtn");
       } else {
-        jQuery(this).addClass("activebtn");
+        allfollowbuttons.addClass("activebtn");
       }
 		var returned = postAjaxPhp(obj).done(function(result) {
 

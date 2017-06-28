@@ -1,12 +1,13 @@
 <div id="{postid}" class="quack voteparent addremparent" data-timestamp="{rawtimestamp}" title="{timestamp}" alt="{timestamp}" id="q{snop}" data-postid="{postid}">
 
+<a class="qmovielink floatleft padding" href="movie.php?id={movieid}"><img alt="{movietitle} ({movieyear})" src="{tinyposter}"></a>
+
 <div class="floatleft quackpartwidth">
 	<span class="qtoprow">
-		<span class="qusername"><a href="profile.php?id={userid}">{username}</a></span>
+		<span class="qusername"><a href="profile.php?id={userid}">{username}</a> {followbtn}</span>
 	</span>
 
 	<div class="msgpart">
-		<div class="qsmile padding0">{msgemoji}</div>
 
 		<div class="qmsg padding0 ">
 
@@ -18,7 +19,7 @@
 	</div>
 </div>
 
-<a class="qmovielink floatright padding" href="movie.php?id={movieid}"><img alt="{movietitle} ({movieyear})" src="{tinyposter}"></a>
+
 
 	<div class="qoptions quackpartwidth floatleft">
 		<span class="qoptpane smallbtn upvote votebtn {upvoteactive}"><span class="votenr votedisplay">{upvotes}</span> <i class="material-icons">thumb_up</i></span>
