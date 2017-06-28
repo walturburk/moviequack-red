@@ -3,11 +3,13 @@
 include("db_functions.php");
 include("functions.php");
 
-$email = mysqli_real_escape_string($_REQUEST["email"]);
+$email = db_escape($_REQUEST["email"]);
 $rawusername = $_REQUEST["username"];
-$username = mysqli_real_escape_string($rawusername);
-$password = mysqli_real_escape_string($_REQUEST["password"]);
-$password2 = mysqli_real_escape_string($_REQUEST["password2"]);
+$username = db_escape($rawusername);
+
+echo "<h1>".$_REQUEST["password"]."</h1>";
+$password = db_escape($_REQUEST["password"]);
+$password2 = db_escape($_REQUEST["password2"]);
 
 $return = db_select("SELECT * FROM `user` WHERE `username` = '$username' OR `email` = '$email' LIMIT 1");
 
