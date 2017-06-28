@@ -47,9 +47,9 @@ if (!isset($_REQUEST["username"])) {
 	db_query($query);
 	$recommendlist = newId("l");
 	$watchlist = newId("l");
-	$query2 = "INSERT INTO `wilnkfzr_moviequack`.`list` (`user`, `listid`, `name`, `permit`) VALUES ('$id', '$recommendlist', 'Recommend', '');
+	$query2 = "INSERT INTO list` (`user`, `listid`, `name`, `permit`) VALUES ('$id', '$recommendlist', 'Recommend', '');
 	";
-	$query3 = "INSERT INTO `wilnkfzr_moviequack`.`list` (`user`, `listid`, `name`, `permit`) VALUES ('$id', '$watchlist', 'Watchlist', '');
+	$query3 = "INSERT INTO `list` (`user`, `listid`, `name`, `permit`) VALUES ('$id', '$watchlist', 'Watchlist', '');
 	";
 
 	db_query($query3);

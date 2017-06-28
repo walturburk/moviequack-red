@@ -14,25 +14,6 @@ jQuery(document).on("click", "[data-expand]", function() {
 
 //EXPAND END
 
-jQuery(document).on("click", ".togglesearch", function() {
-  var smf = jQuery("#searchmovieform");
-  if (smf.is(":visible")) {
-    smf.hide();
-  } else {
-    smf.show();
-    smf.find("input.searchfield").focus();
-  }
-});
-
-jQuery(document).click(function(e) {
-  var target = $(e.target);
-  if (!target.parents(".topsearchbar").hasClass("topsearchbar")) {
-  var smf = jQuery("#searchmovieform");
-  smf.hide();
-
-}
-console.log(target.parents(".topsearchbar").hasClass("topsearchbar"));
-});
 
 jQuery(document).on("click", ".votestar", function() {
 

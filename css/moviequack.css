@@ -772,6 +772,10 @@ i.material-icons.small {
 	top:0;
 	margin-top:16px;
 }
+#searchmovieform {
+	margin: auto;
+	width: 800px;
+}
 .searchfield {
 	border-radius:10px;
 	font-size:20px;
@@ -829,7 +833,7 @@ i.material-icons.small {
 	top: 22px;
 }
 .searchbutton {
-	background-color:#a13647;
+	background-color:#00ffc6;
 	color:white;
 	border-radius:10px;
 	vertical-align:bottom;
@@ -840,7 +844,7 @@ i.material-icons.small {
 	cursor:pointer;
 }
 .searchbutton:hover, .searchbutton:active {
-	background-color:#00ffc6;
+	background-color:#00BE94;
 	color:white;
 	cursor:pointer;
 	transition:.3s;
