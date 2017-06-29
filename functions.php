@@ -1454,7 +1454,7 @@ global $basethumburl;
 	$print .= "</table>";
 	return $print;
 }
-
+ 
 
 function makePermit($allcanread = 0, $allcaneditcontent = 0, $allcaneditlist = 0) {
 	$bin = $allcanread."".$allcaneditcontent."".$allcaneditlist;
