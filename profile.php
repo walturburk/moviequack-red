@@ -21,7 +21,7 @@ $profileoptions = "";
 if ($id == $_SESSION["user"]) {
   $isownprofile = true;
   if ($_SESSION["loggedin"]) {
-    $profileoptions = '<div class="floatright margin0"><a class="button redbtn" href="logout.php">Log out</a></div>';
+    $profileoptions = '<div class="floatright margin0"><a class="button whitebtn" href="logout.php">Log out</a></div>';
   }
 } else {
   $userid = $id;
@@ -31,7 +31,7 @@ if ($id == $_SESSION["user"]) {
   } else {
     $activebtn = "";
   }
-  $profileoptions = '<div class="floatright margin0 button redbtn followbtn '.$activebtn.'" data-followedid="'.$id.'">Follow</div>';
+  $profileoptions = '<div class="floatright margin0 button whitebtn followbtn '.$activebtn.'" data-followedid="'.$id.'">Follow</div>';
 }
 
 

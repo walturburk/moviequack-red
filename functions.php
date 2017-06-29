@@ -1427,12 +1427,9 @@ global $basethumburl;
 
 
 
-			//$print .= '<div class="bubble padding"><div class="quacktext">';
 					$print .= '<div class="window padding small round inblock">'.$row["message"].'';
-					//$print .= '</div>';
 					$print .= '<div class="smalltext grey margintop0">- '.$row["user2"].'</div></div>';
 						$print .= "</td>";
-					//$print .= '</div>';
 					$row["movieid"] = $row["movieid2"];
 					$row["poster"] = $row["poster2"];
 				} else {
@@ -1446,7 +1443,7 @@ global $basethumburl;
 			if ($row["origmsg"]) {
 				$print .= "<i class='material-icons xlarge'>reply</i>";
 			} else {
-				$print .= getEmoji($row["emoji"])."</td>";//"<i class='material-icons xlarge'>comment</i></td>";
+				$print .= "<i class='material-icons xlarge'>comment</i></td>";
 			}
 			$print .= "<td class='wordbreak paddingleft'><div class='whitebubble padding'>".$row["message"]."</div></td>";
 
