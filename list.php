@@ -119,7 +119,7 @@ $listitems .= "</td>";
 //if ($_SESSION["loggedin"]) {
 $loggedinlistoptions = '<div class="expandparent inblock marginright">
   '.$listselect.'
-<div class="expandbtn button redbtn removelist"><i class="material-icons">delete</i></div>
+<div class="expandbtn button whitebtn removelist"><i class="material-icons">delete</i></div>
 <div class="expandchild fixed">
 <div class="whitecard">Are you sure you want to delete '.$listname.'?<br>
   <div class="margintop button redbtn confirmdeletelist">Yes</div>
@@ -129,7 +129,7 @@ $loggedinlistoptions = '<div class="expandparent inblock marginright">
 
 <div class="inblock">
 <input id="newlistname" class="input" type="text" placeholder="Create new list">
-<div class="button redbtn createnewlist"><i class="material-icons">add</i></div>
+<div class="button whitebtn createnewlist"><i class="material-icons">add</i></div>
 </div>';
 //} else {
 //  $loggedinlistoptions = "<p class='large'>You must be logged in to manage lists</p>";

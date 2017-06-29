@@ -27,8 +27,6 @@ $movieid = $quack["movieid"];
 $movieinfo = db_select("SELECT * FROM  `movie` WHERE  `id` =  '".$movieid."' LIMIT 1");
 $movie = $movieinfo[0];
 
-
-
 saveStreams($movie["id"], $movie["title"], $movie["year"]);
 
 //print_r(getExternalStreams($movie["title"], $movie["year"]));
@@ -87,8 +85,6 @@ if ($posts == "") {
 	$posts = "";
 }
 
-$webpagetitle = $movietitle;
-
 $tagsarr = getTags($movieid);
 $tags = printTags($tagsarr, $movieid);
 $taglist = printAllTags($movieid);
@@ -99,7 +95,7 @@ $urate = getUsersMovieRating($movieid, $user);
 $movierating = printMovieRating($movieid, $rating, $urate);
 
 
-
+$webpagetitle = $message;
 $content = $t->output();
 echo $layout->output();
 

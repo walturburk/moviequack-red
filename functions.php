@@ -938,7 +938,7 @@ function getTags($movie) {
 	}
 
 	foreach ($tags2 AS $tag2) {
-			if (is_array($areadyadded) && in_array($tag2["tag"], $alreadyadded)) {
+			if (is_array($alreadyadded) && in_array($tag2["tag"], $alreadyadded)) {
 				$entry["movie"] = $tag2["movie"];
 				$entry["user"] = $tag2["user"];
 				$entry["tag"] = $tag2["tag"];
@@ -961,7 +961,6 @@ function getTags($movie) {
 
 function printTags($tags, $movie) {
 	$user = $_SESSION["user"];
-
 	foreach ($tags AS $tag) {
 		$active = $tag["active"];
 		$fontsize = 14+$tag["c"];
@@ -1457,7 +1456,7 @@ global $basethumburl;
 }
 
 
-function makePermit($allcanread = 0, $allcaneditcontent = 0, $allcaneditlist) {
+function makePermit($allcanread = 0, $allcaneditcontent = 0, $allcaneditlist = 0) {
 	$bin = $allcanread."".$allcaneditcontent."".$allcaneditlist;
 	$dec = bindec($bin);
 	return $dec;
@@ -1472,7 +1471,7 @@ function addToList($item, $list, $order = "0") {
 
 
 function newList($name) {
-	$name = mysqli_real_escape_string(db_connect(), $name);
+	//$name = db_escape($name);
 	if (!strlen(trim($name)) == 0 && $name != "" && $name != null) {
 		$listid = newId("l");
 		$permit = makePermit();
@@ -1480,6 +1479,7 @@ function newList($name) {
 		$query = "INSERT INTO `".dbname."`.`list` (`user`, `listid`, `name`, `permit`, `deleted`) VALUES ('$user', '$listid', '$name', '$permit', false);
 		";
 		$return = db_query($query);
+		echo $query;
 	}
 }
 
