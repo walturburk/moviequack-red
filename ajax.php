@@ -18,8 +18,8 @@ switch ($mode) {
 		if ($isreplyto) {
 			postAsAnswer($id, $isreplyto);
 		}
-		echo $user;
-		echo $_SESSION["username"];
+		//echo $user;
+		//echo $_SESSION["user"];
 		break;
 	case "VOTE":
 		$post = $_REQUEST["post"];

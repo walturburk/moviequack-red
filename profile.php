@@ -38,11 +38,14 @@ if ($id == $_SESSION["user"]) {
 
 
 
-$userinfo = db_select("SELECT * FROM  `user` WHERE  `id` =  '".$id."'");
+$userinfo = db_select("SELECT * FROM  `user` WHERE  `username` =  '".$id."'");
 $user = $userinfo[0];
 
 if ($user) {
-$username = $user["username"];
+  $username = $user["username"];
+  if (isVisitor($username)) {
+    $username = "visitor";
+  }
 } else {
   $username = "";
 }

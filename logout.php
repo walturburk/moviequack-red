@@ -3,15 +3,18 @@
 
 include("db_functions.php");
 session_start();
-$username = $_SESSION["username"];
+$username = $_SESSION["user"];
 $_SESSION["loggedin"] = false;
 unset($_SESSION["user"]);
-unset($_SESSION["username"]);
 
-setcookie ("user", "", time() - 3600);
-setcookie ("logintime", "", time() - 3600);
-setcookie ("loginhash", "", time() - 3600);
-setcookie ("skipmovies", "", time() - 3600);
+
+
+
+setcookie ("user", null, -1, '/');
+setcookie ("logintime", null, -1, '/');
+setcookie ("loginhash", null, -1, '/');
+setcookie ("skipmovies", null, -1, '/');
+
 
 include("functions.php");
 

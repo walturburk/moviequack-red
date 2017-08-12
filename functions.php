@@ -1,5 +1,6 @@
 <?php
 
+
 autoLogin();
 //getDontTag();
 
@@ -91,9 +92,9 @@ function newId($prefix) {
 		$newid = uniqid();
 		$id = $prefix.$newid;
 		if ($prefix == "u") {
-			$idfromdb = db_select("SELECT id FROM `user` WHERE id = '$id'");
+			$idfromdb = db_select("SELECT id FROM `user` WHERE username = '$id'");
 		} else if ($prefix == "p") {
-			$idfromdb = db_select("SELECT id FROM `post` WHERE id = '$id'");
+			$idfromdb = db_select("SELECT id FROM `post` WHERE username = '$id'");
 		}
 	} while ($id == $idfromdb[0]["id"]);
 
@@ -136,8 +137,6 @@ function autoLogin() {
 		if (hashOk($session, $loginhash)) {
 			$_SESSION["loggedin"] = true;
 			$_SESSION["user"] = $user;
-			$userinfo = db_select("SELECT username FROM `user` WHERE id = '$user' LIMIT 1");
-			$_SESSION["username"] = $userinfo[0]["username"];
 		}
 
 	}
@@ -222,14 +221,14 @@ function getVotebtnActive($post, $upvote) {
 function getMessages($movie) {
 	$posts = db_select("SELECT
 	reply.reply,
-	user.username AS user1, user.id AS user1id,
+	user.username AS user1, user.username AS user1id,
 	post.timestamp AS timestamp, post.emoji,
 	post.id, post.message, post.userid, post.movieid, movie.year AS movieyear, movie.poster AS poster,
 (SUM((10+od.upvote-od.downvote)*1000/(UNIX_TIMESTAMP()-post.timestamp)))
 	AS votes
 	FROM user
 	LEFT JOIN post
-	ON user.id = post.userid
+	ON user.username = post.userid
 	LEFT JOIN vote od
 	ON post.id = od.post
 	LEFT JOIN reply
@@ -244,11 +243,11 @@ function getMessages($movie) {
 }
 
 function getReplies($original) {
-	$posts = db_select("SELECT user.username, user.id AS userid, post.id AS postid, post.message, post.timestamp FROM `post`
+	$posts = db_select("SELECT user.username, user.username AS userid, post.id AS postid, post.message, post.timestamp FROM `post`
 LEFT JOIN reply
 ON reply.reply = post.id
 LEFT JOIN user
-ON user.id = post.userid
+ON user.username = post.userid
 WHERE reply.original = '$original'");
 	return $posts;
 }
@@ -256,14 +255,14 @@ WHERE reply.original = '$original'");
 function getLatestMessage() {
 	$posts = db_select("SELECT
 	movie.imdbid, movie.poster, reply.reply,
-	user.username AS username, user.id AS userid,
+	user.username AS username, user.username AS userid,
 	post.timestamp AS timestamp, post.emoji,
 	post.id, post.message, post.userid, post.movieid,
 (SUM((10+od.upvote-od.downvote)*1000/(UNIX_TIMESTAMP()-post.timestamp)))
 	AS votes
 	FROM user
 	LEFT JOIN post
-	ON user.id = post.userid
+	ON user.username = post.userid
 	LEFT JOIN vote od
 	ON post.id = od.post
 	LEFT JOIN reply
@@ -278,10 +277,10 @@ LIMIT 1");
 }
 
 function getTrendingMessage() {
-	$posts = db_select("SELECT user.username AS username, user.id AS userid, post.timestamp AS timestamp, post.emoji, post.id, post.message, post.userid, post.movieid, (SUM((10+od.upvote-od.downvote)*1000/(UNIX_TIMESTAMP()-post.timestamp))) AS votes
+	$posts = db_select("SELECT user.username AS username, user.username AS userid, post.timestamp AS timestamp, post.emoji, post.id, post.message, post.userid, post.movieid, (SUM((10+od.upvote-od.downvote)*1000/(UNIX_TIMESTAMP()-post.timestamp))) AS votes
 FROM user
 LEFT JOIN post
-ON user.id = post.userid
+ON user.username = post.userid
 LEFT JOIN vote od
 ON post.id = od.post
 GROUP BY post.id
@@ -291,10 +290,10 @@ LIMIT 1");
 }
 
 function getTopMessage() {
-	$posts = db_select("SELECT user.username AS username, user.id AS userid, post.timestamp AS timestamp, post.emoji, post.id, post.message, post.userid, post.movieid, (SUM((od.upvote-od.downvote))) AS votes
+	$posts = db_select("SELECT user.username AS username, user.username AS userid, post.timestamp AS timestamp, post.emoji, post.id, post.message, post.userid, post.movieid, (SUM((od.upvote-od.downvote))) AS votes
 FROM user
 LEFT JOIN post
-ON user.id = post.userid
+ON user.username = post.userid
 LEFT JOIN vote od
 ON post.id = od.post
 GROUP BY post.id
@@ -304,10 +303,10 @@ LIMIT 1");
 }
 
 function getControversialMessage() {
-	$posts = db_select("SELECT user.username AS username, user.id AS userid, post.timestamp AS timestamp, post.emoji, post.id, post.message, post.userid, post.movieid, (SUM((od.upvote))) AS upvotes, (SUM((od.downvote))) AS downvotes, (SUM(od.upvote)*SUM(od.downvote)) as multi
+	$posts = db_select("SELECT user.username AS username, user.username AS userid, post.timestamp AS timestamp, post.emoji, post.id, post.message, post.userid, post.movieid, (SUM((od.upvote))) AS upvotes, (SUM((od.downvote))) AS downvotes, (SUM(od.upvote)*SUM(od.downvote)) as multi
 FROM user
 LEFT JOIN post
-ON user.id = post.userid
+ON user.username = post.userid
 LEFT JOIN vote od
 ON post.id = od.post
 GROUP BY post.id
@@ -318,12 +317,12 @@ LIMIT 1");
 
 function getMessage($id) {
 	$sql = "SELECT movie.title AS movietitle, movie.id AS movieid, movie.year AS movieyear, movie.poster AS poster, reply.original AS origmsg,
-	user.username AS user1, user.id AS user1id, post.message, post.emoji, post.timestamp AS timestamp, post.id AS id
+	user.username AS user1, user.username AS user1id, post.message, post.emoji, post.timestamp AS timestamp, post.id AS id
 	FROM `post`
 	LEFT JOIN movie
 	ON post.movieid = movie.id
 	LEFT JOIN user
-	ON post.userid = user.id
+	ON post.userid = user.username
 	LEFT JOIN reply
 	ON post.id = reply.reply
 	WHERE (post.id = '$id')
@@ -634,7 +633,7 @@ function getMovies($searchterm) {
 
 function getUsers($searchterm) {
 	$searchterm = mysqli_real_escape_string(db_connect(), $searchterm);
-	$users = db_select("SELECT id, username FROM  `user` WHERE  `username` LIKE  '%".$searchterm."%'");
+	$users = db_select("SELECT username FROM  `user` WHERE  `username` LIKE  '%".$searchterm."%'");
 	return $users;
 }
 
@@ -924,6 +923,21 @@ function getTagsByUser($movie, $user) {
 	return $tags;
 }
 
+function getAllTagsByUser($user = NULL) {
+
+	if ($user == NULL) {
+		$where = "";
+	} else if (is_array($user)) {
+		$usersor = implode("' OR user = '", $user);
+		$where = "WHERE user = '".$usersor."' ORDER BY tag DESC";
+	} else {
+		$where = "WHERE user = '".$user."'";
+	}
+	$tags = db_select("SELECT * FROM `tag` ".$where." GROUP BY tag ORDER BY `tag` DESC");
+	return $tags;
+}
+
+
 function getTags($movie) {
 	$user = $_SESSION["user"];
 	$tags1 = db_select("SELECT movie, user, tag, timestamp, COUNT(user) AS c FROM  `tag` WHERE  `movie` =  '".$movie."' AND user = '".$user."' GROUP BY tag ORDER BY c DESC");
@@ -1099,34 +1113,41 @@ function addPoster($link) {
 	}
 }
 
+function isVisitor($userid) {
+	if (strlen($userid) == 14 && substr($userid, 0, 1) == "u") {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 function makeDummyUser() {
 	$ip = getUserIp();
 	$user = db_select("SELECT * FROM  `user` WHERE `ip` = '$ip'");
 	$user = $user[0];
 	//print_r($user);
-	if ($user["id"]) {
-		newSession($user["id"], $user["username"]);
+	if (isVisitor($user["username"])) {
+		newSession($user["username"]);
+
 	} else {
-		$id = newId("u");
-		$username = "Visitor";
+		$username = newId("u");
 
 
-		$query = "INSERT INTO `user` (`id`, `username`, `password`, `email`, `ip`)
-		VALUES ('$id', '$username', '', '', '$ip');
+		$query = "INSERT INTO `user` (`username`, `password`, `email`, `ip`)
+		VALUES ('$username', '', '', '$ip');
 		";
 		$return = db_query($query);
 
-		newSession($id, $username);
+		newSession($username);
 		$_SESSION["loggedin"] = false;
 	}
 
 }
 
 
-function newSession($user, $username) {
+function newSession($username) {
 
-	$_SESSION["user"] = $user;
-	$_SESSION["username"] = $username;
+	$_SESSION["user"] = $username;
 
 	$id = session_id();
 	$browser = $_SERVER['HTTP_USER_AGENT'];
@@ -1135,7 +1156,7 @@ function newSession($user, $username) {
 
 
 	$query = "INSERT INTO `session` (`id`, `time`, `ip`, `browser`, `user`)
-	VALUES ('$id', '$time', '$ip', '$browser', '$user');
+	VALUES ('$id', '$time', '$ip', '$browser', '$username');
 	";
 	$return = db_query($query);
 }
@@ -1188,7 +1209,7 @@ function getTagFeed($user = null) {
 		$sql = "SELECT tag.user AS user1id, user.username AS user1, tag.movie, tag.timestamp, movie.id AS movieid, movie.poster, GROUP_CONCAT(tag.tag SEPARATOR ', ') AS tag
 FROM `tag`
 LEFT JOIN user
-ON tag.user = user.id
+ON tag.user = user.username
 LEFT JOIN movie
 ON tag.movie = movie.id
 WHERE tag.movie != '' AND (user = 'start' $postusersql)
@@ -1205,23 +1226,23 @@ function getListFeed($user = null) {
 
 		if (is_array($user)) {
 			foreach ($user AS $u) {
-				$postusersql .= " OR user.id = '$u'";
+				$postusersql .= " OR user.username = '$u'";
 			}
 		} else if (isset($user) && $user != "") {
-			$postusersql = " OR user.id = '$user'";
+			$postusersql = " OR user.username = '$user'";
 		} else if ($user == null) {
-			$postusersql = " OR user.id != 'q'";
+			$postusersql = " OR user.username != 'q'";
 		}
 
-		$sql = "SELECT l.list, l.item, l.timestamp, list.name, movie.title, movie.id AS movieid, movie.poster, user.username AS user1, user.id AS user1id
+		$sql = "SELECT l.list, l.item, l.timestamp, list.name, movie.title, movie.id AS movieid, movie.poster, user.username AS user1, user.username AS user1id
 		FROM `listitem` AS l
 		LEFT JOIN list
 		ON list.listid = l.list
 		LEFT JOIN user
-		ON user.id = list.user
+		ON user.username = list.user
 LEFT JOIN movie
 ON l.item = movie.id
-WHERE user.id = 'start' $postusersql
+WHERE user.username = 'start' $postusersql
 ORDER BY l.timestamp DESC
 		LIMIT 30";
 		$feed = db_select($sql);
@@ -1246,14 +1267,14 @@ function getPostsFeed($user = null) {
 		/*
 		SELECT
 		reply.reply,
-		user.username AS user1, user.id AS user1id,
+		user.username AS user1, user.username AS user1id,
 		post.timestamp AS timestamp, post.emoji,
 		post.id, post.message, post.userid, post.movieid, movie.year AS movieyear, movie.poster AS poster,
 	(SUM((10+od.upvote-od.downvote)*1000/(UNIX_TIMESTAMP()-post.timestamp)))
 		AS votes
 		FROM user
 		LEFT JOIN post
-		ON user.id = post.userid
+		ON user.username = post.userid
 		LEFT JOIN vote od
 		ON post.id = od.post
 		LEFT JOIN reply
@@ -1266,14 +1287,14 @@ function getPostsFeed($user = null) {
 		*/
 
 		$sql = "SELECT movie.title AS movietitle, movie.id AS movieid, movie.year AS movieyear, movie.poster AS poster, reply.original AS origmsg,
-		user.username AS user1, user.id AS user1id, post.message, post.emoji, post.timestamp AS timestamp, post.id AS id,
+		user.username AS user1, user.username AS user1id, post.message, post.emoji, post.timestamp AS timestamp, post.id AS id,
 		(SUM((10+od.upvote-od.downvote)*1000/(UNIX_TIMESTAMP()-post.timestamp)))
 			AS votes
 		FROM `post`
 		LEFT JOIN movie
 		ON post.movieid = movie.id
 		LEFT JOIN user
-		ON post.userid = user.id
+		ON post.userid = user.username
 		LEFT JOIN reply
 		ON post.id = reply.reply
 		LEFT JOIN vote od
@@ -1336,10 +1357,10 @@ function getRatingFeed($user) {
 			$postusersql .= " OR r.user = '$user'";
 		}
 
-$sql = "SELECT u.username AS user1, u.id AS user1id, r.rating AS rating, m.id AS movieid, m.title, m.poster AS poster, r.timestamp
+$sql = "SELECT u.username AS user1, u.username AS user1id, r.rating AS rating, m.id AS movieid, m.title, m.poster AS poster, r.timestamp
 FROM `ratemovie` AS r
 LEFT JOIN user AS u
-ON r.user = u.id
+ON r.user = u.username
 LEFT JOIN movie AS m
 ON r.movie = m.id
 WHERE r.user = 'dude'
@@ -1360,6 +1381,22 @@ function getFeed($user) {
 	$listfeed = getListFeed($user);
 	$postfeed = getPostsFeed($user);
 	$votefeed = getVotesFeed($user);
+	if (!is_array($ratingfeed)) {
+		$ratingfeed = array();
+	}
+	if (!is_array($tagfeed)) {
+		$tagfeed = array();
+	}
+	if (!is_array($listfeed)) {
+		$listfeed = array();
+	}
+	if (!is_array($postfeed)) {
+		$postfeed = array();
+	}
+	if (!is_array($votefeed)) {
+		$votefeed = array();
+	}
+
 	$feed1 = array_merge($postfeed, $votefeed, $listfeed, $tagfeed, $ratingfeed);
 	//$feed1 = array_merge($feed1, );
 
@@ -1433,7 +1470,7 @@ global $basethumburl;
 					$row["poster"] = $row["poster2"];
 				} else {
 					$print .= "<a href='movie.php?id=".$row["movieid"]."' class='red large'>".$row["movietitle"]."</a>";
-						$print .= "</td>";
+					$print .= "</td>";
 
 				}
 
@@ -1454,7 +1491,7 @@ global $basethumburl;
 	$print .= "</table>";
 	return $print;
 }
- 
+
 
 function makePermit($allcanread = 0, $allcaneditcontent = 0, $allcaneditlist = 0) {
 	$bin = $allcanread."".$allcaneditcontent."".$allcaneditlist;

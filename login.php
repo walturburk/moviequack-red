@@ -22,7 +22,7 @@ $output .= "<div class='content narrow large white'>";
 
 if ($return && hashOk($password, $return[0]["password"])) {
 
-	newSession($return[0]["id"], $return[0]["username"]);
+	newSession($return[0]["username"]);
 	$_SESSION["loggedin"] = true;
 	$output .= "<h2>Welcome <span class='red'>".$return[0]["username"]."</span>!</h2>";
 	$success = true;

@@ -38,33 +38,24 @@ if (!isset($_REQUEST["username"])) {
 
 } else {
 	$success = true;
-	$id = newId("u");
 	$password = createHash($password);
 	$ip = getUserIp();
-	$query = "INSERT INTO `user` (`id`, `username`, `password`, `email`, `ip`)
-	VALUES ('$id', '$username', '$password', '$email', '$ip');
+	$query = "INSERT INTO `user` (`username`, `password`, `email`, `ip`)
+	VALUES ('$username', '$password', '$email', '$ip');
 	";
 	db_query($query);
-	$recommendlist = newId("l");
-	$watchlist = newId("l");
-	$query2 = "INSERT INTO list` (`user`, `listid`, `name`, `permit`) VALUES ('$id', '$recommendlist', 'Recommend', '');
-	";
-	$query3 = "INSERT INTO `list` (`user`, `listid`, `name`, `permit`) VALUES ('$id', '$watchlist', 'Watchlist', '');
-	";
 
-	db_query($query3);
-	db_query($query2);
 
-	$sql = "UPDATE `post` SET `post`.`userid` = '".$id."' WHERE `post`.`userid` = '".$_SESSION['user']."' ";
+	$sql = "UPDATE `post` SET `post`.`userid` = '".$username."' WHERE `post`.`userid` = '".$_SESSION['user']."' ";
 	db_query($sql);
-	$sql = "UPDATE `vote` SET `vote`.`user` = '".$id."' WHERE `vote`.`user` = '".$_SESSION['user']."' ";
+	$sql = "UPDATE `vote` SET `vote`.`user` = '".$username."' WHERE `vote`.`user` = '".$_SESSION['user']."' ";
 	db_query($sql);
-	$sql = "UPDATE `ratemovie` SET `ratemovie`.`user` = '".$id."' WHERE `ratemovie`.`user` = '".$_SESSION['user']."' ";
+	$sql = "UPDATE `ratemovie` SET `ratemovie`.`user` = '".$username."' WHERE `ratemovie`.`user` = '".$_SESSION['user']."' ";
 	db_query($sql);
 
 	$_SESSION["loggedin"] = true;
-	$_SESSION["user"] = $id;
-	$_SESSION["username"] = $username;
+	$_SESSION["user"] = $username;
+
 
 	saveAutoLogin();
 

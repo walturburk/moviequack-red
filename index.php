@@ -8,7 +8,7 @@ $registerbtnclass = "redbtn";
 $loginlinkclass = "red";
 
 if ($_SESSION["loggedin"] == true) {
-	$toplogin = "<a href='profile.php?id=".$_SESSION["user"]."''>".$_SESSION["username"]."</a>";
+	$toplogin = "<a href='profile.php?id=".$_SESSION["user"]."''>".$_SESSION["user"]."</a>";
 	$logoutbutton = '<li><a href="logout.php">logout</a></li>';
 } else {
 	$logoutbutton = "";
