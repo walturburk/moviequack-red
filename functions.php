@@ -913,6 +913,7 @@ function printAllTags($movie = null) {
 	return $print;
 }
 
+
 function getTagsByLetter($q) {
 	$tags1 = db_select("SELECT tag FROM tag WHERE tag LIKE '$q%' GROUP BY tag ORDER BY tag DESC LIMIT 5");
 	return $tags1;
@@ -1563,6 +1564,46 @@ ORDER BY listitem.order ASC";
 	return $items;
 }
 
+function getFilteredItems($user, $tag) {
+
+	if (is_array($user)) {
+		foreach ($user AS $u) {
+			/*if (is_array($u)) {
+				$users[] = $u["username"];
+			} else {*/
+				$users[] = $u;
+			//}
+		}
+		$wuser = implode("' OR user = '", $users);
+
+	} else {
+		$wuser = $user;
+	}
+	if (is_array($tag)) {
+		foreach ($tag AS $t) {
+			/*if (is_array($t)) {
+
+				$tags[] = $t["tag"];
+			} else {*/
+				$tags[] = $t;
+			//}
+		}
+		$wtag = implode("' OR tag = '", $tags);
+	} else {
+		$wtag = $tag;
+	}
+
+	$sql = "SELECT tag.movie, movie.title
+	FROM tag
+	LEFT JOIN movie ON movie.id = tag.movie
+	WHERE (user = '$wuser')
+	AND (tag = '$wtag')
+	GROUP BY movie";
+
+	$items = db_select($sql);
+	return $items;
+}
+
 function printListItems($list) {
 	$items = getItemsFromList($list);
 	foreach($items AS $item) {
@@ -1682,8 +1723,6 @@ function getFollowing($userid) {
 	}
 	return $users;
 }
-
-
 
 $timeforpageload = time();
 

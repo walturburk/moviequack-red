@@ -1,17 +1,17 @@
-<script>
-jQuery(document).on("change", ".selectedlist", function() {
-      //console.log(window.location.protocol + "//" + window.location.host + "/");
-      window.location.href = "list.php?id="+this.value;
-});
-jQuery(document).ready(function() {
-  var list = jQuery("#listitems");
-  var ulheight = list.height();
-  list.height(ulheight);
-});
+<script type="text/javascript">
+$(function(){
+         $('#filters input').on('change',function(){
+            $('#filters').submit();
+            });
+        });
 </script>
+
 <div class="content narrow">
-<header class="inblock profileheader contentholder marginbottom"><h1>{listname}</h1></header>
-<div>{loggedinlistoptions}</div>
+
+<form id="filters" action="list.php" method="get">
+<div class="users">{users}</div>
+<div class="tags">{tags}</div>
+</form>
 
 </div>
 
