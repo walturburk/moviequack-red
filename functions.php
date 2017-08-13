@@ -1568,11 +1568,11 @@ function getFilteredItems($user, $tag) {
 
 	if (is_array($user)) {
 		foreach ($user AS $u) {
-			/*if (is_array($u)) {
+			if (is_array($u)) {
 				$users[] = $u["username"];
-			} else {*/
+			} else {
 				$users[] = $u;
-			//}
+			}
 		}
 		$wuser = implode("' OR user = '", $users);
 
@@ -1581,19 +1581,19 @@ function getFilteredItems($user, $tag) {
 	}
 	if (is_array($tag)) {
 		foreach ($tag AS $t) {
-			/*if (is_array($t)) {
+			if (is_array($t)) {
 
 				$tags[] = $t["tag"];
-			} else {*/
+			} else {
 				$tags[] = $t;
-			//}
+			}
 		}
 		$wtag = implode("' OR tag = '", $tags);
 	} else {
 		$wtag = $tag;
 	}
 
-	$sql = "SELECT tag.movie, movie.title
+	$sql = "SELECT tag.movie AS item, movie.title, movie.year, movie.poster
 	FROM tag
 	LEFT JOIN movie ON movie.id = tag.movie
 	WHERE (user = '$wuser')

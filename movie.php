@@ -82,7 +82,7 @@ if ($_SESSION["loggedin"] != true) {
 
 
 if ($posts == "") {
-	$posts = "<div class='centeralign padding2 large grey marginbottom'>Be the first to write about ".$movie["title"]."!</div>";
+	$posts = "";//<div class='centeralign padding2 large grey marginbottom'>Be the first to write about ".$movie["title"]."!</div>";
 }
 
 $webpagetitle = $movietitle;

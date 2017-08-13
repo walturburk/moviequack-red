@@ -317,6 +317,16 @@ span.tag {
 .btn.activebtn {
 	color:#a13647;
 }
+input.userfilter {
+	display:none;
+}
+input.tagfilter {
+	display:none;
+}
+input:checked + label.filterbtn {
+	background-color:white;
+	color:black
+}
 .addremparent.removedparent {
 	opacity:0.5;
 }
@@ -379,7 +389,7 @@ header.movieheader {
 .moviebackdrop {
 	float:left;
 	width:100%;
-	margin:2em 0;
+	box-shadow: 0 0px 16px 0px rgba(0,0,0,0.25);
 }
 footer.footer {
 	padding: 86px 8px;
@@ -529,6 +539,7 @@ input.widemsgtext {
 	padding:16px;
 	width:calc(100% - 55px);
 	float:left;
+	border-bottom-left-radius: 16px;
 }
 input.widemsgsubmit {
 	float:right;
@@ -538,6 +549,7 @@ input.widemsgsubmit {
 	color:white;
 	text-shadow:2px 2px 0 rgba(0,0,0,0.2);
 	border-radius:0;
+	border-bottom-right-radius: 16px;
 }
 input.widemsgsubmit:hover {
 	text-shadow:3px 3px 0 rgba(0,0,0,0.3);
@@ -641,7 +653,7 @@ nav#mainnav {
 }
 nav#mainnav ul li {
 	float:left;
-	width:25%;
+	width:33%;
 }
 nav#mainnav ul li a {
 	display:inline-block;
@@ -863,10 +875,13 @@ i.material-icons.small {
 }
 .topsearchbar .searchbutton {
 	width:60px;
+	height:55px;
 	border-radius:0;
 	float:right;
 	font-size:25px;
 	text-shadow:2px 2px rgba(0,0,0,0.2);
+	border-top-right-radius: 16px;
+	border-bottom-right-radius:16px;
 }
 input {
 	border:0;
@@ -906,9 +921,13 @@ input {
 	width:calc(100% - 60px);
 	max-width:calc(100% - 60px);
 	float:left;
+	height:55px;
 }
 .topsearchbar .searchfield {
 	border-radius:0;
+	border-top-left-radius: 16px;
+	border-bottom-left-radius:16px;
+	height:55px;
 }
 .darkred {
 	color:#a13647;
@@ -1010,6 +1029,7 @@ form#addtag .tt-suggestion:hover {
 
 }
 @media screen and (min-width: 770px) {
+
 	.desktophide {
 		display:none;
 	}
