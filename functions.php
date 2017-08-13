@@ -883,7 +883,7 @@ function addCollections($col, $movie) {
 function addTag($movie, $tag) {
 
 	$user = $_SESSION["user"];
-	$tag = strtolower(preg_replace('/[^a-zA-Z0-9-_ ]/','', $tag));
+	$tag = strtolower(preg_replace('/[^a-zA-Z0-9-_ @]/','', $tag));
 	$time = time();
 
 	$query = "INSERT INTO `".dbname."`.`tag` (`movie`, `user`, `tag`, `timestamp`) VALUES ('".$movie."', '".$user."', '".$tag."', '".$time."');";
@@ -906,6 +906,39 @@ function getAllTags() {
 function printAllTags($movie = null) {
 	$tags = getAllTags();
 	foreach ($tags AS $tag) {
+		$print .= "<div class='tag' data-movie='".$movie."'>";
+		$print .= $tag["tag"];
+		$print .= "</div>";
+	}
+	return $print;
+}
+
+function printFriendsTags($movie = null) {
+	$user = $_SESSION["user"];
+	$tags1 = getFollowing($user);
+
+	$print .= "";
+	foreach ($tags1 AS $tag) {
+		$print .= "<div class='tag' data-movie='".$movie."'>@";
+		$print .= $tag;
+		$print .= "</div>";
+	}
+
+	return $print;
+}
+
+function printAllFriendsTags($movie = null) {
+	$user = $_SESSION["user"];
+	$tags1 = getFollowing($user);
+	$tags2 = getAllTags();
+	//$tags = array_merge($tags1, $tags2);
+	$print .= "";
+	foreach ($tags1 AS $tag) {
+		$print .= "<div class='tag' data-movie='".$movie."'>@";
+		$print .= $tag;
+		$print .= "</div>";
+	}
+	foreach ($tags2 AS $tag) {
 		$print .= "<div class='tag' data-movie='".$movie."'>";
 		$print .= $tag["tag"];
 		$print .= "</div>";
@@ -979,13 +1012,13 @@ function printTags($tags, $movie) {
 	foreach ($tags AS $tag) {
 		$active = $tag["active"];
 		$fontsize = 14+$tag["c"];
-		$print .= "<span style='font-size:".$fontsize."px' class='tag $active' data-movie='".$movie."'>";
+		$print .= "<span style='font-size:".$fontsize."px' class='tag $active' data-movie='".$movie."' data-tag='".$tag["tag"]."' >";
 		$print .= $tag["tag"];
 		$print .= "</span> ";
 	}
 
 	if (empty($tags)) {
-		$print = "<span class='grey smalltext inblock padding0'>No tags</span>";
+		$print = "<span class='white smalltext inblock padding0'>No tags</span>";
 	}
 	return $print;
 }
@@ -1500,13 +1533,19 @@ function makePermit($allcanread = 0, $allcaneditcontent = 0, $allcaneditlist = 0
 	return $dec;
 }
 
-function addToList($item, $list, $order = "0") {
+function addToListOld($item, $list, $order = "0") {
 	$time = time();
 	$query = "INSERT INTO `listitem` (`list`, `item`, `timestamp`, `order`) VALUES ('$list', '$item', '$time', '$order');
 	";
 	$return = db_query($query);
 }
 
+function addToList($item, $user, $tag) {
+	$time = time();
+	$sql = "INSERT INTO tag (`movie`, `user`, `tag`, `timestamp`) VALUES ('$item', '$user', '$tag', '$time')";
+	$return = db_query($sql);
+	return $return;
+}
 
 function newList($name) {
 	//$name = db_escape($name);

@@ -281,7 +281,7 @@ jQuery(document).on("click", ".postmessage .submit", function(e) {
 
 	jQuery(document).on("click", ".tag", function(e) {
 		var movie = jQuery(this).attr("data-movie");
-		var tag = jQuery(this).text();
+		var tag = jQuery(this).attr("data-tag");
 		var active = jQuery(this).hasClass("activebtn");
 
 		if (active) {
@@ -397,7 +397,7 @@ jQuery(document).on("click", ".postmessage .submit", function(e) {
     var item = jQuery(this).attr("data-item");
     var obj = {
 			mode: "ADDTOLIST",
-			listid: listid,
+			tag: tag,
       item: item
 			};
 
@@ -410,7 +410,7 @@ jQuery(document).on("click", ".postmessage .submit", function(e) {
   		var returned = postAjaxPhp(obj).done(function(result) {
         jQuery(".listsmenu").html(result);
       });*/
-      jQuery(".addtolist[data-list='"+listid+"'][data-item='"+item+"']").addClass("activebtn removefromlist").removeClass("addtolist");
+      jQuery(".addtolist[data-list='"+tag+"'][data-item='"+item+"']").addClass("activebtn removefromlist").removeClass("addtolist");
       addremparent.removeClass("removedparent");
     });
   });
@@ -421,7 +421,7 @@ jQuery(document).on("click", ".postmessage .submit", function(e) {
     var item = jQuery(this).attr("data-item");
     var obj = {
 			mode: "REMOVEFROMLIST",
-			listid: listid,
+			tag: tag,
       item: item
 			};
 

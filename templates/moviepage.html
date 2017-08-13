@@ -24,14 +24,27 @@
 
 <div class="movievote voteparent fullwidth" data-postid="{movieid}">
 	<div class="movievoteopt">
-		<div data-list="{recommendlist}" data-item="{movieid}" class="button roundbutton {isinrl}"><i class="material-icons">favorite</i></div>
+		<div data-tag="favourite" data-movie="{movieid}" class="button roundbutton tag"><i class="material-icons">favorite</i></div>
 	</div>
 	<div class="movievoteopt">
-		<div data-list="{watchlist}" data-item="{movieid}" class="button roundbutton {isinwl}"><i class="material-icons">bookmark</i></div>
+		<div data-tag="watch later" data-movie="{movieid}" class="button roundbutton tag"><i class="material-icons">bookmark</i></div>
 	</div>
-	<div style="clear:none" class="movievoteopt expandparent">
-		<div class="button roundbutton expandbtn"><i class="material-icons">playlist_add</i></div>
-		<div class="card verydarkwindow fixed expandchild listsmenu">{lists}</div>
+	<div style="clear:none" class="movievoteopt">
+		<div data-expand="recommendlist" class="button roundbutton"><i class="material-icons">playlist_add</i></div>
+		<div style="display:none;" class="recommendlist card verydarkwindow fixed addtags">
+
+				<form id='addtag' class='addtag' name="addtag" method="post">
+					<fieldset>
+						<input class='input' type='text' name='tag' id='tag' maxlength="20" />
+						<input type='hidden' name='movieid' id='movieid' value="{movieid}" />
+						<input id="submit" class="grey smallbtn submit material-icons" type='submit' name='submit' value='&#xE163;' />
+					</fieldset>
+				</form>
+
+			{friendstaglist}
+
+
+		</div>
 	</div>
 	<div class="clear"></div>
 </div>
@@ -57,8 +70,8 @@
 	<span id="tagscontent">{tags}</span>
 
 
-		<div class="newtagbtn expandbtn small"><i class="material-icons">add</i></div>
-		<div class="card verydarkwindow fixed expandchild addtags">
+		<div data-expand="tagslist" class="newtagbtn expandbtn small"><i class="material-icons">add</i></div>
+		<div style="display:none;" class="card verydarkwindow fixed addtags tagslist">
 
 			<form id='addtag' class='addtag' name="addtag" method="post">
 				<fieldset>

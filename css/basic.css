@@ -228,10 +228,10 @@ h4 {
   z-index:1;
   pointer-events:none;
 }
-.expandchild.absolute {
+.absolute {
   position:absolute;
 }
-.expandchild.fixed {
+.fixed {
   position:fixed;
   top: 50%;
   left: 50%;
@@ -240,12 +240,12 @@ h4 {
 	max-height:100%;
 	overflow:auto;
 }
-.expandchild.fixed.maxwidth {
+.fixed.maxwidth {
 	top: 0;
 	left: 0;
 	transform: translate(0, 0);
 }
-.expandchild.maxwidth {
+.maxwidth {
 	width:100%;
 }
 .expandchild > * {

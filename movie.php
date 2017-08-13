@@ -90,6 +90,7 @@ $webpagetitle = $movietitle;
 $tagsarr = getTags($movieid);
 $tags = printTags($tagsarr, $movieid);
 $taglist = printAllTags($movieid);
+$friendstaglist = printFriendsTags($movieid);
 $streams = printStreams($movieid);
 
 $rating = getMovieRating($movieid);

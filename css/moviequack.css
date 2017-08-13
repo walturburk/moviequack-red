@@ -138,7 +138,7 @@ table.searchresults td .poster {
 .expandparent {
 	clear:both;
 }
-.expandchild.fixed {
+.fixed {
 	max-height:calc(100% - 60px);
 }
 li.sortableli {
@@ -600,10 +600,13 @@ input.widemsgsubmit:hover {
 .quackpartwidth {
 	width:calc(100% - 124px);
 }
+form.addtag {
+	position:relative;
+}
 form.addtag input[type="text"] {
 	padding:6px;
 	font-size:14px;
-
+	position:relative;
 }
 form.addtag input#submit {
 	background: #fafafa;
@@ -1009,7 +1012,7 @@ form#addtag .tt-suggestion:hover {
 	.movieinfowindow {
 		padding-top:16px;
 	}
-	.expandchild.fixed {
+	.fixed {
 		margin-bottom:54px;
 	}
 	.topmenu h1 {

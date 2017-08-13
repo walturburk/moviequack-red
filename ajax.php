@@ -95,8 +95,9 @@ switch ($mode) {
 		break;
 	case "ADDTOLIST":
 		$item = $_REQUEST["item"];
-		$listid = $_REQUEST["listid"];
-		addToList($item, $listid);
+		$tag = $_REQUEST["tag"];
+		$user = $_SESSION["user"];
+		addToList($item, $user, $tag);
 		break;
 	case "REMOVEFROMLIST":
 		$item = $_REQUEST["item"];
