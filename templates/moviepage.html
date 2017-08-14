@@ -24,14 +24,14 @@
 
 <div class="movievote voteparent fullwidth" data-postid="{movieid}">
 	<div class="movievoteopt">
-		<div data-tag="favourite" data-movie="{movieid}" class="button roundbutton tag"><i class="material-icons">favorite</i></div>
+		<div data-tag="favourite" data-movie="{movieid}" class="button roundbutton tag {favouriteactive}"><i class="material-icons">favorite</i></div>
 	</div>
 	<div class="movievoteopt">
-		<div data-tag="watch later" data-movie="{movieid}" class="button roundbutton tag"><i class="material-icons">bookmark</i></div>
+		<div data-tag="watch later" data-movie="{movieid}" class="button roundbutton tag {watchlateractive}"><i class="material-icons">bookmark</i></div>
 	</div>
 	<div style="clear:none" class="movievoteopt">
-		<div data-expand="recommendlist" class="button roundbutton"><i class="material-icons">playlist_add</i></div>
-		<div style="display:none;" class="recommendlist card verydarkwindow fixed addtags">
+		<div data-expand="recommendlist" class="button roundbutton"><i class="material-icons">share</i></div>
+		<div class="recommendlist card verydarkwindow fixed addtags popup">
 
 				<form id='addtag' class='addtag' name="addtag" method="post">
 					<fieldset>
@@ -71,7 +71,7 @@
 
 
 		<div data-expand="tagslist" class="newtagbtn expandbtn small"><i class="material-icons">add</i></div>
-		<div style="display:none;" class="card verydarkwindow fixed addtags tagslist">
+		<div class="card verydarkwindow fixed addtags tagslist popup">
 
 			<form id='addtag' class='addtag' name="addtag" method="post">
 				<fieldset>

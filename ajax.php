@@ -45,7 +45,6 @@ switch ($mode) {
 		echo printMessages($_REQUEST["movie"]);
 		break;
 	case "FOLLOW":
-		echo "HEJ";
 		follow($_REQUEST["follows"]);
 		break;
 	case "EXTERNALSEARCH":
@@ -86,36 +85,12 @@ switch ($mode) {
 		$return = printReplies($replies);
 		echo $return;
 		break;
-	case "NEWLIST":
-		$listname = $_REQUEST["listname"];
-		newList($listname);
-		break;
-	case "REMOVELIST":
-		removeList($q);
-		break;
-	case "ADDTOLIST":
-		$item = $_REQUEST["item"];
-		$tag = $_REQUEST["tag"];
-		$user = $_SESSION["user"];
-		addToList($item, $user, $tag);
-		break;
-	case "REMOVEFROMLIST":
-		$item = $_REQUEST["item"];
-		$listid = $_REQUEST["listid"];
-		removeFromList($item, $listid);
-		break;
+
+
 	case "REMOVEPOST":
 		removePost($q);
 		break;
-	case "SORTLIST":
-		$listid = $_REQUEST["listid"];
-		$listorder = $_REQUEST["listorder"];
-		echo sortList($listid, $listorder);
-		break;
-	case "GETADDTOLIST":
-		$lists = printAddToList($q);
-		echo $lists;
-		break;
+
 	case "ADDTAG":
 		$movie = $_REQUEST["movie"];
 		addTag($movie, $q);

@@ -44,36 +44,10 @@ $plot = $movie["overview"];
 
 $upvoteactive = getVotebtnActive($movieid, true);
 $downvoteactive = getVotebtnActive($movieid, false);
-//$postsarray = getMessages($movieid);
-//printMessages($movieid);
-$emojicode = ":bust_in_silhouette:";
-$emoji = getEmoji($emojicode);
-$lists = printAddToList($movieid);
+
 $replies = printReplies(getReplies($postid));
 
-$listarr = getLists($user);
 
-foreach ($listarr AS $list) {
-	if ($list["name"] == "Watchlist") {
-		$watchlist = $list["listid"];
-	} else if ($list["name"] == "Recommend") {
-		$recommendlist = $list["listid"];
-	}
-}
-
-$inlists = getListsForUserItem($user, $movieid);
-
-
-if (is_array($inlists) && in_array($watchlist, $inlists)) {
-	$isinwl = " removefromlist activebtn ";
-} else {
-	$isinwl = " addtolist ";
-}
-if (is_array($inlists) && in_array($recommendlist, $inlists)) {
-	$isinrl = " removefromlist activebtn ";
-} else {
-	$isinrl = " addtolist ";
-}
 
 if ($_SESSION["loggedin"] != true) {
 	$isinwl = " gotologin ";

@@ -17,7 +17,7 @@ if (empty($users)) {
 	$userhits = "No matching users found";
 } else {
 	foreach ($users AS $user) {
-		$userhits .= '<div class=""><a class="large" href="profile.php?id='.$user["id"].'">'.$user["username"].'</a></div>';
+		$userhits .= '<div class=""><a class="large" href="profile.php?id='.$user["username"].'">'.$user["username"].'</a></div>';
 	}
 }
 
@@ -37,7 +37,7 @@ if (empty($movies)) {
 			$movietitle = $movie["title"];
 		}
 		$movieid = $movie["id"];
-		
+
 		$movieyear = $movie["year"];
 		$posterurl = "https://image.tmdb.org/t/p/w92".$movie["poster"];
 		$searchhits .= $searchhit->output();

@@ -7,10 +7,17 @@ function toggleExpand(elem) {
   }
 }
 
-jQuery(document).on("click", "[data-expand]", function() {
+jQuery(document).on("click", function(e) {
+  var par = jQuery(e.target).parents(".popup");
+  jQuery(".popup").not(e.target).not(par).hide();
+});
+
+jQuery(document).on("click", "[data-expand]", function(e) {
   var expand = jQuery(this).attr("data-expand");
   toggleExpand(jQuery("."+expand));
+  e.stopPropagation();
 });
+
 
 //EXPAND END
 
@@ -286,10 +293,10 @@ jQuery(document).on("click", ".postmessage .submit", function(e) {
 
 		if (active) {
 			var mode = "REMOVETAG";
-			jQuery(this).removeClass("activebtn");
+			jQuery("[data-tag='"+tag+"']").removeClass("activebtn");
 		} else {
 			var mode = "ADDTAG";
-			jQuery(this).addClass("activebtn");
+			jQuery("[data-tag='"+tag+"']").addClass("activebtn");
 		}
 		obj = {
 			mode: mode,
@@ -297,7 +304,6 @@ jQuery(document).on("click", ".postmessage .submit", function(e) {
 			q: tag
 		};
 		postAjaxPhp(obj).done(function(result) {
-			console.log(result);
 			jQuery("span#tagscontent").html(result);
 		});
 	});
@@ -391,45 +397,9 @@ jQuery(document).on("click", ".postmessage .submit", function(e) {
 
 	});
 
-  jQuery(document).on("click", ".addtolist", function() {
-    var addremparent = jQuery(this).parents(".addremparent");
-    var listid = jQuery(this).attr("data-list");
-    var item = jQuery(this).attr("data-item");
-    var obj = {
-			mode: "ADDTOLIST",
-			tag: tag,
-      item: item
-			};
 
-		var returned = postAjaxPhp(obj).done(function(result) {
-      /*var obj = {
-  			mode: "GETADDTOLIST",
-        q: item
-  			};
 
-  		var returned = postAjaxPhp(obj).done(function(result) {
-        jQuery(".listsmenu").html(result);
-      });*/
-      jQuery(".addtolist[data-list='"+tag+"'][data-item='"+item+"']").addClass("activebtn removefromlist").removeClass("addtolist");
-      addremparent.removeClass("removedparent");
-    });
-  });
 
-  jQuery(document).on("click", ".removefromlist", function() {
-    var addremparent = jQuery(this).parents(".addremparent");
-    var listid = jQuery(this).attr("data-list");
-    var item = jQuery(this).attr("data-item");
-    var obj = {
-			mode: "REMOVEFROMLIST",
-			tag: tag,
-      item: item
-			};
-
-		var returned = postAjaxPhp(obj).done(function(result) {
-      jQuery(".removefromlist[data-list='"+listid+"'][data-item='"+item+"']").removeClass("activebtn removefromlist").addClass("addtolist");
-      addremparent.addClass("removedparent");
-    });
-  });
 
   jQuery(document).on("click", ".removepost", function() {
     var addremparent = jQuery(this).parents(".addremparent");
@@ -444,32 +414,9 @@ jQuery(document).on("click", ".postmessage .submit", function(e) {
     });
   });
 
-  jQuery(document).on("click", ".confirmdeletelist", function() {
-    var listid = jQuery(".selectedlist").val();
 
-    var obj = {
-			mode: "REMOVELIST",
-			q: listid
-			};
 
-		var returned = postAjaxPhp(obj).done(function(result) {
-      window.location.href = "list.php";
-    });
-  });
 
-  jQuery(document).on("click", ".createnewlist", function() {
-	  var listname = jQuery("#newlistname").val();
-
-	  var obj = {
-			mode: "NEWLIST",
-			listname: listname
-		};
-
-    	var returned = postAjaxPhp(obj).done(function(result) {
-    		location.reload();
-      });
-
-  });
 
 
 

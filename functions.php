@@ -481,44 +481,6 @@ if (empty($movie)) {
 	return $movie[0];
 }
 
-function printRandomMovie() {
-	$user = $_SESSION["user"];
-	$movie = getRandomMovie();
-	$listarr = getLists($user);
-	foreach ($listarr AS $list) {
-		if ($list["name"] == "Watchlist") {
-			$watchlist = $list["listid"];
-		} else if ($list["name"] == "Recommend") {
-			$recommendlist = $list["listid"];
-		}
-	}
-	$emojicode = ":bust_in_silhouette:";
-	$print = "";
-	if (!empty($movie) && $_SESSION["loggedin"]) {
-		$t = new Template("templates/movieprint.html");
-
-		$t->set("upvoteactive", getVotebtnActive($movie["id"], true));
-		$t->set("downvoteactive", getVotebtnActive($movie["id"], false));
-		$t->set("title", $movie["title"]);
-		$t->set("posterurl", basepostermurl.$movie["poster"]);
-		$t->set("thumburl", basethumburl.$movie["poster"]);
-		$t->set("rate", getMovieRating($movie["id"]));
-		$t->set("urate", getUsersMovieRating($movie["id"], $user));
-		$t->set("rating", printMovieRating($movie["id"], $rate, $urate));
-		$t->set("recommendlist", $recommendlist);
-		$t->set("watchlist", $watchlist);
-		$t->set("movieid", $movie["id"]);
-		$t->set("emojicode", $emojicode);
-		$t->set("emoji", getEmoji($emojicode));
-
-		$print = $t->output();
-	} else {
-		$print = "";
-	}
-
-	return $print;
-}
-
 function rateMovie($movie, $rating) {
 
 	$user = $_SESSION["user"];
@@ -883,13 +845,18 @@ function addCollections($col, $movie) {
 function addTag($movie, $tag) {
 
 	$user = $_SESSION["user"];
+	$tag = trim($tag);
 	$tag = strtolower(preg_replace('/[^a-zA-Z0-9-_ @]/','', $tag));
+	if (strlen($tag) > 0) {
 	$time = time();
 
 	$query = "INSERT INTO `".dbname."`.`tag` (`movie`, `user`, `tag`, `timestamp`) VALUES ('".$movie."', '".$user."', '".$tag."', '".$time."');";
 
 	db_query($query);
 	return $query;
+} else {
+	return false;
+}
 }
 
 function removeTag($movie, $tag) {
@@ -906,7 +873,7 @@ function getAllTags() {
 function printAllTags($movie = null) {
 	$tags = getAllTags();
 	foreach ($tags AS $tag) {
-		$print .= "<div class='tag' data-movie='".$movie."'>";
+		$print .= "<div class='tag' data-tag='".$tag["tag"]."' data-movie='".$movie."'>";
 		$print .= $tag["tag"];
 		$print .= "</div>";
 	}
@@ -919,7 +886,7 @@ function printFriendsTags($movie = null) {
 
 	$print .= "";
 	foreach ($tags1 AS $tag) {
-		$print .= "<div class='tag' data-movie='".$movie."'>@";
+		$print .= "<div class='tag' data-tag='@".$tag."' data-movie='".$movie."'>@";
 		$print .= $tag;
 		$print .= "</div>";
 	}
@@ -934,12 +901,12 @@ function printAllFriendsTags($movie = null) {
 	//$tags = array_merge($tags1, $tags2);
 	$print .= "";
 	foreach ($tags1 AS $tag) {
-		$print .= "<div class='tag' data-movie='".$movie."'>@";
+		$print .= "<div class='tag' data-tag='".$tag."' data-movie='".$movie."'>@";
 		$print .= $tag;
 		$print .= "</div>";
 	}
 	foreach ($tags2 AS $tag) {
-		$print .= "<div class='tag' data-movie='".$movie."'>";
+		$print .= "<div class='tag' data-tag='".$tag["tag"]."' data-movie='".$movie."'>";
 		$print .= $tag["tag"];
 		$print .= "</div>";
 	}
@@ -953,7 +920,7 @@ function getTagsByLetter($q) {
 }
 
 function getTagsByUser($movie, $user) {
-	$tags = db_select("SELECT movie, user, tag, timestamp, COUNT(user) AS c FROM  `tag` WHERE  `movie` =  '".$movie."' AND user = '".$user."' GROUP BY tag ORDER BY c DESC");
+	$tags = db_select("SELECT movie, user, tag, timestamp, COUNT(user) AS c, 'activebtn' AS active FROM  `tag` WHERE  `movie` =  '".$movie."' AND user = '".$user."' GROUP BY tag ORDER BY c DESC");
 	return $tags;
 }
 
@@ -969,6 +936,7 @@ function getAllTagsByUser($user = NULL) {
 	}
 	$tags = db_select("SELECT * FROM `tag` ".$where." GROUP BY tag ORDER BY `tag` DESC");
 	return $tags;
+
 }
 
 
@@ -1021,6 +989,19 @@ function printTags($tags, $movie) {
 		$print = "<span class='white smalltext inblock padding0'>No tags</span>";
 	}
 	return $print;
+}
+
+function getSpecificTag($tag, $user) {
+	$tags1 = db_select("SELECT tag FROM tag WHERE user = '$user' AND tag = '$tag'");
+	return $tags1[0];
+}
+
+function printTagActive($tag) {
+	if (empty($tag["tag"])) {
+		return "";
+	} else {
+		return "activebtn";
+	}
 }
 
 function getExternalStreams($title, $year = null)
@@ -1212,20 +1193,27 @@ function checkiffollows($follower, $follows) {
 	return $user[0]["timestamp"];
 }
 
-function follow($follows) {
+function follow($follows = null) {
 	$follower = $_SESSION["user"];
-	if (checkiffollows($follower, $follows)) {
-		$query = "DELETE FROM `follow` WHERE `follower` = '$follower' AND `follows` = '$follows';";
-		$ret = false;
-	} else {
-		$timestamp = time();
-		$query = "INSERT INTO `".dbname."`.`follow`
-		(`follower`, `follows`, `timestamp`)
-		VALUES ('$follower', '$follows', '$timestamp');";
-		$ret = true;
-	}
+
+		if (checkiffollows($follower, $follows)) {
+			$query = "DELETE FROM `follow` WHERE `follower` = '$follower' AND `follows` = '$follows';";
+			$ret = false;
+		} else {
+			$result = db_query("SELECT username FROM user WHERE username = '$follows'");
+			if (mysql_num_rows($result)==0) {
+			$timestamp = time();
+			$query = "INSERT INTO `".dbname."`.`follow`
+			(`follower`, `follows`, `timestamp`)
+			VALUES ('$follower', '$follows', '$timestamp');";
+			$ret = true;
+		} else {
+			$ret = false;
+		}
+		}
 	db_query($query);
 	return $ret;
+
 }
 
 function getTagFeed($user = null) {
@@ -1249,35 +1237,6 @@ ON tag.movie = movie.id
 WHERE tag.movie != '' AND (user = 'start' $postusersql)
 GROUP BY tag.movie
 ORDER BY `tag`.`timestamp` DESC
-		LIMIT 30";
-		$feed = db_select($sql);
-
-		return $feed;
-
-}
-
-function getListFeed($user = null) {
-
-		if (is_array($user)) {
-			foreach ($user AS $u) {
-				$postusersql .= " OR user.username = '$u'";
-			}
-		} else if (isset($user) && $user != "") {
-			$postusersql = " OR user.username = '$user'";
-		} else if ($user == null) {
-			$postusersql = " OR user.username != 'q'";
-		}
-
-		$sql = "SELECT l.list, l.item, l.timestamp, list.name, movie.title, movie.id AS movieid, movie.poster, user.username AS user1, user.username AS user1id
-		FROM `listitem` AS l
-		LEFT JOIN list
-		ON list.listid = l.list
-		LEFT JOIN user
-		ON user.username = list.user
-LEFT JOIN movie
-ON l.item = movie.id
-WHERE user.username = 'start' $postusersql
-ORDER BY l.timestamp DESC
 		LIMIT 30";
 		$feed = db_select($sql);
 
@@ -1412,7 +1371,7 @@ function getFeed($user) {
 
 	$ratingfeed = getRatingFeed($user);
 	$tagfeed = getTagFeed($user);
-	$listfeed = getListFeed($user);
+
 	$postfeed = getPostsFeed($user);
 	$votefeed = getVotesFeed($user);
 	if (!is_array($ratingfeed)) {
@@ -1421,9 +1380,6 @@ function getFeed($user) {
 	if (!is_array($tagfeed)) {
 		$tagfeed = array();
 	}
-	if (!is_array($listfeed)) {
-		$listfeed = array();
-	}
 	if (!is_array($postfeed)) {
 		$postfeed = array();
 	}
@@ -1431,7 +1387,7 @@ function getFeed($user) {
 		$votefeed = array();
 	}
 
-	$feed1 = array_merge($postfeed, $votefeed, $listfeed, $tagfeed, $ratingfeed);
+	$feed1 = array_merge($postfeed, $votefeed, $tagfeed, $ratingfeed);
 	//$feed1 = array_merge($feed1, );
 
 	usort($feed1, function($a, $b) {
@@ -1468,19 +1424,6 @@ global $basethumburl;
 				$print .= "</td>";
 				$print .= "<td class='red'>";
 				$print .= $row["tag"];
-				$print .= "</td>";
-
-			} else if ($row["list"]) {
-				if ($row["name"] == "Recommend") {
-					$print .= "<i class='material-icons xlarge'>favorite</i>";
-				} else if ($row["name"] == "Watchlist") {
-					$print .= "<i class='material-icons xlarge'>bookmark</i>";
-				} else {
-					$print .= "<i class='material-icons xlarge'>playlist_add</i>";
-				}
-				$print .= "</td>";
-				$print .= "<td class='grey'>";
-				$print .= "<a class='red' href='movie.php?id=".$row["movieid"]."'>".$row["title"]."</a><br>added to<br><a class='red' href='list.php?id=".$row["list"]."'>".$row["name"]."</a>";
 				$print .= "</td>";
 
 			} else if ($row["post"]) {
@@ -1527,82 +1470,6 @@ global $basethumburl;
 }
 
 
-function makePermit($allcanread = 0, $allcaneditcontent = 0, $allcaneditlist = 0) {
-	$bin = $allcanread."".$allcaneditcontent."".$allcaneditlist;
-	$dec = bindec($bin);
-	return $dec;
-}
-
-function addToListOld($item, $list, $order = "0") {
-	$time = time();
-	$query = "INSERT INTO `listitem` (`list`, `item`, `timestamp`, `order`) VALUES ('$list', '$item', '$time', '$order');
-	";
-	$return = db_query($query);
-}
-
-function addToList($item, $user, $tag) {
-	$time = time();
-	$sql = "INSERT INTO tag (`movie`, `user`, `tag`, `timestamp`) VALUES ('$item', '$user', '$tag', '$time')";
-	$return = db_query($sql);
-	return $return;
-}
-
-function newList($name) {
-	//$name = db_escape($name);
-	if (!strlen(trim($name)) == 0 && $name != "" && $name != null) {
-		$listid = newId("l");
-		$permit = makePermit();
-		$user = $_SESSION["user"];
-		$query = "INSERT INTO `".dbname."`.`list` (`user`, `listid`, `name`, `permit`, `deleted`) VALUES ('$user', '$listid', '$name', '$permit', false);
-		";
-		$return = db_query($query);
-		echo $query;
-	}
-}
-
-function removeList($listid) {
-	$user = $_SESSION["user"];
-	$newid = newId("x");
-	$sql = "UPDATE `".dbname."`.`list` SET `deleted` = 1, `name` = '$newid' WHERE `list`.`listid` = '$listid' AND list.user = '$user'";
-	return db_query($sql);
-}
-
-function getLists($user) {
-	$sql = "SELECT * FROM `list` WHERE user = '$user' AND deleted != 1";
-	$lists = db_select($sql);
-	return $lists;
-}
-
-function sortList($listid, $listorder) {
-	//$sql = "UPDATE `listitem` SET `order` = '$ordernr' WHERE `listitem`.`list` = '$listid' AND `listitem`.`item` = '$listitem';";
-	//$items = db_select($sql);
-	$sql = "";
-	$ordernr = 1;
-	foreach ($listorder AS $listitem) {
-		$sql .= "UPDATE `listitem` SET `order` = ".$ordernr." WHERE `listitem`.`list` = '".$listid."' AND `listitem`.`item` = '".$listitem."'; ";
-		$ordernr ++;
-	}
-	$return = mysqli_multi_query(db_connect(), $sql);
-	return $return;//print_r($listorder, true);
-}
-
-function getItemsFromList($list) {
-	$user = $_SESSION["user"];
-	$sql = "SELECT listitem.item, listitem.order, movie.poster, movie.title, movie.year, post.emoji, post.message, list.name
-FROM `listitem`
-LEFT JOIN list ON listitem.list = list.listid
-LEFT JOIN ratemovie ON listitem.item = ratemovie.movie
-LEFT JOIN movie ON listitem.item = movie.id
-LEFT JOIN post ON listitem.item = post.movieid AND list.user = post.userid
-LEFT JOIN reply ON reply.reply = post.id
-WHERE listitem.list = '".$list."' AND reply.reply IS NULL
-GROUP BY listitem.item
-ORDER BY listitem.order ASC";
-	$items = db_select($sql);
-
-	return $items;
-}
-
 function getFilteredItems($user, $tag) {
 
 	if (is_array($user)) {
@@ -1643,76 +1510,6 @@ function getFilteredItems($user, $tag) {
 	return $items;
 }
 
-function printListItems($list) {
-	$items = getItemsFromList($list);
-	foreach($items AS $item) {
-		$print .= $item["item"]."<br>";
-	}
-	return $print;
-}
-
-function printListSelect($selectedlist = "") {
-	$user = $_SESSION["user"];
-	$lists = getLists($user);
-	$print = "<select class='select selectedlist'>";
-	if (!empty($lists)) {
-		foreach ($lists AS $list) {
-			if ($selectedlist == $list["listid"]) {
-				$selected = "selected";
-			} else {
-				$selected = "";
-			}
-			$print .= "<option ".$selected." value='".$list["listid"]."'>".$list["name"]."</option>";
-		}
-	} else {
-		$print .= "<option disabled>No list found</option>";
-	}
-	$print .= "</select>";
-	return $print;
-}
-
-function printAddToList($item) {
-	$user = $_SESSION["user"];
-	$lists = getLists($user);
-	$inlists = getListsForUserItem($user, $item);
-
-	if (empty($lists)) {
-		$print = "You must be <a href='login.php'>signed in</a> to make lists";
-	} else {
-	$print = "<h3 class='marginbottom'>Add to</h3>";//print_r($inlists, true);
-
-	foreach ($lists AS $list) {
-		if (is_array($inlists) && in_array($list["listid"], $inlists)) {
-			$print .= "<div class='button addtolistbtn activebtn removefromlist' data-item='".$item."' data-list='".$list["listid"]."'>".$list["name"]."</div>";
-		} else {
-			$print .= "<div class='button addtolistbtn addtolist' data-item='".$item."' data-list='".$list["listid"]."'>".$list["name"]."</div>";
-		}
-	}
-	}
-	$print .= "";
-	return $print;
-}
-
-function getListsForUserItem($user, $item) {
-	$sql = "SELECT listitem.list AS list FROM `listitem`, list WHERE listitem.list = list.listid AND list.user = '".$user."' AND listitem.item = '".$item."' AND list.deleted != 1";
-	$lists = db_select($sql);
-	foreach ($lists AS $list) {
-		$return[] = $list["list"];
-	}
-	return $return;
-}
-
-function removeFromList($item, $list) {
-		$user = $_SESSION["user"];
-		$sql = "SELECT * FROM `list` WHERE user = '$user' AND listid = '$list'";
-		$lists = db_select($sql);
-		if ($lists) {
-			$sql = "DELETE FROM  `".dbname."`.`listitem` WHERE  `listitem`.`list` =  '".$list."' AND  `listitem`.`item` =  '".$item."' LIMIT 1";
-			return db_query($sql);
-		} else {
-			return false;
-		}
-}
 
 function removePost($post) {
 	$user = $_SESSION["user"];

@@ -48,38 +48,12 @@ $downvoteactive = getVotebtnActive($movieid, false);
 //printMessages($movieid);
 $emojicode = ":bust_in_silhouette:";
 $emoji = getEmoji($emojicode);
-$lists = printAddToList($movieid);
+
 $posts = printMessages($movieid);
 
-$listarr = getLists($user);
 
-foreach ($listarr AS $list) {
-	if ($list["name"] == "Watchlist") {
-		$watchlist = $list["listid"];
-	} else if ($list["name"] == "Recommend") {
-		$recommendlist = $list["listid"];
-	}
-}
-
-$inlists = getListsForUserItem($user, $movieid);
-
-
-if (is_array($inlists) && in_array($watchlist, $inlists)) {
-	$isinwl = " removefromlist activebtn ";
-} else {
-	$isinwl = " addtolist ";
-}
-if (is_array($inlists) && in_array($recommendlist, $inlists)) {
-	$isinrl = " removefromlist activebtn ";
-} else {
-	$isinrl = " addtolist ";
-}
-
-if ($_SESSION["loggedin"] != true) {
-	$isinwl = " gotologin ";
-	$isinrl = " gotologin ";
-}
-
+$watchlateractive = printTagActive(getSpecificTag("watch later", $user));
+$favouriteactive = printTagActive(getSpecificTag("favourite", $user));
 
 if ($posts == "") {
 	$posts = "";//<div class='centeralign padding2 large grey marginbottom'>Be the first to write about ".$movie["title"]."!</div>";
