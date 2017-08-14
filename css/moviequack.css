@@ -474,7 +474,6 @@ footer.footer .third {
 	float:left;
 }
 .msgpart {
-	padding: 0 8px;
 	min-height:84px;
 }
 .quack {
@@ -487,7 +486,7 @@ footer.footer .third {
 	text-align:left;
 	border-radius:2px;
 	padding:6px;
-	box-shadow:0px 2px 0px 0px rgba(0,0,0,0.3);
+	box-shadow:3px 3px 0px 0px rgba(0,0,0,0.3);
 }
 .quackslim .qtoprow .qdatetime, .quackslim .qoptions {
 	opacity:0;

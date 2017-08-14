@@ -22,7 +22,7 @@ if (!isset($_GET["user"])) {
 	$ischeckedu[] = $_SESSION["user"];
 }
 
-$alltags = getAllTagsByUser($selectedusers);
+$alltags = getAllTagsByUser($ischeckedu);
 
 
 

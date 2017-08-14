@@ -930,11 +930,14 @@ function getAllTagsByUser($user = NULL) {
 		$where = "";
 	} else if (is_array($user)) {
 		$usersor = implode("' OR user = '", $user);
-		$where = "WHERE user = '".$usersor."' ORDER BY tag DESC";
-	} else {
+		$where = "WHERE user = '".$usersor."' ";
+
+		} else {
 		$where = "WHERE user = '".$user."'";
 	}
-	$tags = db_select("SELECT * FROM `tag` ".$where." GROUP BY tag ORDER BY `tag` DESC");
+	$sql = "SELECT * FROM `tag` ".$where." GROUP BY tag ORDER BY `tag` DESC";
+	
+	$tags = db_select($sql);
 	return $tags;
 
 }
@@ -991,8 +994,8 @@ function printTags($tags, $movie) {
 	return $print;
 }
 
-function getSpecificTag($tag, $user) {
-	$tags1 = db_select("SELECT tag FROM tag WHERE user = '$user' AND tag = '$tag'");
+function getSpecificTag($tag, $user, $movie) {
+	$tags1 = db_select("SELECT tag FROM tag WHERE user = '$user' AND tag = '$tag' AND movie = '$movie'");
 	return $tags1[0];
 }
 
