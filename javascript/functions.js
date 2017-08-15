@@ -70,38 +70,6 @@ jQuery(document).on("click", ".votestar", function() {
     });
 });
 
-jQuery(document).on("click", ".skipmovie", function() {
-
-	var movie = jQuery(this).attr("data-movieid");
-  var holder = jQuery(this).parents("#randommoviesug").find(".contentholder");
-  var rms = jQuery(this).parents("#randommoviesug");
-
-
-  holder.width(holder.width());
-  holder.height(holder.height());
-  rms.height(holder.height());
-  holder.css({position:"absolute"});
-  holder.animate({left:'-100%', opacity:1}, 350, function() {
-    holder.remove();
-  });
-	var obj = {
-    mode: "PRINTRANDOMMOVIE",
-    q: movie
-     };
-    var returned = postAjaxPhp(obj).done(function(result) {
-      if (result == "") {
-        rms.remove();
-      }
-      rms.append(result);
-
-      rms.find(".contentholder").css({position:"absolute", opacity:1, left:"100%"}).animate({opacity:1, left:"0"}, 500, function() {
-
-        rms.height(rms.find(".contentholder").height());
-      });
-
-    });
-
-});
 
 jQuery(document).on("click", ".gotologin", function() {
 	window.location.href = "login.php";
@@ -194,6 +162,52 @@ console.log(data);
     return '<div>'+data.tag+'</div>';
 	}
 },
+});
+
+
+var users = new Bloodhound({
+  datumTokenizer: Bloodhound.tokenizers.obj.whitespace("username"),
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  remote: {
+    url: "usersearch.php?q=%QUERY",
+    wildcard: "%QUERY"
+  }
+});
+
+
+jQuery('form#usersearch input#usersearchfield').typeahead(null, {
+  name: "username",
+  display: "username",
+  source: users,
+	templates: {
+    empty: [
+      ''
+    ].join('\n'),
+		suggestion: function(data) {
+console.log(data);
+    return '<div>'+data.username+'</div>';
+	}
+},
+});
+
+jQuery(".usersearchfield").bind("typeahead:selected", function(obj, data, name) {
+  jQuery("form#usersearch .submit").submit();
+});
+
+jQuery(document).on("click", "form#usersearch .submit", function(e) {
+  e.preventDefault();
+  var form = jQuery(this).parents("form#usersearch");
+  var movie = form.find("input#movieid").val();
+  var user = form.find("input#usersearchfield").val();
+  obj = {
+    mode: "ADDUSERTAG",
+    movie: movie,
+    q: user
+  };
+  postAjaxPhp(obj).done(function(result) {
+    form.find("input#usersearchfield").val("");
+    jQuery("span#tagscontent").html(result);
+  });
 });
 
 /*jQuery(document).on("click", ".quack .msgpart", function() {
@@ -293,10 +307,10 @@ jQuery(document).on("click", ".postmessage .submit", function(e) {
 
 		if (active) {
 			var mode = "REMOVETAG";
-			jQuery("[data-tag='"+tag+"']").removeClass("activebtn");
+			jQuery("[data-tag='"+tag+"'][data-movie='"+movie+"']").removeClass("activebtn");
 		} else {
 			var mode = "ADDTAG";
-			jQuery("[data-tag='"+tag+"']").addClass("activebtn");
+			jQuery("[data-tag='"+tag+"'][data-movie='"+movie+"']").addClass("activebtn");
 		}
 		obj = {
 			mode: mode,
@@ -392,7 +406,7 @@ jQuery(document).on("click", ".postmessage .submit", function(e) {
         allfollowbuttons.addClass("activebtn");
       }
 		var returned = postAjaxPhp(obj).done(function(result) {
-
+      console.log(result);
 		});
 
 	});

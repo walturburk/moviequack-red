@@ -205,14 +205,19 @@ li.sortableli:hover .xinfo {
 	background-color:rgba(0,0,0,0.5);
 	color:white;
 }
-span.tag {
+.addtags .tag, #tagscontent .tag {
 	display:inline-block;
+}
+.addtags .tag {
+	margin-right:3px;
 }
 .tag {
 	padding:8px;
 	border:2px solid rgba(255,255,255,0);
 	cursor:pointer;
 	margin-bottom:3px;
+	vertical-align:top;
+	font-size:15px;
 }
 .tag:hover {
 	border-color:white;
@@ -249,10 +254,10 @@ span.tag {
 	color:white;
 	background-color:#353535;
 }
+
 .button {
-	border:0;
-	border-radius:6px;
-	border:3px solid white;
+	border-radius:2px;
+	border:2px solid white;
 	color:white;
 	cursor:pointer;
 	padding:12px;
@@ -306,6 +311,7 @@ span.tag {
 }
 .roundbutton {
 	border-radius:50%;
+	border-width:3px;
 }
 .roundbutton i {
 	vertical-align:top;
@@ -329,9 +335,19 @@ input.userfilter {
 input.tagfilter {
 	display:none;
 }
+label.filterbtn {
+	padding:12px;
+	border-bottom:3px solid rgba(0,0,0,0);
+	display:inline-block;
+}
+label.filterbtn:hover {
+	background-color:rgba(0,0,0,0.2);
+
+}
 input:checked + label.filterbtn {
-	background-color:white;
-	color:black
+	border-bottom:3px solid #00ffc6;
+	background-color:rgba(0,0,0,0.2);
+	color:#fff;
 }
 .addremparent.removedparent {
 	opacity:0.5;
@@ -421,10 +437,10 @@ footer.footer .third {
 	color:#999;
 }
 .darkrating.ratemovie .votestar.myrating {
-	color:#a13647;
+	color:#00ffc6;
 }
 .redrating.ratemovie .votestar.myrating {
-	color:#a13647;
+	color:#00ffc6;
 }
 .ratemovie .votestar {
 	color:white;
@@ -605,23 +621,55 @@ input.widemsgsubmit:hover {
 .quackpartwidth {
 	width:calc(100% - 124px);
 }
+.addtags {
+	vertical-align:top;
+}
 form.addtag {
 	position:relative;
 }
 form.addtag input[type="text"] {
 	padding:6px;
-	font-size:14px;
+	font-size:15px;
 	position:relative;
+	border-color:white;
+	border-radius:0;
+	max-width:120px;
 }
 form.addtag input#submit {
-	background: #fafafa;
-    padding: 6px;
+		background: #fff;
+		color:black;
+    padding: 8px;
     vertical-align: top;
     font-size: 16px;
-    height: 32px;
-	position: absolute;
+    height: 35px;
+		position: absolute;
     top: 0;
     right: 0;
+		border-radius:0;
+}
+form.usersearch {
+	position:relative;
+	display:inline-block;
+}
+form.usersearch input[type="text"] {
+	padding:6px;
+	font-size:15px;
+	position:relative;
+	border-color:white;
+	border-radius:0;
+	max-width:180px;
+}
+form.usersearch input#submit {
+		background: #fff;
+		color:black;
+    padding: 8px;
+    vertical-align: top;
+    font-size: 16px;
+    height: 35px;
+		position: absolute;
+    top: 0;
+    right: 0;
+		border-radius:0;
 }
 .smallbtn {
 	cursor:pointer;
@@ -751,6 +799,16 @@ i.material-icons.small {
 	background-color:rgba(0,0,0,0.85);
 	color:white;
 }
+.urgentmessage {
+	background:rgba(0,0,0,0.3);
+	color:white;
+	display:inline-block;
+	width:100%;
+	padding:1em;
+	margin:1em 0;
+	text-align:center;
+	font-size:1.5em;
+}
 .whitecard {
 	padding:32px;
 	background-color:white;
@@ -779,6 +837,7 @@ i.material-icons.small {
 	background-size:cover;
 	background-position:50%;
 	background-position-y:20%;
+	background-attachment: fixed;
 }
 .absolutefill {
 	position:absolute;
@@ -819,7 +878,7 @@ i.material-icons.small {
 .searchfield:focus {
 
 }
-.twitter-typeahead {
+#searchmovieform .twitter-typeahead {
 	width:100%;
 }
 .searchholder {
@@ -937,6 +996,12 @@ input {
 	border-bottom-left-radius:16px;
 	height:55px;
 }
+.topsearchbar .moviepagesearchfieldholder .searchfield {
+	border-bottom-left-radius:0;
+}
+.topsearchbar .moviepagesearchfieldholder .searchbutton {
+	border-bottom-right-radius:0;
+}
 .darkred {
 	color:#a13647;
 }
@@ -948,14 +1013,23 @@ input {
 	border-radius:6px;
 }
 .tt-open .tt-suggestion {
-
+	display:block;
+	padding:12px;
 }
 .tt-open a {
 	display:block;
-	padding:8px;
 }
-.tt-open a:hover {
+.tt-open .tt-suggestion:hover {
 	background-color:#a13647;
+	color:white;
+}
+#searchmovieform .tt-open .tt-suggestion {
+	padding:0;
+}
+#searchmovieform .tt-open a {
+	padding:16px;
+}
+#searchmovieform .tt-open a:hover {
 	color:white;
 }
 form#addtag .tt-suggestion {
@@ -1057,7 +1131,7 @@ form#addtag .tt-suggestion:hover {
 	}
 	.button:hover {
 		background-color:white;
-		color:#353535;
+		color:#a13647;
 	}
 	table.feed td .poster:hover {
 		transform: scale(1.05);

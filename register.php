@@ -8,13 +8,12 @@ $rawusername = $_REQUEST["username"];
 $username = db_escape($rawusername);
 
 $password = db_escape($_REQUEST["password"]);
-$password2 = db_escape($_REQUEST["password2"]);
 
 $return = db_select("SELECT * FROM `user` WHERE `username` = '$username' OR `email` = '$email' LIMIT 1");
 
 $movieinfo = db_select("SELECT backdrop FROM  `movie` WHERE backdrop != '' ORDER BY RAND() LIMIT 1");
 $backdropurl = $basebigbackdropurl.$movieinfo[0]["backdrop"];
-$output .= '<div style="background-image:url('.$backdropurl.')" class="fullheight centeralign backgroundimage">';
+$output .= '<div class="padding"></div><div style="background-image:url('.$backdropurl.')" class="fullheight centeralign backgroundimage">';
 
 
 $output .= "<div class='fullheight darkwindow white paddingtop'>";
@@ -27,8 +26,6 @@ if (!isset($_REQUEST["username"])) {
 	$output .= "Your username needs to be at least three characters long";
 } else if (strlen($rawusername)>22) {
 	$output .= "Your username may be no longer than 22 characters";
-} else if ($password != $password2) {
-	$output .= "You can only have one password!";
 } else if ($return[0]["username"] == $username) {
 	$output .= "This username is taken!";
 } else if ($return[0]["email"] == $email) {
@@ -59,7 +56,7 @@ if (!isset($_REQUEST["username"])) {
 
 	saveAutoLogin();
 
-	$output .= "<h2>Welcome to moviequack, $username!</h2>";
+	$output .= "<h2>Welcome to moviequack, <span class='red'>$username</span>!</h2>";
 
 }
 
@@ -74,8 +71,8 @@ if ($success != true) {
 
 	$feed = getFeed($_SESSION["user"]);
 	if ($feed) {
-		$output .= "<p class='padding2 margintop large'>This activity will be brought to your new account</p>";
-		$output .= "<div class='centercontent narrow padding window white'>".printFeed($feed)."</div>";
+		$output .= "<div class='centercontent narrow padding window white'><p class='padding2 margintop large'>This activity will be brought to your new account</p>";
+		$output .= "".printFeed($feed)."</div>";
 	}
 
 }

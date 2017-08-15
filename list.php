@@ -43,7 +43,7 @@ if (is_array($allusers)) {
 		} else {
 			$checked = "";
 		}
-		$users .= "<input ".$checked." name='user[]' class='userfilter' id='".$u."' value='".$u."' type='checkbox'><label for='".$u."' class='button filterbtn'>".$u."</label>";
+		$users .= "<input ".$checked." name='user[]' class='userfilter' id='".$u."' value='".$u."' type='checkbox'><label for='".$u."' class='tabbtn filterbtn'>".$u."</label>";
 	}
 }
 
@@ -55,7 +55,7 @@ foreach ($alltags AS $tag) {
 	} else {
 		$checked = "";
 	}
-	$tagsbuttons .= "<input ".$checked." name='tag[]' class='tagfilter' id='".$tag["tag"]."' value='".$tag["tag"]."' type='checkbox'><label for='".$tag["tag"]."' class='button filterbtn'>".$tag["tag"]."</label>";
+	$tagsbuttons .= "<input ".$checked." name='tag[]' class='tagfilter' id='".$tag["tag"]."' value='".$tag["tag"]."' type='checkbox'><label for='".$tag["tag"]."' class='tabbtn filterbtn'>".$tag["tag"]."</label>";
 }
 
 

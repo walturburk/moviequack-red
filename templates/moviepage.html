@@ -27,26 +27,26 @@
 		<div data-tag="favourite" data-movie="{movieid}" class="button roundbutton tag {favouriteactive}"><i class="material-icons">favorite</i></div>
 	</div>
 	<div class="movievoteopt">
-		<div data-tag="watch later" data-movie="{movieid}" class="button roundbutton tag {watchlateractive}"><i class="material-icons">bookmark</i></div>
+		<div data-tag="bookmark" data-movie="{movieid}" class="button roundbutton tag {watchlateractive}"><i class="material-icons">bookmark</i></div>
 	</div>
 	<div style="clear:none" class="movievoteopt">
 		<div data-expand="recommendlist" class="button roundbutton"><i class="material-icons">share</i></div>
-		<div class="recommendlist card verydarkwindow fixed addtags popup">
 
-				<form id='addtag' class='addtag' name="addtag" method="post">
-					<fieldset>
-						<input class='input' type='text' name='tag' id='tag' maxlength="20" />
-						<input type='hidden' name='movieid' id='movieid' value="{movieid}" />
-						<input id="submit" class="grey smallbtn submit material-icons" type='submit' name='submit' value='&#xE163;' />
-					</fieldset>
-				</form>
-
-			{friendstaglist}
-
-
-		</div>
 	</div>
 	<div class="clear"></div>
+	<div class="recommendlist addtags popup paddingtop">
+
+{friendstaglist}
+
+			<form id='usersearch' class='usersearch' name="usersearch" method="post">
+				<fieldset>
+					<input placeholder="search for user" class='input usersearchfield' type='text' name='usersearchfield' id='usersearchfield' maxlength="20" />
+					<input type='hidden' name='movieid' id='movieid' value="{movieid}" />
+					<input id="submit" class="small smallbtn submit material-icons" type='submit' name='submit' value='&#xE145;' />
+				</fieldset>
+			</form>
+
+	</div>
 </div>
 
 
@@ -70,18 +70,17 @@
 	<span id="tagscontent">{tags}</span>
 
 
-		<div data-expand="tagslist" class="newtagbtn expandbtn small"><i class="material-icons">add</i></div>
-		<div class="card verydarkwindow fixed addtags tagslist popup">
+
+		<div class="inblock addtags">
 
 			<form id='addtag' class='addtag' name="addtag" method="post">
 				<fieldset>
-					<input class='input' type='text' name='tag' id='tag' maxlength="20" />
+					<input class='input' type='text' name='tag' id='tag' maxlength="20" placeholder="add tag"/>
 					<input type='hidden' name='movieid' id='movieid' value="{movieid}" />
-					<input id="submit" class="grey smallbtn submit material-icons" type='submit' name='submit' value='&#xE163;' />
+					<input id="submit" class="newtagbtn small submit material-icons" type='submit' name='submit' value='&#xE145;' />
 				</fieldset>
 			</form>
 
-		{taglist}
 		</div>
 	</div>
 
@@ -110,7 +109,7 @@
 	<div class="widemsgholder centercontent narrow">
 
 
-	<form class='postmessage smileymessage msgandbtn' name="postmessage" method="post">
+	<form class='postmessage smileymessage msgandbtn marginbottom' name="postmessage" method="post">
 	<fieldset>
 
 	<input placeholder="Write about {movietitle}" class="input widemsgtext" type='text' name='message' id='message' maxlength="200" />

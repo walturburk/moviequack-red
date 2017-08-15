@@ -1,5 +1,6 @@
 <?php
 
+$searchfieldholderclass = "";
 
 autoLogin();
 //getDontTag();
@@ -353,6 +354,10 @@ function printMessage($postsarray) {
 		  $followbtn = '<div class="smallbtn inblock followbtn '.$activebtn.'" data-followedid="'.$post["user1id"].'"><i style="font-size:17px; vertical-align:top" class="material-icons">person_add</i></div>';
 		}
 
+		if (isVisitor($post["user1"])) {
+			$post["user1"] = "visitor";
+		}
+
 		$upact = "";
 		$downact = "";
 		$replies = printReplies(getReplies($post["id"]));
@@ -437,49 +442,6 @@ function skipMovie($movie) {
 	return $movies;
 }
 
-function getRandomMovie() {
-
-	$user = $_SESSION["user"];
-
-	$skipsql = "";
-
-	if (isset($_COOKIE["skipmovies"])) {
-		$movies = unserialize($_COOKIE['skipmovies']);
-		foreach ($movies AS $skipmovie) {
-			$skipsql .= " AND m.id != '".$skipmovie."' ";
-		}
-
-	}
-
-$sql = "SELECT m.id, m.title, m.poster, r.rating, li.item, l.listid FROM `movie` AS m
-LEFT JOIN listitem AS li ON li.item = m.id
-LEFT JOIN list AS l
-ON l.listid = li.list AND l.user = '".$user."'
-LEFT JOIN ratemovie AS r ON r.movie = m.id AND r.user = '".$user."'
-WHERE l.listid IS NULL AND r.rating IS NULL AND m.poster != ''
-".$skipsql."
-ORDER BY rand()
-LIMIT 1";
-
-	$movie = db_select($sql);
-
-if (empty($movie)) {
-	setcookie('skipmovies', "", time()-3600);
-	$sql = "SELECT m.id, m.title, m.poster, r.rating, li.item
-	FROM `movie` AS m
-	LEFT JOIN listitem AS li ON li.item = m.id
-	LEFT JOIN list AS l ON l.listid = li.list
-	LEFT JOIN ratemovie AS r ON r.movie = m.id AND r.user = '".$user."'
-	WHERE li.item IS NULL AND r.rating IS NULL AND m.poster != ''
-	".$skipsql."
-	ORDER BY rand()
-	LIMIT 1";
-
-		$movie = db_select($sql);
-}
-
-	return $movie[0];
-}
 
 function rateMovie($movie, $rating) {
 
@@ -897,6 +859,27 @@ function printFriendsTags($movie = null) {
 function printAllFriendsTags($movie = null) {
 	$user = $_SESSION["user"];
 	$tags1 = getFollowing($user);
+	$tags2 = getTagNamesByUser($movie, $user);
+	$print .= "";
+	foreach ($tags1 AS $tag) {
+		if (in_array("@".$tag, $tags2)) {
+			$active = "activebtn";
+		} else {
+			$active = "";
+		}
+		$print .= "<div class='tag $active' data-tag='@".$tag."' data-movie='".$movie."'>";
+		$print .= $tag;
+		$print .= "</div>";
+	}
+	return $print;
+
+
+
+}
+
+function printFriendsAndTags($movie = null) {
+	$user = $_SESSION["user"];
+	$tags1 = getFollowing($user);
 	$tags2 = getAllTags();
 	//$tags = array_merge($tags1, $tags2);
 	$print .= "";
@@ -913,15 +896,38 @@ function printAllFriendsTags($movie = null) {
 	return $print;
 }
 
-
 function getTagsByLetter($q) {
 	$tags1 = db_select("SELECT tag FROM tag WHERE tag LIKE '$q%' GROUP BY tag ORDER BY tag DESC LIMIT 5");
 	return $tags1;
 }
 
+function getUsersByLetter($q) {
+	$tags1 = db_select("SELECT username FROM user WHERE username LIKE '$q%' ORDER BY username DESC LIMIT 5");
+	return $tags1;
+}
+
+function checkIfUserExist($q) {
+	$tags1 = db_select("SELECT username FROM user WHERE username = '$q'");
+	if ($tags1[0]["username"] == $q && $q != "") {
+		$ret = true;
+	} else {
+		$ret = false;
+	}
+	return $ret;
+}
+
 function getTagsByUser($movie, $user) {
 	$tags = db_select("SELECT movie, user, tag, timestamp, COUNT(user) AS c, 'activebtn' AS active FROM  `tag` WHERE  `movie` =  '".$movie."' AND user = '".$user."' GROUP BY tag ORDER BY c DESC");
 	return $tags;
+}
+
+function getTagNamesByUser($movie, $user) {
+	$tags = db_select("SELECT tag FROM  `tag` WHERE  `movie` =  '".$movie."' AND user = '".$user."' GROUP BY tag ");
+	$ret = array();
+	foreach ($tags AS $tag) {
+		$ret[] = $tag["tag"];
+	}
+	return $ret;
 }
 
 function getAllTagsByUser($user = NULL) {
@@ -936,7 +942,7 @@ function getAllTagsByUser($user = NULL) {
 		$where = "WHERE user = '".$user."'";
 	}
 	$sql = "SELECT * FROM `tag` ".$where." GROUP BY tag ORDER BY `tag` DESC";
-	
+
 	$tags = db_select($sql);
 	return $tags;
 
@@ -1203,8 +1209,8 @@ function follow($follows = null) {
 			$query = "DELETE FROM `follow` WHERE `follower` = '$follower' AND `follows` = '$follows';";
 			$ret = false;
 		} else {
-			$result = db_query("SELECT username FROM user WHERE username = '$follows'");
-			if (mysql_num_rows($result)==0) {
+
+			if (checkIfUserExist($follows)) {
 			$timestamp = time();
 			$query = "INSERT INTO `".dbname."`.`follow`
 			(`follower`, `follows`, `timestamp`)
@@ -1374,7 +1380,6 @@ function getFeed($user) {
 
 	$ratingfeed = getRatingFeed($user);
 	$tagfeed = getTagFeed($user);
-
 	$postfeed = getPostsFeed($user);
 	$votefeed = getVotesFeed($user);
 	if (!is_array($ratingfeed)) {
@@ -1411,8 +1416,11 @@ global $basethumburl;
 		$print = "<table class='feed'>";
 	}
 	foreach ($feed AS $row) {
+		if (isVisitor($row["user1"])) {
+			$row["user1"] = "visitor";
+		}
 		$print .= "<tr>";
-			$print .= "<td class='red relative paddingtop2'><div class='feedusername small grey'><a href='profile.php?id=".$row["user1id"]."'>".$row["user1"]."</a></div>";
+			$print .= "<td class='red relative paddingtop2'><div class='feedusername small'><a href='profile.php?id=".$row["user1id"]."'>".$row["user1"]."</a></div>";
 			//$print .= print_r($row, true);
 			if ($row["rating"]) {
 				$print .= "<i class='material-icons xlarge'>star</i>";

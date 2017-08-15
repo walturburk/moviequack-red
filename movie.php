@@ -4,6 +4,7 @@
 include("db_functions.php");
 include("functions.php");
 
+$searchfieldholderclass = "moviepagesearchfieldholder";
 
 $t = new Template("templates/moviepage.html");
 $layout = new Template("templates/layout.html");
@@ -64,7 +65,7 @@ $webpagetitle = $movietitle;
 $tagsarr = getTags($movieid);
 $tags = printTags($tagsarr, $movieid);
 $taglist = printAllTags($movieid);
-$friendstaglist = printFriendsTags($movieid);
+$friendstaglist = printAllFriendsTags($movieid);
 $streams = printStreams($movieid);
 
 $rating = getMovieRating($movieid);

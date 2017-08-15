@@ -97,16 +97,25 @@ switch ($mode) {
 		$tags = getTags($movie);
 		echo printTags($tags, $movie);
 		break;
+	case "ADDUSERTAG":
+		$movie = $_REQUEST["movie"];
+		if ($q[0] != "@") {
+			$atq = "@".$q;
+		} else {
+			$atq = $q;
+			$str = substr($q, 1);
+		}
+		if (checkIfUserExist($q)) {
+			addTag($movie, $atq);
+		}
+		$tags = getTags($movie);
+		echo printTags($tags, $movie);
+		break;
 	case "REMOVETAG":
 		$movie = $_REQUEST["movie"];
 		removeTag($movie, $q);
 		$tags = getTags($movie);
 		echo printTags($tags, $movie);
-		break;
-	case "PRINTRANDOMMOVIE":
-		skipMovie($q);
-		$movie = printRandomMovie();
-		echo $movie;
 		break;
 	case "RATEMOVIE":
 		$movie = $_REQUEST["movie"];
