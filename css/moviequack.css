@@ -70,6 +70,7 @@ table.feed td .poster {
 	text-align:center;
 	background:none;
 	transition:.1s;
+	float:right;
 }
 table.feed td img {
 	max-width:100%;
@@ -138,7 +139,7 @@ table.searchresults td .poster {
 }
 .narrow {
 	margin:auto;
-	max-width:800px;
+	max-width:680px;
 }
 .expandparent {
 	clear:both;
@@ -450,7 +451,7 @@ footer.footer .third {
 	opacity:0.5;
 }
 .ratemovie .votestar.myrating i {
-	font-weight:bold;
+
 }
 .ratemovie .votestar {
 	display:inline-block;
@@ -583,7 +584,6 @@ input.widemsgsubmit:hover {
 	padding:16px 8px;
 	color:#fff;
 	display:inline-block;
-	font-weight:bold;
 }
 .qdatetime {
 	float:right;
@@ -617,6 +617,9 @@ input.widemsgsubmit:hover {
 	text-align:center;
 	white-space:nowrap;
 	position:relative;
+}
+.qmovielink {
+
 }
 .quackpartwidth {
 	width:calc(100% - 124px);
@@ -865,7 +868,7 @@ i.material-icons.small {
 }
 #searchmovieform {
 	margin: auto;
-	max-width: 800px;
+	max-width: 680px;
 }
 .searchfield {
 	border-radius:10px;
@@ -1073,6 +1076,9 @@ form#addtag .tt-suggestion:hover {
 	.qoptions {
 		width:100%;
 		max-width:100%;
+	}
+	.qmovielink {
+
 	}
 	html, body {
     max-width: 100%;

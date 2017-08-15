@@ -68,7 +68,7 @@ $rating = getMovieRating($movieid);
 $urate = getUsersMovieRating($movieid, $user);
 $movierating = printMovieRating($movieid, $rating, $urate);
 
-
+$searchfieldholderclass = "moviepagesearchfieldholder";
 $webpagetitle = $message;
 $content = $t->output();
 echo $layout->output();
