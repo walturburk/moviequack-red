@@ -57,7 +57,7 @@ $watchlateractive = printTagActive(getSpecificTag("watch later", $user, $movieid
 $favouriteactive = printTagActive(getSpecificTag("favourite", $user, $movieid));
 
 if ($posts == "") {
-	$posts = "";//<div class='centeralign padding2 large grey marginbottom'>Be the first to write about ".$movie["title"]."!</div>";
+	$posts = "";
 }
 
 $webpagetitle = $movietitle;

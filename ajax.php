@@ -34,7 +34,7 @@ switch ($mode) {
 	case "ADDMOVIESTODB":
 		$q = $_REQUEST["searchterm"];
 		$omdbq = str_replace(" ", "+", $q);
-		$url = "http://svr2.omdbapi.com/?s=".$omdbq."";//"http://www.omdbapi.com/?s=".$omdbq."";
+		$url = "//svr2.omdbapi.com/?s=".$omdbq."";//"//www.omdbapi.com/?s=".$omdbq."";
 		$json = file_get_contents($url);
 		$searchresults = json_decode($json, true);
 		foreach($searchresults["Search"] AS $movie) {

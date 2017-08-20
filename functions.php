@@ -161,7 +161,7 @@ function postMessage($id, $emoji, $movie, $msg, $user) {
 	}
 
 	$message = db_escape($msg);
-	$query = "INSERT INTO `post` (`id`, `movieid`, `emoji`, `message`, `userid`, `timestamp`)
+	$query = "INSERT INTO `post` (`id`, `item`, `emoji`, `message`, `userid`, `timestamp`)
 	VALUES ('$id', '$movie', '$emoji', '$message', '$user',  '$time');
 	";
 	db_query($query);
@@ -224,7 +224,7 @@ function getMessages($movie) {
 	reply.reply,
 	user.username AS user1, user.username AS user1id,
 	post.timestamp AS timestamp, post.emoji,
-	post.id, post.message, post.userid, post.movieid, movie.year AS movieyear, movie.poster AS poster,
+	post.id, post.message, post.userid, post.item, movie.year AS movieyear, movie.poster AS poster,
 (SUM((10+od.upvote-od.downvote)*1000/(UNIX_TIMESTAMP()-post.timestamp)))
 	AS votes
 	FROM user
@@ -235,8 +235,8 @@ function getMessages($movie) {
 	LEFT JOIN reply
 	ON reply.reply = post.id
 	LEFT JOIN movie
-	ON post.movieid = movie.id
-	WHERE post.movieid = '$movie' AND reply.reply IS NULL
+	ON post.item = movie.id
+	WHERE post.item = '$movie' AND reply.reply IS NULL
 	GROUP BY post.id
 	ORDER BY `votes` DESC
 ");
@@ -258,7 +258,7 @@ function getLatestMessage() {
 	movie.imdbid, movie.poster, reply.reply,
 	user.username AS username, user.username AS userid,
 	post.timestamp AS timestamp, post.emoji,
-	post.id, post.message, post.userid, post.movieid,
+	post.id, post.message, post.userid, post.item,
 (SUM((10+od.upvote-od.downvote)*1000/(UNIX_TIMESTAMP()-post.timestamp)))
 	AS votes
 	FROM user
@@ -269,7 +269,7 @@ function getLatestMessage() {
 	LEFT JOIN reply
 	ON reply.reply = post.id
 	LEFT JOIN movie
-	ON movie.imdbid = post.movieid
+	ON movie.imdbid = post.item
 	WHERE reply.reply IS NULL
 	GROUP BY post.id
 	ORDER BY `post`.timestamp DESC
@@ -278,7 +278,7 @@ LIMIT 1");
 }
 
 function getTrendingMessage() {
-	$posts = db_select("SELECT user.username AS username, user.username AS userid, post.timestamp AS timestamp, post.emoji, post.id, post.message, post.userid, post.movieid, (SUM((10+od.upvote-od.downvote)*1000/(UNIX_TIMESTAMP()-post.timestamp))) AS votes
+	$posts = db_select("SELECT user.username AS username, user.username AS userid, post.timestamp AS timestamp, post.emoji, post.id, post.message, post.userid, post.item, (SUM((10+od.upvote-od.downvote)*1000/(UNIX_TIMESTAMP()-post.timestamp))) AS votes
 FROM user
 LEFT JOIN post
 ON user.username = post.userid
@@ -291,7 +291,7 @@ LIMIT 1");
 }
 
 function getTopMessage() {
-	$posts = db_select("SELECT user.username AS username, user.username AS userid, post.timestamp AS timestamp, post.emoji, post.id, post.message, post.userid, post.movieid, (SUM((od.upvote-od.downvote))) AS votes
+	$posts = db_select("SELECT user.username AS username, user.username AS userid, post.timestamp AS timestamp, post.emoji, post.id, post.message, post.userid, post.item, (SUM((od.upvote-od.downvote))) AS votes
 FROM user
 LEFT JOIN post
 ON user.username = post.userid
@@ -304,7 +304,7 @@ LIMIT 1");
 }
 
 function getControversialMessage() {
-	$posts = db_select("SELECT user.username AS username, user.username AS userid, post.timestamp AS timestamp, post.emoji, post.id, post.message, post.userid, post.movieid, (SUM((od.upvote))) AS upvotes, (SUM((od.downvote))) AS downvotes, (SUM(od.upvote)*SUM(od.downvote)) as multi
+	$posts = db_select("SELECT user.username AS username, user.username AS userid, post.timestamp AS timestamp, post.emoji, post.id, post.message, post.userid, post.item, (SUM((od.upvote))) AS upvotes, (SUM((od.downvote))) AS downvotes, (SUM(od.upvote)*SUM(od.downvote)) as multi
 FROM user
 LEFT JOIN post
 ON user.username = post.userid
@@ -321,7 +321,7 @@ function getMessage($id) {
 	user.username AS user1, user.username AS user1id, post.message, post.emoji, post.timestamp AS timestamp, post.id AS id
 	FROM `post`
 	LEFT JOIN movie
-	ON post.movieid = movie.id
+	ON post.item = movie.id
 	LEFT JOIN user
 	ON post.userid = user.username
 	LEFT JOIN reply
@@ -358,6 +358,12 @@ function printMessage($postsarray) {
 			$post["user1"] = "visitor";
 		}
 
+
+		$qfontsize = round(34-(strlen($post["message"])/10));
+		if ($qfontsize < 20 ) {
+			$qfontsize = 20;
+		}
+
 		$upact = "";
 		$downact = "";
 		$replies = printReplies(getReplies($post["id"]));
@@ -382,7 +388,7 @@ function printMessage($postsarray) {
 		$q->set("votes", $votes["diff"]);
 		$q->set("upvotes", $votes["upvotes"]);
 		$q->set("downvotes", $votes["downvotes"]);
-		$q->set("quacksize", 16+$votes["diff"]);
+		$q->set("quacksize", $qfontsize);
 		$q->set("rawtimestamp", $post["timestamp"]);
 		$q->set("timestamp", formatTimestamp($post["timestamp"]));
 		$q->set("shorttime", formatTimestampSmart($post["timestamp"]));
@@ -995,7 +1001,7 @@ function printTags($tags, $movie) {
 	}
 
 	if (empty($tags)) {
-		$print = "<span class='white smalltext inblock padding0'>No tags</span>";
+		$print = "";//<span class='white smalltext inblock padding0'>No tags</span>";
 	}
 	return $print;
 }
@@ -1294,7 +1300,7 @@ function getPostsFeed($user = null) {
 			AS votes
 		FROM `post`
 		LEFT JOIN movie
-		ON post.movieid = movie.id
+		ON post.item = movie.id
 		LEFT JOIN user
 		ON post.userid = user.username
 		LEFT JOIN reply
@@ -1333,7 +1339,7 @@ ON post.id = vote.post
 LEFT JOIN movie
 ON vote.post = movie.id
 LEFT JOIN movie AS m2
-ON post.movieid = m2.id
+ON post.item = m2.id
 LEFT JOIN user AS usa
 ON vote.user = usa.id
 LEFT JOIN user AS op

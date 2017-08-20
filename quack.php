@@ -17,8 +17,8 @@ $quack = $quacki[0];
 $postid = $quack["id"];
 $username = $quack["user1"];
 $message = $quack["message"];
-$userid = $quack["userid"];
-$msgemoji = getEmoji($quack["emoji"]);
+$userid = $quack["user1"];
+
 $movieyear = $quack["movieyear"];
 $movieid = $quack["movieid"];
 

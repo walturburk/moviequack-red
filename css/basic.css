@@ -70,6 +70,9 @@ h4 {
 .paddingtop {
 	padding-top:16px;
 }
+.paddingtop0 {
+	padding-top:8px;
+}
 .paddingtop2 {
 	padding-top:32px !IMPORTANT;
 }
@@ -147,7 +150,7 @@ h4 {
 	color:white;
 }
 .gradientredback {
-	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#a13647+0,9b0d03+100 */
+	/* Permalink - use to edit and share this gradient: //colorzilla.com/gradient-editor/#a13647+0,9b0d03+100 */
 	background: #a13647; /* Old browsers */
 	background: -moz-linear-gradient(top, #a13647 0%, #9b0d03 100%); /* FF3.6-15 */
 	background: -webkit-linear-gradient(top, #a13647 0%,#9b0d03 100%); /* Chrome10-25,Safari5.1-6 */
@@ -171,7 +174,7 @@ h4 {
 	margin:auto;
 }
 .narrow, .content.narrow {
-	max-width:800px;
+	max-width:680px;
 }
 .contentholder img {
 	max-width:100%;

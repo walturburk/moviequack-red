@@ -340,6 +340,7 @@ label.filterbtn {
 	padding:12px;
 	border-bottom:3px solid rgba(0,0,0,0);
 	display:inline-block;
+	margin-right:1px;
 }
 label.filterbtn:hover {
 	background-color:rgba(0,0,0,0.2);
@@ -347,7 +348,7 @@ label.filterbtn:hover {
 }
 input:checked + label.filterbtn {
 	border-bottom:3px solid #00ffc6;
-	background-color:rgba(0,0,0,0.2);
+
 	color:#fff;
 }
 .addremparent.removedparent {
@@ -504,6 +505,7 @@ footer.footer .third {
 	border-radius:2px;
 	padding:6px;
 	box-shadow:3px 3px 0px 0px rgba(0,0,0,0.3);
+	position:relative;
 }
 .quackslim .qtoprow .qdatetime, .quackslim .qoptions {
 	opacity:0;
@@ -579,7 +581,7 @@ input.widemsgsubmit:hover {
 }
 .qtoprow {
 	width:100%;
-	font-size:14px;
+	font-size:16px;
 	clear:both;
 	padding:16px 8px;
 	color:#fff;
@@ -610,6 +612,7 @@ input.widemsgsubmit:hover {
 	display:inline-block;
 	word-wrap: break-word;
   max-width: 100%;
+	font-size:20px;
 }
 .qoptions {
 	font-size:0.8em;
@@ -617,9 +620,29 @@ input.widemsgsubmit:hover {
 	text-align:center;
 	white-space:nowrap;
 	position:relative;
+	width:100%;
+}
+.qmovielinkholder {
+	height:140px;
+	position:absolute;
+	top:0;
+	right:0;
+}
+.hw {
+	height:100px;
+	width:100px;
 }
 .qmovielink {
-
+	border-radius:50%;
+	transition:.35s;
+	overflow:hidden;
+	height:92px;
+	width:92px;
+	display:inline-block;
+}
+.qmovielink:hover {
+	border-radius:2px;
+	height:140px;
 }
 .quackpartwidth {
 	width:calc(100% - 124px);
@@ -865,6 +888,8 @@ i.material-icons.small {
 	left:6px;
 	top:0;
 	margin-top:16px;
+	color:rgba(0,0,0,0.5);
+	display:none;
 }
 #searchmovieform {
 	margin: auto;
