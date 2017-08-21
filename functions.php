@@ -383,8 +383,6 @@ function printMessage($postsarray) {
 		$q->set("upvoteactive", $upact);
 		$q->set("downvoteactive", $downact);
 		$q->set("msgemoji", getEmoji($post["emoji"]));
-		$snop += 1;
-		$q->set("snop", $snop);
 		$q->set("message", $post["message"]);
 		$q->set("movieid", $post["movieid"]);
 		$q->set("movietitle", $post["movietitle"]);

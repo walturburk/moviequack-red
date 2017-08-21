@@ -622,10 +622,12 @@ input.widemsgsubmit:hover {
 	height:92px;
 	width:92px;
 	display:inline-block;
+	position:relative;
 }
 .qmovielink:hover {
 	border-radius:2px;
 	height:140px;
+	z-index:1;
 }
 .quackpartwidth {
 	width:calc(100% - 124px);
