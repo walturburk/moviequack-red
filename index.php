@@ -58,10 +58,7 @@ $output .= "<div class='clear'></div>";
 
 
 $output .= "</div></div>";
-//$output .= '<div class="content padding2">';
 
-//$output .= '</div>';
-//$output .= "</div>";
 $joinuscontent .= $output;
 
 $toplogin = "";
@@ -70,7 +67,7 @@ $toplogin = "";
 
 $rawfeed = getPostsFeed();
 $printedfeed = printMessage($rawfeed);
-//$randommovie = printRandomMovie();
+
 
 $t = new Template("templates/indexpage.html");
 $content .= $t->output();

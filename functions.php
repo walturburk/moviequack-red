@@ -335,9 +335,15 @@ function getMessage($id) {
 }
 
 function printMessage($postsarray) {
+	if (!is_array($postsarray)) {
+		$postitem = $postsarray;
+		$postsarray = array();
+		$postsarray[] = $postitem;
+	}
 	$user = $_SESSION["user"];
 	$q = new Template("templates/quack.html");
 	$posts = "";
+
 	foreach ($postsarray AS $post) {
 
 		$followbtn = "";
@@ -1243,7 +1249,7 @@ function getTagFeed($user = null) {
 			$postusersql = " OR tag.user != 'q'";
 		}
 
-		$sql = "SELECT tag.user AS user1id, user.username AS user1, tag.movie, tag.timestamp, movie.id AS movieid, movie.poster, GROUP_CONCAT(tag.tag SEPARATOR ', ') AS tag
+		$sql = "SELECT 'tag' AS feedtype, tag.user AS user1id, user.username AS user1, tag.movie, tag.timestamp, movie.id AS movieid, movie.poster, GROUP_CONCAT(tag.tag SEPARATOR ', ') AS tag
 FROM `tag`
 LEFT JOIN user
 ON tag.user = user.username
@@ -1294,7 +1300,7 @@ function getPostsFeed($user = null) {
 		ORDER BY `votes` DESC
 		*/
 
-		$sql = "SELECT movie.title AS movietitle, movie.id AS movieid, movie.year AS movieyear, movie.poster AS poster, reply.original AS origmsg,
+		$sql = "SELECT 'post' AS feedtype, movie.title AS movietitle, movie.id AS movieid, movie.year AS movieyear, movie.poster AS poster, reply.original AS origmsg,
 		user.username AS user1, user.username AS user1id, post.message, post.emoji, post.timestamp AS timestamp, post.id AS id,
 		(SUM((10+od.upvote-od.downvote)*1000/(UNIX_TIMESTAMP()-post.timestamp)))
 			AS votes
@@ -1328,30 +1334,30 @@ function getVotesFeed($user) {
 			$postusersql .= " OR vote.user = '$user'";
 		}
 
-$sql = "SELECT movie.title AS movietitle, movie.id AS movieid, movie.poster AS poster,
-							m2.title AS movietitle2, m2.id AS movieid2, m2.poster AS poster2,
-		usa.username AS user1, usa.id AS user1id,
-		op.username AS user2, op.id AS user2id,
-		post.message, vote.post AS post, vote.upvote, vote.downvote, vote.timestamp AS timestamp
-FROM vote
-LEFT JOIN post
-ON post.id = vote.post
-LEFT JOIN movie
-ON vote.post = movie.id
-LEFT JOIN movie AS m2
-ON post.item = m2.id
-LEFT JOIN user AS usa
-ON vote.user = usa.id
-LEFT JOIN user AS op
-ON post.userid = op.id
-WHERE vote.user = 'start' $postusersql
-ORDER BY `vote`.`timestamp`  DESC
-LIMIT 30";
+$sql = "SELECT 'vote' AS feedtype, movie.title AS movietitle2, movie.id AS movieid2, movie.poster AS poster2,
+				m2.title AS movietitle, m2.id AS movieid, m2.poster AS poster,
+				usa.username AS user1, usa.username AS user1id,
+				op.username AS user2, op.username AS user2id,
+				post.message, vote.post AS post, vote.upvote, vote.downvote, vote.timestamp AS timestamp
+				FROM vote
+				LEFT JOIN post
+				ON post.id = vote.post
+				LEFT JOIN movie
+				ON vote.post = movie.id
+				LEFT JOIN movie AS m2
+				ON post.item = m2.id
+				LEFT JOIN user AS usa
+				ON vote.user = usa.username
+				LEFT JOIN user AS op
+				ON post.userid = op.username
+				WHERE vote.user = 'start'
+              $postusersql
+				ORDER BY `vote`.`timestamp`  DESC
+				LIMIT 30";
 
 		$feed = db_select($sql);
-//print_r($feed);
-		return $feed;
 
+		return $feed;
 }
 
 function getRatingFeed($user) {
@@ -1365,7 +1371,7 @@ function getRatingFeed($user) {
 			$postusersql .= " OR r.user = '$user'";
 		}
 
-$sql = "SELECT u.username AS user1, u.username AS user1id, r.rating AS rating, m.id AS movieid, m.title, m.poster AS poster, r.timestamp
+$sql = "SELECT 'rating' AS feedtype, u.username AS user1, u.username AS user1id, r.rating AS rating, m.id AS movieid, m.title, m.poster AS poster, r.timestamp
 FROM `ratemovie` AS r
 LEFT JOIN user AS u
 ON r.user = u.username
@@ -1413,76 +1419,146 @@ function getFeed($user) {
 
 }
 
+function printFeedItem($content) {
+
+}
+
 function printFeed($feed) {
 global $basethumburl;
 	//$feed = getFeed($user);
 	if (empty($feed)) {
 		$print = "<span class='large'>Follow people to see their activity here</span>";
 	} else {
-		$print = "<table class='feed'>";
+		//$print = "<table class='feed'>";
 	}
+
+
+/*$print = "<div class='narrow clear relative'>";
+$print .= "<div class='feeditemcell feedicon'><div class='feedusername small'><a href='profile.php?id=".$row["user1id"]."'>".$row["user1"]."</a></div>";
+$print .= "<i class='material-icons xlarge'>star</i>";
+$print .= "</div>";
+$print = "</div>";*/
+
+$fdivstart = "<div class='narrow clear relative'>";
+
+$ficonstart = "<div class='feeditemcell feedicon'><i class='material-icons'>";
+$ficonend = "</i></div>";
+$fconstart = "<div class='feeditemcell feedcontent'>";
+$fconend = "</div>";
+$fdivend = "</div>";
+
+
 	foreach ($feed AS $row) {
-		if (isVisitor($row["user1"])) {
+
+		$fusername = "<div class='feedusername small'><a href='profile.php?id=".$row["user1"]."'>".$row["user1"]."</a></div>";
+
+		$fposter = '<div class="qmovielinkholder floatright padding">
+		<a class="qmovielink" href="movie.php?id='.$row["movieid"].'"><img alt="'.$row["movietitle"].' ('.$row["movieyear"].')" src="'.basethumburl.$row["poster"].'"></a>
+		</div>';
+
+		if (isVisitor($row["user1"])) { //Set visitors username to generic name "visitor"
 			$row["user1"] = "visitor";
 		}
-		$print .= "<tr>";
-			$print .= "<td class='red relative paddingtop2'><div class='feedusername small'><a href='profile.php?id=".$row["user1id"]."'>".$row["user1"]."</a></div>";
-			//$print .= print_r($row, true);
-			if ($row["rating"]) {
-				$print .= "<i class='material-icons xlarge'>star</i>";
-				$print .= "</td>";
-				$print .= "<td class='large red'>";
-				//$print .= "<a class='red' href='movie.php?id=".$row["movieid"]."'>".$row["title"]."</a>";
-				//$print .= "<div class='grey'>rated</div>";
-				$print .= $row["rating"]/2;
-				$print .= "</td>";
-			} else if ($row["tag"]) {
-				$print .= "<i class='material-icons xlarge'>label</i>";
-				$print .= "</td>";
-				$print .= "<td class='red'>";
-				$print .= $row["tag"];
-				$print .= "</td>";
 
-			} else if ($row["post"]) {
-
-			$print .= "";
-			if ($row["upvote"]) {
-				$print .= "<i class='material-icons xlarge'>thumb_up</i>";
-			} else if ($row["downvote"]) {
-				$print .= "<i class='material-icons xlarge'>thumb_down</i>";
-			}
-			$print .= "</td>";
-			$print .= "<td class='wordbreak '>";
-			if (substr($row["post"], 0, 1) == "p") {
-
-
-
-					$print .= '<div class="window padding small round inblock">'.$row["message"].'';
-					$print .= '<div class="smalltext grey margintop0">- '.$row["user2"].'</div></div>';
-						$print .= "</td>";
-					$row["movieid"] = $row["movieid2"];
-					$row["poster"] = $row["poster2"];
-				} else {
-					$print .= "<a href='movie.php?id=".$row["movieid"]."' class='red large'>".$row["movietitle"]."</a>";
-					$print .= "</td>";
-
+		switch ($row["feedtype"]) { //determine type
+			case "post":
+				$type = 1;
+				break;
+			case "vote":
+				if ($row["upvote"]) {
+					$type = 2;
+				} else if ($row["downvote"]) {
+					$type = 3;
 				}
-
-
-		} else {
-			if ($row["origmsg"]) {
-				$print .= "<i class='material-icons xlarge'>reply</i>";
-			} else {
-				$print .= "<i class='material-icons xlarge'>comment</i></td>";
-			}
-			$print .= "<td class='wordbreak paddingleft'><div class='whitebubble padding'>".$row["message"]."</div></td>";
-
+				break;
+			case "rating":
+				$type = 4;
+				break;
+			case "tag":
+				if ("@" == substr($row["tag"], 0, 1)) {
+					$type = 5;
+				} else {
+					$type = 6;
+				}
+				break;
+			default:
+				$type = 0;
+				break;
 		}
-		$print .= "<td class=''><a class='poster' href='movie.php?id=".$row["movieid"]."'><img src='".$basethumburl.$row["poster"]."'></a></td>";
 
-		$print .= "</tr>";
+
+		switch ($type) { //print freed item
+			case 1:
+				$input = array();
+				$input[] = $row;
+				$print .= printMessage($input);
+
+				break;
+			case 2:
+				$print .= $fdivstart;
+				$print .= $fusername;
+				$print .= $ficonstart;
+				$print .= "thumb_up";
+				$print .= $ficonend;
+				$print .= $fconstart;
+				$print .= $row["user1"];
+				$print .= $fconend;
+				$print .= $fposter;
+				$print .= $fdivend;
+				break;
+			case 3:
+				$print .= $fdivstart;
+				$print .= $fusername;
+				$print .= $ficonstart;
+				$print .= "thumb_down";
+				$print .= $ficonend;
+				$print .= $fconstart;
+				$print .= $row["user1"];
+				$print .= $fconend;
+				$print .= $fposter;
+				$print .= $fdivend;
+				break;
+			case 4:
+				$print .= $fdivstart;
+				$print .= $fusername;
+				$print .= $ficonstart;
+				$print .= "star";
+				$print .= $ficonend;
+				$print .= $fconstart;
+				$print .= $row["user1"];
+				$print .= $fconend;
+				$print .= $fposter;
+				$print .= $fdivend;
+				break;
+			case 5:
+				$print .= $fdivstart;
+				$print .= $fusername;
+				$print .= $ficonstart;
+				$print .= "label";
+				$print .= $ficonend;
+				$print .= $fconstart;
+				$print .= $row["user1"];
+				$print .= $fconend;
+				$print .= $fposter;
+				$print .= $fdivend;
+				break;
+			case 6:
+				$print .= $fdivstart;
+				$print .= $fusername;
+				$print .= $ficonstart;
+				$print .= "share";
+				$print .= $ficonend;
+				$print .= $fconstart;
+				$print .= $row["user1"];
+				$print .= $fconend;
+				$print .= $fposter;
+				$print .= $fdivend;
+			 	break;
+		}
+
+
 	}
-	$print .= "</table>";
+	//$print .= "</table>";
 	return $print;
 }
 

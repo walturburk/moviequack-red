@@ -53,33 +53,16 @@ table td.fixedcell {
 	position:absolute;
 	z-index:2;
 }
-table.feed td {
-	vertical-align:middle;
+.feeditemcell {
 	padding:8px;
-	position:relative;
-}
-table.feed {
-	width:100%;
-	text-align:left;
-}
-table.feed td .poster {
-	padding:0px;
-	overflow:hidden;
-	border-radius:16px;
-	position:relative;
-	text-align:center;
-	background:none;
-	transition:.1s;
-	float:right;
-}
-table.feed td img {
-	max-width:100%;
-	max-height:initial;
+	min-height:100px;
 	float:left;
-	min-width:54px;
 }
-table.feed td {
-	padding:38px 8px;
+.feeditemcell.feedicon {
+	color:#00ffc6;
+}
+.feeditemcell.feedcontent {
+	color:white
 }
 table.searchresults {
 	width:100%;
