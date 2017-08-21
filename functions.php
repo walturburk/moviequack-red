@@ -357,7 +357,7 @@ function printMessage($postsarray) {
 		  } else {
 		    $activebtn = "";
 		  }
-		  $followbtn = '<div class="smallbtn inblock followbtn '.$activebtn.'" data-followedid="'.$post["user1id"].'"><i style="font-size:17px; vertical-align:top" class="material-icons">person_add</i></div>';
+		  $followbtn = '<span class="smallbtn followbtn '.$activebtn.'" data-followedid="'.$post["user1id"].'"><i style="font-size:17px; vertical-align:top" class="material-icons">person_add</i></span>';
 		}
 
 		if (isVisitor($post["user1"])) {
@@ -396,7 +396,7 @@ function printMessage($postsarray) {
 		$q->set("rawtimestamp", $post["timestamp"]);
 		$q->set("timestamp", formatTimestamp($post["timestamp"]));
 		$q->set("shorttime", formatTimestampSmart($post["timestamp"]));
-		if ($user == $post["userid"]) {
+		if ($user == $post["user1id"]) {
 			$removepostbtn = '<div data-post="'.$post["id"].'" class="simplebtn removepost">Remove post</div>';
 		} else {
 			$removepostbtn = "";
@@ -1247,16 +1247,45 @@ function getTagFeed($user = null) {
 			$postusersql = " OR tag.user != 'q'";
 		}
 
-		$sql = "SELECT 'tag' AS feedtype, tag.user AS user1id, user.username AS user1, tag.movie, tag.timestamp, movie.id AS movieid, movie.poster, GROUP_CONCAT(tag.tag SEPARATOR ', ') AS tag
+		$sql = "SELECT 'tag' AS feedtype, tag.user AS user1id, user.username AS user1, tag.movie, tag.timestamp, movie.id AS movieid, movie.poster, GROUP_CONCAT(tag.tag SEPARATOR ', ') AS tags
 FROM `tag`
 LEFT JOIN user
 ON tag.user = user.username
 LEFT JOIN movie
 ON tag.movie = movie.id
-WHERE tag.movie != '' AND (user = 'start' $postusersql)
+WHERE tag.tag NOT LIKE '@%' AND (user = 'start' $postusersql)
 GROUP BY tag.movie
 ORDER BY `tag`.`timestamp` DESC
 		LIMIT 30";
+		$feed = db_select($sql);
+
+		return $feed;
+
+}
+
+function getShareFeed($user = null) {
+
+		if (is_array($user)) {
+			foreach ($user AS $u) {
+				$postusersql .= " OR tag.user = '$u'";
+			}
+		} else if (isset($user) && $user != "") {
+			$postusersql = " OR tag.user = '$user'";
+		} else if ($user == null) {
+			$postusersql = " OR tag.user != 'q'";
+		}
+
+$sql = "SELECT 'tag' AS feedtype, tag.tag AS tag, tag.user AS user1id, user.username AS user1, tag.movie, tag.timestamp, movie.id AS movieid, movie.poster
+				FROM `tag`
+				LEFT JOIN user
+				ON tag.user = user.username
+				LEFT JOIN movie
+				ON tag.movie = movie.id
+				WHERE tag.tag LIKE '@%' AND (user = 'start' $postusersql)
+				GROUP BY tag.movie
+				ORDER BY `tag`.`timestamp` DESC
+				LIMIT 30";
+
 		$feed = db_select($sql);
 
 		return $feed;
@@ -1392,6 +1421,7 @@ function getFeed($user) {
 	$tagfeed = getTagFeed($user);
 	$postfeed = getPostsFeed($user);
 	$votefeed = getVotesFeed($user);
+	$sharefeed = getShareFeed($user);
 	if (!is_array($ratingfeed)) {
 		$ratingfeed = array();
 	}
@@ -1404,8 +1434,11 @@ function getFeed($user) {
 	if (!is_array($votefeed)) {
 		$votefeed = array();
 	}
+	if (!is_array($sharefeed)) {
+		$sharefeed = array();
+	}
 
-	$feed1 = array_merge($postfeed, $votefeed, $tagfeed, $ratingfeed);
+	$feed1 = array_merge($postfeed, $votefeed, $tagfeed, $ratingfeed, $sharefeed);
 	//$feed1 = array_merge($feed1, );
 
 	usort($feed1, function($a, $b) {
@@ -1499,7 +1532,7 @@ $fdivend = "</div>";
 				$print .= "thumb_up";
 				$print .= $ficonend;
 				$print .= $fconstart;
-				$print .= $row["user1"];
+				$print .= $row["message"];
 				$print .= $fconend;
 				$print .= $fposter;
 				$print .= $fdivend;
@@ -1511,7 +1544,7 @@ $fdivend = "</div>";
 				$print .= "thumb_down";
 				$print .= $ficonend;
 				$print .= $fconstart;
-				$print .= $row["user1"];
+				$print .= $row["message"];
 				$print .= $fconend;
 				$print .= $fposter;
 				$print .= $fdivend;
@@ -1523,7 +1556,7 @@ $fdivend = "</div>";
 				$print .= "star";
 				$print .= $ficonend;
 				$print .= $fconstart;
-				$print .= $row["user1"];
+				$print .= ($row["rating"]/2)."";
 				$print .= $fconend;
 				$print .= $fposter;
 				$print .= $fdivend;
@@ -1532,10 +1565,10 @@ $fdivend = "</div>";
 				$print .= $fdivstart;
 				$print .= $fusername;
 				$print .= $ficonstart;
-				$print .= "label";
+				$print .= "share";
 				$print .= $ficonend;
 				$print .= $fconstart;
-				$print .= $row["user1"];
+				$print .= $row["tag"];
 				$print .= $fconend;
 				$print .= $fposter;
 				$print .= $fdivend;
@@ -1544,10 +1577,10 @@ $fdivend = "</div>";
 				$print .= $fdivstart;
 				$print .= $fusername;
 				$print .= $ficonstart;
-				$print .= "share";
+				$print .= "label";
 				$print .= $ficonend;
 				$print .= $fconstart;
-				$print .= $row["user1"];
+				$print .= $row["tags"];
 				$print .= $fconend;
 				$print .= $fposter;
 				$print .= $fdivend;

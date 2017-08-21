@@ -688,7 +688,7 @@ form.usersearch input#submit {
 	transition:.3s;
 }
 .smallbtn:hover {
-	color:#000;
+	color:#fff;
 }
 .selectemoji {
 	background-color:rgba(0,0,0,0.8);

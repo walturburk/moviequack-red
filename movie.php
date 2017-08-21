@@ -72,6 +72,11 @@ $rating = getMovieRating($movieid);
 $urate = getUsersMovieRating($movieid, $user);
 $movierating = printMovieRating($movieid, $rating, $urate);
 
+if ($rating > 0) {
+	$ratingpercent = $rating*10;
+} else {
+	$ratingpercent = "not yet rated";
+}
 
 $content = $t->output();
 echo $layout->output();
