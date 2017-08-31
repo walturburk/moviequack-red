@@ -19,6 +19,24 @@ a:hover {
 img {
 
 }
+i.material-icons {
+	font-size:inherit;
+}
+.content {
+	max-width:1280px;
+	margin:auto;
+	padding:32px 8px;
+}
+.narrow {
+	margin:auto;
+	max-width:680px;
+}
+.expandparent {
+	clear:both;
+}
+.fixed {
+	max-height:calc(100% - 60px);
+}
 .popup {
 	display:none;
 }
@@ -53,13 +71,19 @@ table td.fixedcell {
 	position:absolute;
 	z-index:2;
 }
+.feeditem {
+	box-shadow:3px 3px 0px 0px rgba(0,0,0,0.3);
+	background-color:rgba(0,0,0,0.1);
+	display:inline-block;
+  margin-bottom: 1rem;
+	width:100%;
+}
 .feeditemcell {
-	padding:8px;
-	min-height:100px;
-	float:left;
+	padding:16px;
 }
 .feeditemcell.feedicon {
 	color:#00ffc6;
+	font-size:2rem;
 }
 .feeditemcell.feedcontent {
 	color:white
@@ -114,21 +138,6 @@ table.searchresults td .poster {
 }
 .listposter img {
 	max-width:100%;
-}
-.content {
-	max-width:1280px;
-	margin:auto;
-	padding:32px 8px;
-}
-.narrow {
-	margin:auto;
-	max-width:680px;
-}
-.expandparent {
-	clear:both;
-}
-.fixed {
-	max-height:calc(100% - 60px);
 }
 li.sortableli {
 	height:92px;
@@ -457,7 +466,6 @@ footer.footer .third {
 .votebtn .votenr {
 	display:inline-block;
 	vertical-align:top;
-	padding-top:6px;
 	padding-right:6px;
 }
 .movievote .smallbtn.activebtn.upvote {
@@ -598,7 +606,6 @@ input.widemsgsubmit:hover {
 	font-size:20px;
 }
 .qoptions {
-	font-size:0.8em;
 	color:#fff;
 	text-align:center;
 	white-space:nowrap;

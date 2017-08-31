@@ -1464,17 +1464,13 @@ global $basethumburl;
 	}
 
 
-/*$print = "<div class='narrow clear relative'>";
-$print .= "<div class='feeditemcell feedicon'><div class='feedusername small'><a href='profile.php?id=".$row["user1id"]."'>".$row["user1"]."</a></div>";
-$print .= "<i class='material-icons xlarge'>star</i>";
-$print .= "</div>";
-$print = "</div>";*/
 
-$fdivstart = "<div class='narrow clear relative'>";
+
+$fdivstart = "<div class='feeditem narrow clear relative'>";
 
 $ficonstart = "<div class='feeditemcell feedicon'><i class='material-icons'>";
 $ficonend = "</i></div>";
-$fconstart = "<div class='feeditemcell feedcontent'>";
+$fconstart = "<div class='feeditemcell feedcontent'><div class='floatright hw'></div>";
 $fconend = "</div>";
 $fdivend = "</div>";
 
