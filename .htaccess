@@ -1,0 +1,15 @@
+RewriteEngine on
+
+
+RewriteRule ^user?$ profile.php
+
+RewriteRule ^user/([a-z]+) profile.php?id=$1
+
+RewriteRule ^list/([a-z=\[\]&\@]+) list.php?$1
+
+RewriteRule ^movie/([a-z0-9]+) movie.php?id=$1
+
+RewriteRule ^quack/([a-z0-9]+) quack.php?id=$1
+
+RewriteRule ^login login.php
+RewriteRule ^register register.php

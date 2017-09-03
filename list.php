@@ -19,7 +19,7 @@ $ischeckedu = $_GET["user"];
 $ischeckedt = $_GET["tag"];
 
 if (!isset($_GET["user"])) {
-	$ischeckedu[] = $_SESSION["user"];
+
 }
 
 $alltags = getAllTagsByUser($ischeckedu);

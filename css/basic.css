@@ -112,6 +112,9 @@ h4 {
 .inblock {
 	display:inline-block;
 }
+.block {
+	display:block;
+}
 .half {
 	float:left;
 	width:50%;

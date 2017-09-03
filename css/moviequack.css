@@ -77,16 +77,22 @@ table td.fixedcell {
 	display:inline-block;
   margin-bottom: 1rem;
 	width:100%;
+	text-align:left;
+}
+.feeditem.recitem {
+	border:3px solid #00ffc6;
 }
 .feeditemcell {
 	padding:16px;
+	float:left;
 }
 .feeditemcell.feedicon {
 	color:#00ffc6;
 	font-size:2rem;
 }
 .feeditemcell.feedcontent {
-	color:white
+	color:white;
+	width: calc(100% - 72px);
 }
 table.searchresults {
 	width:100%;
@@ -203,6 +209,11 @@ li.sortableli:hover .xinfo {
 }
 .addtags .tag {
 	margin-right:3px;
+	font-size:15px;
+}
+.hzscroll {
+	white-space:nowrap;
+	overflow-x:auto;
 }
 .tag {
 	padding:8px;
@@ -210,7 +221,6 @@ li.sortableli:hover .xinfo {
 	cursor:pointer;
 	margin-bottom:3px;
 	vertical-align:top;
-	font-size:15px;
 }
 .tag:hover {
 	border-color:white;
@@ -481,6 +491,7 @@ footer.footer .third {
 	width:33%;
 	padding:8px;
 	float:left;
+	font-size:1.2rem;
 }
 .msgpart {
 	min-height:84px;
@@ -876,12 +887,7 @@ i.material-icons.small {
     margin-top: 16px;
 }
 .feedusername {
-	position:absolute;
-	left:6px;
-	top:0;
-	margin-top:16px;
-	color:rgba(0,0,0,0.5);
-	display:none;
+	padding:16px;
 }
 #searchmovieform {
 	margin: auto;

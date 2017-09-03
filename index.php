@@ -3,6 +3,7 @@
 include("db_functions.php");
 include("functions.php");
 
+$user = $_SESSION["user"];
 
 $registerbtnclass = "redbtn";
 $loginlinkclass = "red";
@@ -65,8 +66,12 @@ $toplogin = "";
 
 }
 
+$follows = getFollowing($user);
+$rawfeed = getFeed($follows);
+$printedfeed = printFeed($rawfeed);
+
 $rawfeed = getPostsFeed();
-$printedfeed = printMessage($rawfeed);
+$printedfeed .= printMessage($rawfeed);
 
 
 $t = new Template("templates/indexpage.html");

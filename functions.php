@@ -1264,28 +1264,29 @@ ORDER BY `tag`.`timestamp` DESC
 }
 
 function getShareFeed($user = null) {
-
+$postusersql = "";
 		if (is_array($user)) {
 			foreach ($user AS $u) {
 				$postusersql .= " OR tag.user = '$u'";
 			}
+			$postusersql = " OR tag.tag LIKE '@".$_SESSION["user"]."'";
 		} else if (isset($user) && $user != "") {
 			$postusersql = " OR tag.user = '$user'";
+			$postusersql .= " OR tag.tag LIKE '@".$user."'";
 		} else if ($user == null) {
-			$postusersql = " OR tag.user != 'q'";
+			$postusersql = " OR tag.tag LIKE '@".$_SESSION["user"]."'";
 		}
 
-$sql = "SELECT 'tag' AS feedtype, tag.tag AS tag, tag.user AS user1id, user.username AS user1, tag.movie, tag.timestamp, movie.id AS movieid, movie.poster
+$sql = "SELECT 'tag' AS feedtype, tag.tag AS tag, tag.user AS user1id, user.username AS user1, tag.movie, tag.timestamp, movie.id AS movieid, movie.title AS title, movie.poster
 				FROM `tag`
 				LEFT JOIN user
 				ON tag.user = user.username
 				LEFT JOIN movie
 				ON tag.movie = movie.id
-				WHERE tag.tag LIKE '@%' AND (user = 'start' $postusersql)
+				WHERE (tag.tag LIKE '@%' AND (user = 'start' $postusersql))
 				GROUP BY tag.movie
 				ORDER BY `tag`.`timestamp` DESC
 				LIMIT 30";
-
 		$feed = db_select($sql);
 
 		return $feed;
@@ -1353,12 +1354,11 @@ function getPostsFeed($user = null) {
 function getVotesFeed($user) {
 
 		if (is_array($user)) {
+			$postusersql = implode("' OR vote.user = '", $user);
+			$postusersql = " vote.user = '".$postusersql. "' ";
 
-			foreach ($user AS $u) {
-				$postusersql .= " OR vote.user = '$u'";
-			}
 		} else if (isset($user) && $user != "") {
-			$postusersql .= " OR vote.user = '$user'";
+			$postusersql .= " vote.user = '$user'";
 		}
 
 $sql = "SELECT 'vote' AS feedtype, movie.title AS movietitle2, movie.id AS movieid2, movie.poster AS poster2,
@@ -1377,11 +1377,9 @@ $sql = "SELECT 'vote' AS feedtype, movie.title AS movietitle2, movie.id AS movie
 				ON vote.user = usa.username
 				LEFT JOIN user AS op
 				ON post.userid = op.username
-				WHERE vote.user = 'start'
-              $postusersql
+				WHERE post.message != '' AND ($postusersql)
 				ORDER BY `vote`.`timestamp`  DESC
 				LIMIT 30";
-
 		$feed = db_select($sql);
 
 		return $feed;
@@ -1415,13 +1413,14 @@ LIMIT 30";
 
 }
 
-function getFeed($user) {
-
+function getFeed($user = null) {
+	if ($user != null) {
 	$ratingfeed = getRatingFeed($user);
 	$tagfeed = getTagFeed($user);
 	$postfeed = getPostsFeed($user);
 	$votefeed = getVotesFeed($user);
-	$sharefeed = getShareFeed($user);
+
+}
 	if (!is_array($ratingfeed)) {
 		$ratingfeed = array();
 	}
@@ -1434,6 +1433,8 @@ function getFeed($user) {
 	if (!is_array($votefeed)) {
 		$votefeed = array();
 	}
+
+	$sharefeed = getShareFeed($user);
 	if (!is_array($sharefeed)) {
 		$sharefeed = array();
 	}
@@ -1448,6 +1449,8 @@ function getFeed($user) {
 	//$feed = print_r($feed1, true);
 	return $feed1;
 
+	return false;
+
 }
 
 function printFeedItem($content) {
@@ -1455,16 +1458,17 @@ function printFeedItem($content) {
 }
 
 function printFeed($feed) {
+	$print = "";
 global $basethumburl;
 	//$feed = getFeed($user);
 	if (empty($feed)) {
-		$print = "<span class='large'>Follow people to see their activity here</span>";
+		//$print = "<div class='large padding'>Follow users to see their activity in the feed</div>";
 	} else {
 		//$print = "<table class='feed'>";
 	}
 
 
-
+$rdivstart = "<div class='feeditem narrow clear relative recitem'>";
 
 $fdivstart = "<div class='feeditem narrow clear relative'>";
 
@@ -1477,15 +1481,18 @@ $fdivend = "</div>";
 
 	foreach ($feed AS $row) {
 
-		$fusername = "<div class='feedusername small'><a href='profile.php?id=".$row["user1"]."'>".$row["user1"]."</a></div>";
+		if (isVisitor($row["user1"])) { //Set visitors username to generic name "visitor"
+			$username = "visitor";
+		} else {
+			$username = $row["user1"];
+		}
+
+		$fusername = "<div class='feedusername small'><a href='profile.php?id=".$row["user1"]."'>".$username."</a></div>";
 
 		$fposter = '<div class="qmovielinkholder floatright padding">
 		<a class="qmovielink" href="movie.php?id='.$row["movieid"].'"><img alt="'.$row["movietitle"].' ('.$row["movieyear"].')" src="'.basethumburl.$row["poster"].'"></a>
 		</div>';
 
-		if (isVisitor($row["user1"])) { //Set visitors username to generic name "visitor"
-			$row["user1"] = "visitor";
-		}
 
 		switch ($row["feedtype"]) { //determine type
 			case "post":
@@ -1503,7 +1510,11 @@ $fdivend = "</div>";
 				break;
 			case "tag":
 				if ("@" == substr($row["tag"], 0, 1)) {
-					$type = 5;
+					if ($row["tag"] == "@".$_SESSION["user"]) {
+						$type = 7;
+					} else {
+						$type = 5;
+					}
 				} else {
 					$type = 6;
 				}
@@ -1512,6 +1523,8 @@ $fdivend = "</div>";
 				$type = 0;
 				break;
 		}
+
+
 
 
 		switch ($type) { //print freed item
@@ -1528,7 +1541,10 @@ $fdivend = "</div>";
 				$print .= "thumb_up";
 				$print .= $ficonend;
 				$print .= $fconstart;
-				$print .= $row["message"];
+				$print .= "<a href='quack.php?id=".$row["post"]."'>";
+				$print .= "\"".$row["message"]."\"";
+				$print .= "</a>";
+				$print .= "<a href='profile.php?id=".$row["user2"]."' class='block small paddingtop'>".$row["user2"]."</a>";
 				$print .= $fconend;
 				$print .= $fposter;
 				$print .= $fdivend;
@@ -1540,7 +1556,10 @@ $fdivend = "</div>";
 				$print .= "thumb_down";
 				$print .= $ficonend;
 				$print .= $fconstart;
-				$print .= $row["message"];
+				$print .= "<a href='quack.php?id=".$row["post"]."'>";
+				$print .= "\"".$row["message"]."\"";
+				$print .= "</a>";
+				$print .= "<a href='profile.php?id=".$row["user2"]."' class='block small paddingtop'>".$row["user2"]."</a>";
 				$print .= $fconend;
 				$print .= $fposter;
 				$print .= $fdivend;
@@ -1552,7 +1571,8 @@ $fdivend = "</div>";
 				$print .= "star";
 				$print .= $ficonend;
 				$print .= $fconstart;
-				$print .= ($row["rating"]/2)."";
+				$print .= "<div class='red large'>".($row["rating"]/2)."</div> stars to ";
+				$print .= "<div class='red large nowrap'>".$row["title"]."</div>";
 				$print .= $fconend;
 				$print .= $fposter;
 				$print .= $fdivend;
@@ -1581,6 +1601,21 @@ $fdivend = "</div>";
 				$print .= $fposter;
 				$print .= $fdivend;
 			 	break;
+			case 7:
+				$print .= $rdivstart;
+				$print .= $fusername;
+				$print .= $ficonstart;
+				$print .= "share";
+				$print .= $ficonend;
+				$print .= $fconstart;
+				$print .= $username;
+				$print .= " recommended ";
+				$print .= "<a href='movie.php?id=".$row["movieid"]."' class='block red'>".$row["title"]."</a>";
+				$print .= $fconend;
+				$print .= "<a href='list.php?tag%5B%5D=%40".$_SESSION["user"]."' class='padding block small'>All recommended movies</a>";
+				$print .= $fposter;
+				$print .= $fdivend;
+				break;
 		}
 
 
@@ -1592,7 +1627,9 @@ $fdivend = "</div>";
 
 function getFilteredItems($user, $tag) {
 
-	if (is_array($user)) {
+	if (empty($user)) {
+		$wuser = "user != '1'";
+	} else if (is_array($user)) {
 		foreach ($user AS $u) {
 			if (is_array($u)) {
 				$users[] = $u["username"];
@@ -1601,9 +1638,10 @@ function getFilteredItems($user, $tag) {
 			}
 		}
 		$wuser = implode("' OR user = '", $users);
-
+		$wuser = "user = '$wuser'";
 	} else {
 		$wuser = $user;
+		$wuser = "user = '$wuser'";
 	}
 	if (is_array($tag)) {
 		foreach ($tag AS $t) {
@@ -1622,7 +1660,7 @@ function getFilteredItems($user, $tag) {
 	$sql = "SELECT tag.movie AS item, movie.title, movie.year, movie.poster
 	FROM tag
 	LEFT JOIN movie ON movie.id = tag.movie
-	WHERE (user = '$wuser')
+	WHERE ($wuser)
 	AND (tag = '$wtag')
 	GROUP BY movie";
 
