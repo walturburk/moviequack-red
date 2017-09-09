@@ -67,9 +67,9 @@ function isDev() {
 
 function getConfig() {
   if (isDev()) {
-    $config = parse_ini_file("/../config-dev.ini");
+    $config = parse_ini_file("../../config-dev.ini");
   } else {
-    $config = parse_ini_file("/../config-live.ini");
+    $config = parse_ini_file("../../config-live.ini");
   }
 
 
