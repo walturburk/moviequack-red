@@ -967,8 +967,7 @@ function getTags($movie) {
 	$tags1 = db_select($sql1);
 	$sql2 = "SELECT movie, user, tag, timestamp, COUNT(user) AS c FROM  `tag` WHERE  `movie` =  '".$movie."' GROUP BY tag ORDER BY c DESC";
 	$tags2 = db_select($sql2);
-	echo $sql1."<br>";
-	echo $sql2."<br>";
+
 
 	$active = array();
 	$nonactive = array();
