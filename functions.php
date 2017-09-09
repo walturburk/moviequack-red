@@ -1,5 +1,7 @@
 <?php
 
+//ini_set('display_errors', 1);
+
 $searchfieldholderclass = "";
 
 autoLogin();
@@ -15,6 +17,8 @@ $basebigbackdropurl = "https://image.tmdb.org/t/p/w1280/";
 define("basethumburl", "https://image.tmdb.org/t/p/w92/");
 define("basepostermurl", "https://image.tmdb.org/t/p/w185/");
 define("baseposterurl", "https://image.tmdb.org/t/p/w342/");
+
+
 
 function addGenreNames() {
 	$curl = curl_init();
@@ -80,7 +84,6 @@ file_put_contents('donttag.bin', $string);
 return $array;
 }
 
-include("emoji/emoji.php");
 include("template.php");
 
 if (!isset($_SESSION["user"])) {
@@ -382,7 +385,6 @@ function printMessage($postsarray) {
 		$q->set("userid", $post["user1id"]);
 		$q->set("upvoteactive", $upact);
 		$q->set("downvoteactive", $downact);
-		$q->set("msgemoji", getEmoji($post["emoji"]));
 		$q->set("message", $post["message"]);
 		$q->set("movieid", $post["movieid"]);
 		$q->set("movietitle", $post["movietitle"]);
@@ -961,8 +963,12 @@ function getAllTagsByUser($user = NULL) {
 
 function getTags($movie) {
 	$user = $_SESSION["user"];
-	$tags1 = db_select("SELECT movie, user, tag, timestamp, COUNT(user) AS c FROM  `tag` WHERE  `movie` =  '".$movie."' AND user = '".$user."' GROUP BY tag ORDER BY c DESC");
-	$tags2 = db_select("SELECT movie, user, tag, timestamp, COUNT(user) AS c FROM  `tag` WHERE  `movie` =  '".$movie."' GROUP BY tag ORDER BY c DESC");
+	$sql1 = "SELECT movie, user, tag, timestamp, COUNT(user) AS c FROM  `tag` WHERE  `movie` =  '".$movie."' AND user = '".$user."' GROUP BY tag ORDER BY c DESC";
+	$tags1 = db_select($sql1);
+	$sql2 = "SELECT movie, user, tag, timestamp, COUNT(user) AS c FROM  `tag` WHERE  `movie` =  '".$movie."' GROUP BY tag ORDER BY c DESC";
+	$tags2 = db_select($sql2);
+	echo $sql1."<br>";
+	echo $sql2."<br>";
 
 	$active = array();
 	$nonactive = array();

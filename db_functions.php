@@ -2,7 +2,7 @@
 
 session_start();
 
-$config = parse_ini_file("config.ini");
+$config = getConfig();
 define("dbname", $config["dbname"]);
 
 $locale = "en_SE";
@@ -56,13 +56,37 @@ function createId() {
 	return $newid;
 }
 
+function isDev() {
+	if ($_SERVER['SERVER_ADDR'] == "::1") {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function getConfig() {
+  if (isDev()) {
+    $config = parse_ini_file("/../config-dev.ini");
+  } else {
+    $config = parse_ini_file("/../config-live.ini");
+  }
+
+  if ($config["baseurl"]) {
+
+  } else {
+    $config["baseurl"] = "/";
+  }
+  return $config;
+
+}
+
 function db_connect() {
 
 	static $connection;
 
 	if (!isset($connection)) {
 
-		$config = parse_ini_file("config.ini");
+		$config = getConfig();
 		$connection = mysqli_connect($config["dbpath"], $config["username"], $config["password"], $config["dbname"]);
 
 	}

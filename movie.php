@@ -47,8 +47,7 @@ $upvoteactive = getVotebtnActive($movieid, true);
 $downvoteactive = getVotebtnActive($movieid, false);
 //$postsarray = getMessages($movieid);
 //printMessages($movieid);
-$emojicode = ":bust_in_silhouette:";
-$emoji = getEmoji($emojicode);
+
 
 $posts = printMessages($movieid);
 
