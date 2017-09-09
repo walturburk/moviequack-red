@@ -71,6 +71,7 @@ function getConfig() {
     $config = parse_ini_file("/../config-live.ini");
   }
 
+
   if ($config["baseurl"]) {
 
   } else {
