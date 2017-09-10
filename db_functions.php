@@ -1,5 +1,11 @@
 <?php
 
+if (isDev()) {
+  ini_set('display_errors', 1);
+} else {
+  ini_set('display_errors', 0);
+}
+
 session_start();
 
 $config = getConfig();
@@ -57,7 +63,7 @@ function createId() {
 }
 
 function isDev() {
-	if ($_SERVER['SERVER_ADDR'] == "::1") {
+	if ($_SERVER['SERVER_ADDR'] == "::1" || $_REQUEST["dev"] == true) {
 		return true;
 	} else {
 		return false;
