@@ -52,7 +52,7 @@ $downvoteactive = getVotebtnActive($movieid, false);
 $posts = printMessages($movieid);
 
 
-$bookmarkactive = printTagActive(getSpecificTag("bookmar", $user, $movieid));
+$bookmarkactive = printTagActive(getSpecificTag("bookmark", $user, $movieid));
 $favouriteactive = printTagActive(getSpecificTag("favourite", $user, $movieid));
 
 if ($posts == "") {
