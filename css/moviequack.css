@@ -892,6 +892,8 @@ i.material-icons.small {
 #searchmovieform {
 	margin: auto;
 	max-width: 680px;
+	display: inline-block;
+	width: 100%;
 }
 .searchfield {
 	border-radius:2px;
