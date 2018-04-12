@@ -1,5 +1,5 @@
 html {
-	background-color:#ccc;/*#A13647;*/
+	background-color:#A13647;
 	color:#fff;
 	overflow-x:hidden;
 }
@@ -894,7 +894,7 @@ i.material-icons.small {
 	max-width: 680px;
 }
 .searchfield {
-	border-radius:10px;
+	border-radius:2px;
 	font-size:20px;
 	width:100%;
 	outline:0;
@@ -973,8 +973,8 @@ i.material-icons.small {
 	float:right;
 	font-size:25px;
 	text-shadow:2px 2px rgba(0,0,0,0.2);
-	border-top-right-radius: 16px;
-	border-bottom-right-radius:16px;
+	border-top-right-radius: 2px;
+	border-bottom-right-radius:2px;
 }
 input {
 	border:0;
@@ -1018,8 +1018,8 @@ input {
 }
 .topsearchbar .searchfield {
 	border-radius:0;
-	border-top-left-radius: 16px;
-	border-bottom-left-radius:16px;
+	border-top-left-radius: 2px;
+	border-bottom-left-radius:2px;
 	height:55px;
 }
 .topsearchbar .moviepagesearchfieldholder .searchfield {
