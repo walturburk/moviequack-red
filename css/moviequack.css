@@ -565,7 +565,7 @@ input.widemsgtext {
 	padding:16px;
 	width:calc(100% - 55px);
 	float:left;
-	border-bottom-left-radius: 16px;
+	border-bottom-left-radius: 2px;
 }
 input.widemsgsubmit {
 	float:right;
@@ -575,7 +575,7 @@ input.widemsgsubmit {
 	color:white;
 	text-shadow:2px 2px 0 rgba(0,0,0,0.2);
 	border-radius:0;
-	border-bottom-right-radius: 16px;
+	border-bottom-right-radius: 2px;
 }
 input.widemsgsubmit:hover {
 	text-shadow:3px 3px 0 rgba(0,0,0,0.3);
