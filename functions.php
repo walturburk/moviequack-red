@@ -16,6 +16,7 @@ $basebigbackdropurl = "https://image.tmdb.org/t/p/w1280/";
 define("basethumburl", "https://image.tmdb.org/t/p/w92/");
 define("basepostermurl", "https://image.tmdb.org/t/p/w185/");
 define("baseposterurl", "https://image.tmdb.org/t/p/w342/");
+define("basebackdropurl", "https://image.tmdb.org/t/p/w780/");
 
 
 
@@ -1051,12 +1052,20 @@ function getExternalStreams($title, $year = null)
 	return $result;
 }
 
-function saveStreams($movieid, $title, $year) {
-
+function streamsAreOld($movieid) {
 	$strms = getStreams($movieid);
 	$week = 604800;
 
 	if ($strms[0]["timestamp"] < time()-$week) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function saveStreams($movieid, $title, $year) {
+
+
 	$streams = getExternalStreams($title, $year);
 
 
@@ -1095,11 +1104,11 @@ function saveStreams($movieid, $title, $year) {
 			VALUES
 			('$movieid', '$region', '$type', '$provider', '$price', '$currency', '$link', '$def', '$dateproviderid', '$timestamp')
 				";
-				
+
 			db_query($query);
 		}
 	}
-	}
+
 }
 
 
@@ -1723,6 +1732,15 @@ function getFollowing($userid) {
 }
 
 function getBuffet() {
+
+	$movies = db_select("SELECT m.*, SUM(r.rating) AS rate
+	FROM ".dbname.".movie AS m
+	LEFT JOIN ".dbname.".ratemovie AS r
+	ON r.movie = m.id
+	GROUP BY m.id
+	ORDER BY rate DESC");
+
+	return $movies;
 
 }
 

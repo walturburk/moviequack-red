@@ -28,7 +28,6 @@ if (!$movie["id"]) {
 	$movie = $movieinfo[0];
 }
 
-saveStreams($movie["id"], $movie["title"], $movie["year"]);
 
 //print_r(getExternalStreams($movie["title"], $movie["year"]));
 
@@ -42,6 +41,10 @@ $backdrop = $basebackdropurl.$movie["backdrop"];
 $runtime = $movie["runtime"];
 $genre = $movie["genre"];
 $plot = $movie["overview"];
+
+if (streamsAreOld($movieid)) {
+	saveStreams($movieid, $movietitle, $year);
+}
 
 $upvoteactive = getVotebtnActive($movieid, true);
 $downvoteactive = getVotebtnActive($movieid, false);
