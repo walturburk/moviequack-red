@@ -77,9 +77,9 @@ if ($rating > 0) {
 	$ratingpercent = "not yet rated";
 }
 
-print_r(getExternalStreams($movietitle, $year));
+print_r(saveStreams($movieid, $movietitle, $year));
 
 $content = $t->output();
-//echo $layout->output();
+echo $layout->output();
 
 ?>
