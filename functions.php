@@ -1722,6 +1722,10 @@ function getFollowing($userid) {
 	return $users;
 }
 
+function getBuffet() {
+
+}
+
 $timeforpageload = time();
 
 
