@@ -1084,7 +1084,7 @@ function saveStreams($movieid, $title, $year) {
 			$region = "en_SE";
 			$type = $stream["monetization_type"];
 			$provider = $stream["provider_id"];
-			$price = $stream["retail_price"];
+			$price = 0+$stream["retail_price"];
 			$currency = $stream["currency"];
 			$link = $stream["urls"]["standard_web"];
 			$def = $stream["presentation_type"];
