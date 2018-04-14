@@ -30,15 +30,17 @@ $ss["Rent"] = $streamsites["rent"];
 $ss["Buy"] = $streamsites["buy"];
 
 foreach ($ss AS $key => $streamsite) {
-$print .= "<h2>".$key."</h2>";
+$print .= "<p>".$key."</p>";
   foreach ($streamsite AS $s) {
     $print .= "<h3>".$s["clear"]."</h3>";
     foreach ($s["movie"] AS $movie) {
+      $allmovieids[] = $movie["movieid"];
       $print .= "<a class='poster postersmall' href='movie.php?id=".$movie["movieid"]."'><img src='".basethumburl.$movie["poster"]."'/></a>";
     }
   }
 }
 
+massUpdateStreams($allmovieids);
 //$print = print_r($streamsites, true);
 
 $content = $t->output();

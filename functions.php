@@ -1065,6 +1065,30 @@ function streamsAreOld($movieid) {
 	}
 }
 
+function massUpdateStreams($movies, $hours = 48) {
+	$timeago = time() - (3600 * $hours);
+	$sqlpart = implode("' OR 'movieid' = '", $movies);
+
+	$sql = "SELECT s.*, m.title, m.year
+	FROM ".dbname.".stream AS s, ".dbname.".movie AS m
+	WHERE ('movieid' = '".$sqlpart."')
+	AND timestamp < ".$timeago."
+	AND s.movieid = m.id";
+
+	$sql = "SELECT s.*, m.title, m.year, m.id AS movid
+	FROM ".dbname.".movie AS m
+LEFT JOIN ".dbname.".stream AS s
+ON s.movieid = m.id
+WHERE ('movid' = '".$sqlpart."')
+AND (timestamp < ".$timeago." OR s.timestamp IS NULL)";
+
+	$streams = db_select($sql);
+
+	foreach ($streams AS $stream) {
+		saveStreams($steam["movieid"], $stream["title"], $stream["year"]);
+	}
+}
+
 function saveStreams($movieid, $title, $year) {
 
 
