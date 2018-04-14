@@ -1070,7 +1070,7 @@ function massUpdateStreams($movies, $hours = 48) {
 	$sqlpart = implode("' OR m.id = '", $movies);
 
 
-	$sql = "SELECT s.*, m.title, m.year, m.id
+	$sql = "SELECT s.*, m.title, m.year, m.id AS movieid
 	FROM ".dbname.".movie AS m
 LEFT JOIN ".dbname.".stream AS s
 ON s.movieid = m.id
