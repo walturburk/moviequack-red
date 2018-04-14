@@ -42,7 +42,7 @@ $runtime = $movie["runtime"];
 $genre = $movie["genre"];
 $plot = $movie["overview"];
 
-if (streamsAreOld($movieid)) {
+if (streamsAreOld($movieid) || isset($_REQUEST["updateinfo"])) {
 	saveStreams($movieid, $movietitle, $year);
 }
 
