@@ -1077,7 +1077,7 @@ ON s.movieid = m.id
 WHERE (m.id = '".$sqlpart."')
 AND (s.timestamp < ".$timeago." OR s.timestamp IS NULL)
 GROUP BY m.id";
-echo $sql;
+//echo $sql;
 	$streams = db_select($sql);
 
 	foreach ($streams AS $stream) {
