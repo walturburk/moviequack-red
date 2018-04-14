@@ -63,11 +63,11 @@ function createId() {
 }
 
 function isDev() {
-	if ($_SERVER['SERVER_ADDR'] == "::1" || $_REQUEST["dev"] == true) {
+	//if ($_SERVER['SERVER_ADDR'] == "::1" || $_REQUEST["dev"] == true) {
 		return true;
-	} else {
-		return false;
-	}
+	//} else {
+	//	return false;
+//	}
 }
 
 

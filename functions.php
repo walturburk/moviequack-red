@@ -735,6 +735,8 @@ if ($err) {
 		$year = $expdate[0];
 		$searcht = $movie["title"]." ".$movie["original_title"];
 		$searchstring = iconv('UTF-8', 'ASCII//TRANSLIT', $searcht);//strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $searcht));
+
+		if ($movie["id"] > 0) {
 		$mqid = "m".$movie["id"];
 
 
@@ -755,7 +757,7 @@ if ($err) {
 		addProdCountries($movie["production_countries"], $mqid);
 		addLanguages($movie["spoken_languages"], $mqid);
 		addCollections($movie["belongs_to_collection"], $mqid);
-
+	}
 		//$movie = $printablemovie;
 	}
 //$movie["mqid"] = $mqid;
@@ -1290,7 +1292,7 @@ $postusersql = "";
 			$postusersql = " OR tag.tag LIKE '@".$_SESSION["user"]."'";
 		}
 
-$sql = "SELECT 'tag' AS feedtype, tag.tag AS tag, tag.user AS user1id, user.username AS user1, tag.movie, tag.timestamp, movie.id AS movieid, movie.title AS title, movie.poster
+$sql = "SELECT 'tag' AS feedtype, tag.tag AS tag, tag.user AS user1id, user.username AS user1, tag.movie, tag.timestamp, movie.id AS movieid, movie.title AS title, movie.poster, movie.backdrop AS backdrop
 				FROM `tag`
 				LEFT JOIN user
 				ON tag.user = user.username
@@ -1341,7 +1343,7 @@ function getPostsFeed($user = null) {
 		ORDER BY `votes` DESC
 		*/
 
-		$sql = "SELECT 'post' AS feedtype, movie.title AS movietitle, movie.id AS movieid, movie.year AS movieyear, movie.poster AS poster, reply.original AS origmsg,
+		$sql = "SELECT 'post' AS feedtype, movie.title AS movietitle, movie.id AS movieid, movie.year AS movieyear, movie.poster AS poster, movie.backdrop AS backdrop, reply.original AS origmsg,
 		user.username AS user1, user.username AS user1id, post.message, post.emoji, post.timestamp AS timestamp, post.id AS id,
 		(SUM((10+od.upvote-od.downvote)*1000/(UNIX_TIMESTAMP()-post.timestamp)))
 			AS votes
@@ -1409,7 +1411,7 @@ function getRatingFeed($user) {
 			$postusersql .= " OR r.user = '$user'";
 		}
 
-$sql = "SELECT 'rating' AS feedtype, u.username AS user1, u.username AS user1id, r.rating AS rating, m.id AS movieid, m.title, m.poster AS poster, r.timestamp
+$sql = "SELECT 'rating' AS feedtype, u.username AS user1, u.username AS user1id, r.rating AS rating, m.id AS movieid, m.title, m.poster AS poster, m.backdrop AS backdrop, r.timestamp
 FROM `ratemovie` AS r
 LEFT JOIN user AS u
 ON r.user = u.username
@@ -1481,7 +1483,7 @@ global $basethumburl;
 	}
 
 
-$rdivstart = "<div class='feeditem narrow clear relative recitem'>";
+$rdivstart = "<div class='feeditem narrow clear relative recitem' style='background-image:url(".basebackdropurl.")'>";
 
 $fdivstart = "<div class='feeditem narrow clear relative'>";
 
@@ -1615,7 +1617,8 @@ $fdivend = "</div>";
 				$print .= $fdivend;
 			 	break;
 			case 7:
-				$print .= $rdivstart;
+				$print .= "<div class='feeditem narrow clear relative recitem' style='background-image:url(".basebackdropurl.$row["backdrop"].")'>";
+				$print .= "<div class='tintedwindow'>";
 				$print .= $fusername;
 				$print .= $ficonstart;
 				$print .= "share";
@@ -1628,6 +1631,7 @@ $fdivend = "</div>";
 				$print .= "<a href='list.php?tag%5B%5D=%40".$_SESSION["user"]."' class='padding block small'>All recommended movies</a>";
 				$print .= $fposter;
 				$print .= $fdivend;
+				$print .= "</div>";
 				break;
 		}
 
@@ -1743,6 +1747,51 @@ function getBuffet() {
 	return $movies;
 
 }
+
+function getStreamSites($user, $flatrate = true) {
+
+	if ($flatrate) {
+		$type = "AND s.type = 'flatrate'";
+	} else {
+		$type = "AND s.type != 'flatrate'";
+	}
+
+	$sql = "SELECT *, COUNT(*) AS quant FROM ".dbname.".stream AS s
+	LEFT JOIN ".dbname.".tag AS t
+	ON t.movie = s.movieid
+	LEFT JOIN ".dbname.".provider AS p
+	ON p.id = s.provider
+	WHERE t.tag = 'bookmark'
+	AND t.user = '".$user."'
+	 ".$type."
+	GROUP BY provider
+	ORDER BY quant DESC";
+
+	$streamsites = db_select($sql);
+	return $streamsites;
+
+}
+
+function getStreamableMovies($user, $tag = "bookmark") {
+
+	$sql = "SELECT * FROM ".dbname.".stream AS s
+LEFT JOIN ".dbname.".tag AS t
+ON t.movie = s.movieid
+LEFT JOIN ".dbname.".movie AS m
+ON s.movieid = m.id
+LEFT JOIN ".dbname.".provider AS p
+ON p.id = s.provider
+WHERE t.tag = '".$tag."'
+AND t.user = '".$user."'
+GROUP BY movieid, provider
+";
+
+	$movies = db_select($sql);
+	return $movies;
+
+}
+
+
 
 $timeforpageload = time();
 

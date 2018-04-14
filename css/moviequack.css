@@ -80,7 +80,7 @@ table td.fixedcell {
 	text-align:left;
 }
 .feeditem.recitem {
-	border:3px solid #00ffc6;
+
 }
 .feeditemcell {
 	padding:16px;
@@ -434,7 +434,7 @@ footer.footer .third {
 .poster img {
 	max-height:100%;
 }
-.postersmall {
+.movieinfowindow .postersmall {
 	display:none;
 }
 .darkrating.ratemovie .votestar {
@@ -820,6 +820,10 @@ i.material-icons.small {
 	background-color:rgba(0,0,0,0.15);
 	color:white;
 }
+.tintedwindow {
+	background-color:rgba(0,0,0,0.25);
+	color:white;
+}
 .darkwindow {
 	background-color:rgba(0,0,0,0.65);
 	color:white;
@@ -1121,7 +1125,7 @@ form#addtag .tt-suggestion:hover {
 	header.movieheader .posterlarge {
 		display:none;
 	}
-	.postersmall {
+	.movieinfowindow .postersmall {
 		display:inline-block;
 		height:400px;
 	}
