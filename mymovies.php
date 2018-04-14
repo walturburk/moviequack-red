@@ -13,20 +13,29 @@ $user = $_SESSION["user"];
 $movies = getStreamableMovies($user, "bookmark");
 
 foreach ($movies AS $movie) {
-  $streamsites[$movie["provider"]]["clear"] = $movie["clear"];
-  $streamsites[$movie["provider"]]["count"] = 0+$streamsites[$movie["provider"]]["count"]+1;
-  $streamsites[$movie["provider"]]["movie"][] = $movie;
+  $streamsites[$movie["type"]][$movie["provider"]]["clear"] = $movie["clear"];
+  $streamsites[$movie["type"]][$movie["provider"]]["count"] = 0+$streamsites[$movie["provider"]]["count"]+1;
+  $streamsites[$movie["type"]][$movie["provider"]]["movie"][] = $movie;
 
 }
 
-usort($streamsites, function($a, $b) {
-    return $b['count'] <=> $a['count'];
-});
+foreach ($streamsites AS $s) {
+  usort($s, function($a, $b) {
+      return $b['count'] <=> $a['count'];
+  });
+}
 
-foreach ($streamsites AS $streamsite) {
-  $print .= "<h2>".$streamsite["clear"]."</h2>";
-  foreach ($streamsite["movie"] AS $movie) {
-    $print .= "<a href='movie.php?id=".$movie["movieid"]."'><img src='".basethumburl.$movie["poster"]."'/></a>";
+$ss["Subscription"] = $streamsites["flatrate"];
+$ss["Rent"] = $streamsites["rent"];
+$ss["Buy"] = $streamsites["buy"];
+
+foreach ($ss AS $key => $streamsite) {
+$print .= "<h2>".$key."</h2>";
+  foreach ($streamsite AS $s) {
+    $print .= "<h3>".$s["clear"]."</h3>";
+    foreach ($s["movie"] AS $movie) {
+      $print .= "<a class='poster postersmall' href='movie.php?id=".$movie["movieid"]."'><img src='".basethumburl.$movie["poster"]."'/></a>";
+    }
   }
 }
 

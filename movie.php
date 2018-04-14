@@ -36,7 +36,7 @@ $movietitle = $movie["title"];
 $year = $movie["year"];
 $posterurl = baseposterurl.$movie["poster"];
 //$posterurl = checkImage($poster);
-$backdrop = $basebackdropurl.$movie["backdrop"];
+$backdrop = $basebigbackdropurl.$movie["backdrop"];
 
 $runtime = $movie["runtime"];
 $genre = $movie["genre"];
