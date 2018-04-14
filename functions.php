@@ -1081,7 +1081,7 @@ echo $sql;
 	$streams = db_select($sql);
 
 	foreach ($streams AS $stream) {
-		echo $stream["movieid"]." ".$stream["title"]." ".$stream["year"]."<br>";
+		//echo $stream["movieid"]." ".$stream["title"]." ".$stream["year"]."<br>";
 		saveStreams($stream["movieid"], $stream["title"], $stream["year"]);
 	}
 }
@@ -1130,7 +1130,7 @@ function saveStreams($movieid, $title, $year) {
 			VALUES
 			('$movieid', '$region', '$type', '$provider', '$price', '$currency', '$link', '$def', '$dateproviderid', '$timestamp')
 				";
-				echo $query."<br>";
+				//echo $query."<br>";
 			db_query($query);
 		}
 	}

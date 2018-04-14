@@ -10,7 +10,7 @@ $layout = new Template("templates/layout.html");
 $user = $_SESSION["user"];
 
 $allmovies = getFilteredItems($user, "bookmark");
-print_r($allmovies);
+
 foreach ($allmovies AS $mov) {
   $moviesarray[] = $mov["item"];
 }
