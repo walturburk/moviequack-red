@@ -9,6 +9,12 @@ $layout = new Template("templates/layout.html");
 
 $user = $_SESSION["user"];
 
+$allmovies = getFilteredItems($user, "bookmark");
+print_r($allmovies);
+foreach ($allmovies AS $mov) {
+  $moviesarray[] = $mov["item"];
+}
+massUpdateStreams($moviesarray, 48);
 
 $movies = getStreamableMovies($user, "bookmark");
 
@@ -34,13 +40,12 @@ $print .= "<p>".$key."</p>";
   foreach ($streamsite AS $s) {
     $print .= "<h3>".$s["clear"]."</h3>";
     foreach ($s["movie"] AS $movie) {
-      $allmovieids[] = $movie["movieid"];
       $print .= "<a class='poster postersmall' href='movie.php?id=".$movie["movieid"]."'><img src='".basethumburl.$movie["poster"]."'/></a>";
     }
   }
 }
 
-massUpdateStreams($allmovieids);
+
 //$print = print_r($streamsites, true);
 
 $content = $t->output();

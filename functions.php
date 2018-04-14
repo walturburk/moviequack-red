@@ -1067,25 +1067,22 @@ function streamsAreOld($movieid) {
 
 function massUpdateStreams($movies, $hours = 48) {
 	$timeago = time() - (3600 * $hours);
-	$sqlpart = implode("' OR 'movieid' = '", $movies);
+	$sqlpart = implode("' OR m.id = '", $movies);
 
-	$sql = "SELECT s.*, m.title, m.year
-	FROM ".dbname.".stream AS s, ".dbname.".movie AS m
-	WHERE ('movieid' = '".$sqlpart."')
-	AND timestamp < ".$timeago."
-	AND s.movieid = m.id";
 
-	$sql = "SELECT s.*, m.title, m.year, m.id AS movid
+	$sql = "SELECT s.*, m.title, m.year, m.id
 	FROM ".dbname.".movie AS m
 LEFT JOIN ".dbname.".stream AS s
 ON s.movieid = m.id
-WHERE ('movid' = '".$sqlpart."')
-AND (timestamp < ".$timeago." OR s.timestamp IS NULL)";
-
+WHERE (m.id = '".$sqlpart."')
+AND (s.timestamp < ".$timeago." OR s.timestamp IS NULL)
+GROUP BY m.id";
+echo $sql;
 	$streams = db_select($sql);
 
 	foreach ($streams AS $stream) {
-		saveStreams($steam["movieid"], $stream["title"], $stream["year"]);
+		echo $stream["movieid"]." ".$stream["title"]." ".$stream["year"]."<br>";
+		saveStreams($stream["movieid"], $stream["title"], $stream["year"]);
 	}
 }
 
@@ -1798,6 +1795,8 @@ function getStreamSites($user, $flatrate = true) {
 	return $streamsites;
 
 }
+
+
 
 function getStreamableMovies($user, $tag = "bookmark") {
 
