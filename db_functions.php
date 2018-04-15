@@ -79,7 +79,7 @@ function getConfig() {
     $config = parse_ini_file("config-dev.ini");
   } else {
     $config = parse_ini_file("../../config-live.ini");
-    $config["baseurl"] = "";
+    $config["baseurl"] = "/";
   }
 
 
