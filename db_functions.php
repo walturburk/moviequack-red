@@ -9,8 +9,10 @@ if (isDev()) {
 session_start();
 
 $config = getConfig();
+
 define("dbname", $config["dbname"]);
-$baseurl = "http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+//$baseurl = "http://" . $_SERVER['SERVER_NAME'] ;
+$baseurl = $config["baseurl"];
 define("baseurl", $baseurl);
 $locale = "en_SE";
 date_default_timezone_set('Europe/Stockholm');
@@ -80,7 +82,7 @@ function getConfig() {
   }
 
 
-  if ($config["baseurl"]) {
+  if (isset($config["baseurl"])) {
 
   } else {
     $config["baseurl"] = "/";
