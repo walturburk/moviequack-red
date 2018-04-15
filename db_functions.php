@@ -11,7 +11,6 @@ session_start();
 $config = getConfig();
 
 define("dbname", $config["dbname"]);
-//$baseurl = "http://" . $_SERVER['SERVER_NAME'] ;
 $baseurl = $config["baseurl"];
 define("baseurl", $baseurl);
 $locale = "en_SE";
@@ -79,7 +78,7 @@ function getConfig() {
     $config = parse_ini_file("config-dev.ini");
   } else {
     $config = parse_ini_file("../../config-live.ini");
-    $config["baseurl"] = "/";
+    $config["baseurl"] = "http://" . $_SERVER['SERVER_NAME'] ;
   }
 
 
