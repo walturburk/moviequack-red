@@ -82,11 +82,11 @@ function getConfig() {
   }
 
 
-  if (isset($config["baseurl"])) {
+  /*if (isset($config["baseurl"])) {
 
   } else {
     $config["baseurl"] = "/";
-  }
+  }*/
   return $config;
 
 }

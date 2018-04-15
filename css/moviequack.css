@@ -263,7 +263,7 @@ li.sortableli:hover .xinfo {
 	border:2px solid white;
 	color:white;
 	cursor:pointer;
-	padding:12px;
+	padding:1rem;
 	display:inline-block;
 	transition:.3s;
 	background:none;
@@ -520,7 +520,6 @@ footer.footer .third {
 }
 input.input {
 	background: white;
-	border: 3px solid #e5e5e5;
 }
 select.select {
 	-webkit-appearance: none;
@@ -992,8 +991,8 @@ i.material-icons.small {
 }
 input {
 	border:0;
-	border-radius:6px;
-	padding:8px;
+	border-radius:2px;
+	padding:1rem;
 	font-size:18px;
 }
 .topsearchbar {
