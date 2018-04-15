@@ -1823,5 +1823,4 @@ $timeforpageload = time();
 
 
 $webpagetitle = "moviequack";
-$baseurl = $config["baseurl"];
 ?>
