@@ -58,6 +58,9 @@ if (!isset($_REQUEST["username"])) {
 
 	$output .= "<h2>Welcome to moviequack, <span class='red'>$username</span>!</h2>";
 
+	$newURL = baseurl."/buffet.php";
+	header('Location: '.$newURL);
+
 }
 
 
@@ -82,6 +85,8 @@ $output .= "</div>";
 $output .= "</div>";
 $content = $output;
 $layout = new Template("templates/layout.html");
-echo $layout->output();
+$foundation = new Template("templates/foundation.html");
+$body = $layout->output();
+echo $foundation->output();
 
 ?>

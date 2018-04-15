@@ -4,7 +4,7 @@ html {
 	overflow-x:hidden;
 }
 body {
-	padding-bottom:48px;
+
 }
 a {
 	color:inherit;
@@ -700,6 +700,13 @@ form.usersearch input#submit {
     top: 0;
     right: 0;
 		border-radius:0;
+}
+form.register input {
+	width:100%;
+	text-align:center;
+}
+form.register input.input {
+	text-align:left;
 }
 .smallbtn {
 	cursor:pointer;

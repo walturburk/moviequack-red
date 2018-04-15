@@ -5,7 +5,7 @@ include("db_functions.php");
 include("functions.php");
 
 $t = new Template("templates/buffet.html");
-$layout = new Template("templates/layout.html");
+$layout = new Template("templates/foundation.html");
 
 
 $moviearr = getBuffet();
@@ -28,8 +28,9 @@ foreach ($moviearr AS $movie) {
   $squares .= $sq->output();
 }
 
-$content = $t->output();
+$body = $t->output();
 
 echo $layout->output();
+
 
 ?>

@@ -6,6 +6,7 @@ include("functions.php");
 
 $t = new Template("templates/mymovies.html");
 $layout = new Template("templates/layout.html");
+$foundation = new Template("templates/foundation.html");
 
 $user = $_SESSION["user"];
 
@@ -45,12 +46,13 @@ usort($ss["Buy"], function($a, $b) {
 });
 
 foreach ($ss AS $key => $streamsite) {
-$print .= "<p>".$key."</p>";
+$print .= "<p style='padding-bottom:1rem;' class='red'>".$key."</p>";
   foreach ($streamsite AS $s) {
-    $print .= "<h3>".$s["clear"]." (".$s["count"].")</h3>";
+    $print .= "<h3 style='padding-bottom:1rem'>".$s["clear"]." (".$s["count"].")</h3>";
     foreach ($s["movie"] AS $movie) {
       $print .= "<a class='poster postersmall' href='movie.php?id=".$movie["movieid"]."'><img src='".basethumburl.$movie["poster"]."'/></a>";
     }
+    $print .= "<div style='padding:2rem 0;'></div>";
   }
 }
 
@@ -59,6 +61,7 @@ $print .= "<p>".$key."</p>";
 
 $content = $t->output();
 
-echo $layout->output();
+$body = $layout->output();
+echo $foundation->output();
 
 ?>

@@ -58,6 +58,8 @@ $content = "<div class='content narrow'><h2>pls enter a longer searchterm</h2></
 }
 
 $layout = new Template("templates/layout.html");
-echo $layout->output();
+$foundation = new Template("templates/foundation.html");
+$body = $layout->output();
+echo $foundation->output();
 
 ?>

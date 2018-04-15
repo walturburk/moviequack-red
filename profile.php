@@ -5,6 +5,7 @@ include("functions.php");
 
 $t = new Template("templates/profile.html");
 $layout = new Template("templates/layout.html");
+$foundation = new Template("templates/foundation.html");
 
 $id = $_REQUEST["id"];
 if (!isset($id)) {
@@ -53,6 +54,7 @@ $rawfeed = getFeed($id);
 $feed = printFeed($rawfeed);
 
 $content = $t->output();
-echo $layout->output();
+$body = $layout->output();
+echo $foundation->output();
 
 ?>

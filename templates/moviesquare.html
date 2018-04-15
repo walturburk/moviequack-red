@@ -1,23 +1,27 @@
-<div style="background-image:url({backdrop}); background-size:cover;" class="third">
-  <div class="darkwindow padding">
-<h3>{movietitle}</h3>
-<div style="display:inline-block; height:auto;" class="poster postersmall">
+<div style="position:relative;" class="padding">
+
+  <div style="min-height:100%; background-image:url({backdrop}); background-size:cover;" class="">
+<div style="height:100%;" class="darkwindow padding">
+
+
+<div class="floatleft poster postersmall">
     <img src="{posterurl}"/>
    </div>
+<h3>{movietitle}</h3>
 
-   <div class="movievote voteparent fullwidth" data-postid="{movieid}">
-   	<div class="movievoteopt">
-   		<div data-tag="favourite" data-movie="{movieid}" class="button roundbutton tag {favouriteactive}"><i class="material-icons">favorite</i></div>
-   	</div>
-   	<div class="movievoteopt">
-   		<div data-tag="bookmark" data-movie="{movieid}" class="button roundbutton tag {bookmarkactive}"><i class="material-icons">bookmark</i></div>
-   	</div>
-
-   </div>
 
   <div id="movierating" class="relative ratemovie redrating padding">
   {movierating}
   </div>
 
+  <div class="movievote voteparent" data-postid="{movieid}">
+
+   <div class="movievoteopt">
+     <div data-tag="bookmark" data-movie="{movieid}" class="button roundbutton tag {bookmarkactive}"><i class="material-icons">bookmark</i></div>
+   </div>
+
+  </div>
+
+</div>
 </div>
 </div>

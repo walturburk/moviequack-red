@@ -58,5 +58,7 @@ unset($_REQUEST["password"]);
 
 $content = $output;
 $layout = new Template("templates/layout.html");
-echo $layout->output();
+$foundation = new Template("templates/foundation.html");
+$body = $layout->output();
+echo $foundation->output();
 ?>

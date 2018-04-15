@@ -5,6 +5,7 @@ include("functions.php");
 
 $t = new Template("templates/feed.html");
 $layout = new Template("templates/layout.html");
+$foundation = new Template("templates/foundation.html");
 
 if ($_SESSION["loggedin"] != true) {
 	header("Location: register.php");
@@ -34,6 +35,7 @@ $rawfeed = getFeed($follows);
 $feed = printFeed($rawfeed);
 
 $content = $t->output();
-echo $layout->output();
+$body = $layout->output();
+echo $foundation->output();
 
 ?>

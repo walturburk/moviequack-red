@@ -7,6 +7,7 @@ include("functions.php");
 
 $t = new Template("templates/quackpage.html");
 $layout = new Template("templates/layout.html");
+$foundation = new Template("templates/foundation.html");
 
 $user = $_SESSION["user"];
 $id = $_REQUEST["id"];
@@ -71,6 +72,7 @@ $movierating = printMovieRating($movieid, $rating, $urate);
 $searchfieldholderclass = "moviepagesearchfieldholder";
 $webpagetitle = $message;
 $content = $t->output();
-echo $layout->output();
+$body = $layout->output();
+echo $foundation->output();
 
 ?>

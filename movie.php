@@ -8,6 +8,7 @@ $searchfieldholderclass = "moviepagesearchfieldholder";
 
 $t = new Template("templates/moviepage.html");
 $layout = new Template("templates/layout.html");
+$foundation = new Template("templates/foundation.html");
 
 $user = $_SESSION["user"];
 $id = $_REQUEST["id"];
@@ -82,6 +83,7 @@ if ($rating > 0) {
 
 
 $content = $t->output();
-echo $layout->output();
+$body = $layout->output();
+echo $foundation->output();
 
 ?>
