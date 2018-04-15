@@ -10,7 +10,8 @@ session_start();
 
 $config = getConfig();
 define("dbname", $config["dbname"]);
-define("baseurl", $config["baseurl"]);
+$baseurl = "http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+define("baseurl", $baseurl);
 $locale = "en_SE";
 date_default_timezone_set('Europe/Stockholm');
 
