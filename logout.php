@@ -26,7 +26,7 @@ $output .= "<div class='fullheight darkwindow white paddingtop'>";
 $output .= "<div class='content narrow large'>";
 	$output .= "<h2>Goodbye for now <span class='red'>".$username."</span></h2>";
 
-	$output .= "<br><a class='button redbtn' href='/'>Return</a>";
+	$output .= "<br><a class='button redbtn' href='".baseurl."'>Return</a>";
 $output .= "</div>";
 $output .= "</div>";
 $output .= "</div>";
