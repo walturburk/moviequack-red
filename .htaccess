@@ -11,6 +11,8 @@ RewriteRule ^list/([a-z=\[\]&\@]+) list.php?$1
 
 RewriteRule ^list/ list.php
 
+RewriteRule ^list list.php
+
 RewriteRule ^movie/([a-z0-9]+) movie.php?id=$1
 
 RewriteRule ^quack/([a-z0-9]+) quack.php?id=$1
