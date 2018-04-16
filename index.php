@@ -10,7 +10,7 @@ $loginlinkclass = "red";
 
 if ($_SESSION["loggedin"] == true) {
 	$toplogin = "<a href='/user/".$_SESSION["user"]."''>".$_SESSION["user"]."</a>";
-	$logoutbutton = '<li><a href="logout.php">logout</a></li>';
+	$logoutbutton = '<li><a href="/logout">logout</a></li>';
 } else {
 	$newURL = baseurl."/welcome.php";
 	header('Location: '.$newURL);
