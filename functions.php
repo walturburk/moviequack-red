@@ -414,7 +414,7 @@ function printReplies($postsarray) {
 
 	$posts = "";
 	foreach ($postsarray AS $post) {
-		$posts .= "<div class='replymsg'><a class='small' href='profile/".$post["userid"]."'>".$post["username"]."</a>";
+		$posts .= "<div class='replymsg'><a class='small' href='/profile/".$post["userid"]."'>".$post["username"]."</a>";
 		$posts .= "<div class='padding0'>".$post["message"]."</div></div>";
 	}
 
@@ -1526,7 +1526,7 @@ $fdivend = "</div>";
 			$username = $row["user1"];
 		}
 
-		$fusername = "<div class='feedusername small'><a href='profile/".$row["user1"]."'>".$username."</a></div>";
+		$fusername = "<div class='feedusername small'><a href='/profile/".$row["user1"]."'>".$username."</a></div>";
 
 		$fposter = '<div class="qmovielinkholder floatright padding">
 		<a class="qmovielink" href="/movie/'.$row["movieid"].'"><img alt="'.$row["movietitle"].' ('.$row["movieyear"].')" src="'.basethumburl.$row["poster"].'"></a>
@@ -1583,7 +1583,7 @@ $fdivend = "</div>";
 				$print .= "<a href='quack.php?id=".$row["post"]."'>";
 				$print .= "\"".$row["message"]."\"";
 				$print .= "</a>";
-				$print .= "<a href='profile/".$row["user2"]."' class='block small paddingtop'>".$row["user2"]."</a>";
+				$print .= "<a href='/profile/".$row["user2"]."' class='block small paddingtop'>".$row["user2"]."</a>";
 				$print .= $fconend;
 				$print .= $fposter;
 				$print .= $fdivend;
@@ -1598,7 +1598,7 @@ $fdivend = "</div>";
 				$print .= "<a href='quack.php?id=".$row["post"]."'>";
 				$print .= "\"".$row["message"]."\"";
 				$print .= "</a>";
-				$print .= "<a href='profile/".$row["user2"]."' class='block small paddingtop'>".$row["user2"]."</a>";
+				$print .= "<a href='/profile/".$row["user2"]."' class='block small paddingtop'>".$row["user2"]."</a>";
 				$print .= $fconend;
 				$print .= $fposter;
 				$print .= $fdivend;
