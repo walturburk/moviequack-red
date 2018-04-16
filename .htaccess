@@ -19,3 +19,4 @@ RewriteRule ^quack/([a-z0-9]+) quack.php?id=$1
 
 RewriteRule ^login login.php
 RewriteRule ^register register.php
+RewriteRule ^logout logout.php
