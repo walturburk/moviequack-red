@@ -112,7 +112,7 @@ var bestPictures = new Bloodhound({
   datumTokenizer: Bloodhound.tokenizers.obj.whitespace("title"),
   queryTokenizer: Bloodhound.tokenizers.whitespace,
   remote: {
-    url: "searchmovie.php?q=%QUERY",
+    url: "/searchmovie.php?q=%QUERY",
     wildcard: "%QUERY"
   }
 });
@@ -143,7 +143,7 @@ var tags = new Bloodhound({
   datumTokenizer: Bloodhound.tokenizers.obj.whitespace("tag"),
   queryTokenizer: Bloodhound.tokenizers.whitespace,
   remote: {
-    url: "typeaheadtags.php?q=%QUERY",
+    url: "/typeaheadtags.php?q=%QUERY",
     wildcard: "%QUERY"
   }
 });
@@ -169,7 +169,7 @@ var users = new Bloodhound({
   datumTokenizer: Bloodhound.tokenizers.obj.whitespace("username"),
   queryTokenizer: Bloodhound.tokenizers.whitespace,
   remote: {
-    url: "usersearch.php?q=%QUERY",
+    url: "/usersearch.php?q=%QUERY",
     wildcard: "%QUERY"
   }
 });
