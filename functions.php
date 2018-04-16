@@ -414,7 +414,7 @@ function printReplies($postsarray) {
 
 	$posts = "";
 	foreach ($postsarray AS $post) {
-		$posts .= "<div class='replymsg'><a class='small' href='profile.php?id=".$post["userid"]."'>".$post["username"]."</a>";
+		$posts .= "<div class='replymsg'><a class='small' href='profile/".$post["userid"]."'>".$post["username"]."</a>";
 		$posts .= "<div class='padding0'>".$post["message"]."</div></div>";
 	}
 
@@ -429,7 +429,7 @@ function printSpecMessage($sort) {
 	} else {
 		$postarray = getTopMessage();
 	}
-	$message = "<a href='movie.php?id=".$postarray[0]["movieid"]."'>";
+	$message = "<a href='movie/".$postarray[0]["movieid"]."'>";
 	$message .= "<img src='".$postarray[0]["poster"]."'>";
 	$message .= "</a>";
 
@@ -1526,10 +1526,10 @@ $fdivend = "</div>";
 			$username = $row["user1"];
 		}
 
-		$fusername = "<div class='feedusername small'><a href='profile.php?id=".$row["user1"]."'>".$username."</a></div>";
+		$fusername = "<div class='feedusername small'><a href='profile/".$row["user1"]."'>".$username."</a></div>";
 
 		$fposter = '<div class="qmovielinkholder floatright padding">
-		<a class="qmovielink" href="movie.php?id='.$row["movieid"].'"><img alt="'.$row["movietitle"].' ('.$row["movieyear"].')" src="'.basethumburl.$row["poster"].'"></a>
+		<a class="qmovielink" href="movie/'.$row["movieid"].'"><img alt="'.$row["movietitle"].' ('.$row["movieyear"].')" src="'.basethumburl.$row["poster"].'"></a>
 		</div>';
 
 
@@ -1583,7 +1583,7 @@ $fdivend = "</div>";
 				$print .= "<a href='quack.php?id=".$row["post"]."'>";
 				$print .= "\"".$row["message"]."\"";
 				$print .= "</a>";
-				$print .= "<a href='profile.php?id=".$row["user2"]."' class='block small paddingtop'>".$row["user2"]."</a>";
+				$print .= "<a href='profile/".$row["user2"]."' class='block small paddingtop'>".$row["user2"]."</a>";
 				$print .= $fconend;
 				$print .= $fposter;
 				$print .= $fdivend;
@@ -1598,7 +1598,7 @@ $fdivend = "</div>";
 				$print .= "<a href='quack.php?id=".$row["post"]."'>";
 				$print .= "\"".$row["message"]."\"";
 				$print .= "</a>";
-				$print .= "<a href='profile.php?id=".$row["user2"]."' class='block small paddingtop'>".$row["user2"]."</a>";
+				$print .= "<a href='profile/".$row["user2"]."' class='block small paddingtop'>".$row["user2"]."</a>";
 				$print .= $fconend;
 				$print .= $fposter;
 				$print .= $fdivend;
@@ -1650,7 +1650,7 @@ $fdivend = "</div>";
 				$print .= $fconstart;
 				$print .= $username;
 				$print .= " recommended ";
-				$print .= "<a href='movie.php?id=".$row["movieid"]."' class='block red'>".$row["title"]."</a>";
+				$print .= "<a href='movie/".$row["movieid"]."' class='block red'>".$row["title"]."</a>";
 				$print .= $fconend;
 				$print .= "<a href='list.php?tag%5B%5D=%40".$_SESSION["user"]."' class='padding block small'>All recommended movies</a>";
 				$print .= $fposter;

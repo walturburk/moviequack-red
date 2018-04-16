@@ -1,12 +1,12 @@
 <div id="{postid}" class="quack voteparent addremparent" data-timestamp="{rawtimestamp}" title="{timestamp}" alt="{timestamp}" data-postid="{postid}">
 
 <div class="qmovielinkholder floatright padding">
-<a class="qmovielink" href="movie.php?id={movieid}"><img alt="{movietitle} ({movieyear})" src="{tinyposter}"></a>
+<a class="qmovielink" href="movie/{movieid}"><img alt="{movietitle} ({movieyear})" src="{tinyposter}"></a>
 </div>
 
 <div class="floatleft paddingleft">
 	<span class="qtoprow">
-		<span class="qusername"><a href="profile.php?id={userid}">{username}</a> {followbtn}</span>
+		<span class="qusername"><a href="profile/{userid}">{username}</a> {followbtn}</span>
 	</span>
 
 	<div class="msgpart">
@@ -30,7 +30,7 @@
 		<span data-expand="options{postid}" class="qoptpane smallbtn"><i class="material-icons">more_horiz</i></span>
 		<div class="smalloptionsbox whitecard nopadding options{postid} popup" style="display:none">
 			{removepostbtn}
-			<a href="//www.moviequack.com/movie.php?id={movieid}#{postid}" class="simplebtn">Link to quack</a>
+			<a href="//www.moviequack.com/movie/{movieid}#{postid}" class="simplebtn">Link to quack</a>
 		</div>
 	</div>
 
