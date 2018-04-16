@@ -429,7 +429,7 @@ function printSpecMessage($sort) {
 	} else {
 		$postarray = getTopMessage();
 	}
-	$message = "<a href='movie/".$postarray[0]["movieid"]."'>";
+	$message = "<a href='/movie/".$postarray[0]["movieid"]."'>";
 	$message .= "<img src='".$postarray[0]["poster"]."'>";
 	$message .= "</a>";
 
@@ -1529,7 +1529,7 @@ $fdivend = "</div>";
 		$fusername = "<div class='feedusername small'><a href='profile/".$row["user1"]."'>".$username."</a></div>";
 
 		$fposter = '<div class="qmovielinkholder floatright padding">
-		<a class="qmovielink" href="movie/'.$row["movieid"].'"><img alt="'.$row["movietitle"].' ('.$row["movieyear"].')" src="'.basethumburl.$row["poster"].'"></a>
+		<a class="qmovielink" href="/movie/'.$row["movieid"].'"><img alt="'.$row["movietitle"].' ('.$row["movieyear"].')" src="'.basethumburl.$row["poster"].'"></a>
 		</div>';
 
 
@@ -1650,7 +1650,7 @@ $fdivend = "</div>";
 				$print .= $fconstart;
 				$print .= $username;
 				$print .= " recommended ";
-				$print .= "<a href='movie/".$row["movieid"]."' class='block red'>".$row["title"]."</a>";
+				$print .= "<a href='/movie/".$row["movieid"]."' class='block red'>".$row["title"]."</a>";
 				$print .= $fconend;
 				$print .= "<a href='list.php?tag%5B%5D=%40".$_SESSION["user"]."' class='padding block small'>All recommended movies</a>";
 				$print .= $fposter;

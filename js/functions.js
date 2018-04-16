@@ -129,13 +129,13 @@ jQuery('.searchfield.typeahead').typeahead(null, {
     ].join('\n'),
 		suggestion: function(data) {
 
-    return '<div><a href="movie/'+data.id+'"><strong>' + data.title + '</strong> (' + data.year + ')</a></div>';
+    return '<div><a href="/movie/'+data.id+'"><strong>' + data.title + '</strong> (' + data.year + ')</a></div>';
 	}
 },
 });
 
 jQuery(".searchfield.typeahead").bind("typeahead:selected", function(obj, data, name) {
-  window.location.href = "movie/"+data.id+"";
+  window.location.href = "/movie/"+data.id+"";
 });
 
 

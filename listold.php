@@ -49,7 +49,7 @@ if (empty($items) && $selectedlist != "") {
 } else if ($_REQUEST["listmode"] == "compact") {
 	$listitems .= "<ul class='clear floatleft sortablelist'>";
 	 foreach ($items AS $item) {
-		 $listitems .= "<li class='sortableli' style=''><a href='movie/".$item["item"]."' class='handle absolutecenter'><img alt='".$item["title"]."' class='handle' src='".basethumburl.$item["poster"]."'>";
+		 $listitems .= "<li class='sortableli' style=''><a href='/movie/".$item["item"]."' class='handle absolutecenter'><img alt='".$item["title"]."' class='handle' src='".basethumburl.$item["poster"]."'>";
 		 $listitems .= "<div class='xinfo'>".$item["title"]."</div></a></li>";
 	 }
 	 $listitems .= "</ul><div class='clear'></div>";
@@ -59,7 +59,7 @@ if (empty($items) && $selectedlist != "") {
     $listitems .= "<tr class='titleitem addremparent' id='".$item["item"]."'>";
 
 		$listitems .= "<td class='fixedcell'>";
-	$listitems .= "<a href='movie/".$item["item"]."' class=''><img alt='".$item["title"]."' class='handle' src='".basethumburl.$item["poster"]."'></a>";
+	$listitems .= "<a href='/movie/".$item["item"]."' class=''><img alt='".$item["title"]."' class='handle' src='".basethumburl.$item["poster"]."'></a>";
 $listitems .= "</td>";
 $listitems .= "<td style='height:105px;min-width:70px;'> </td>";
 
@@ -68,7 +68,7 @@ $listitems .= "<span data-list='".$selectedlist."' data-item='".$item["item"]."'
 $listitems .= "</td>";
 
 $listitems .= "<td class='padding0'>";
-$listitems .= "<a href='movie/".$item["item"]."'>".$item["title"]."</a>";
+$listitems .= "<a href='/movie/".$item["item"]."'>".$item["title"]."</a>";
 $listitems .= "</td>";
 
 	$listitems .= "<td style='' id='movierating' class='ratemovie darkrating'>";
@@ -83,7 +83,7 @@ $listitems .= "</td>";
 		$listitems .= "<td class='userquack'>";
 			if ($item["message"] != "") {
 	    $listitems .= "<span class='floatleft middle'>".getEmoji($item["emoji"])."</span>";
-			$listitems .= "<a class='bubble padding smalltext' href='movie/".$item["item"]."'>";
+			$listitems .= "<a class='bubble padding smalltext' href='/movie/".$item["item"]."'>";
 			//$listitems .= "<div class='bubble padding'>";
 			$listitems .= $item["message"];
 			//$listitems .= "</div>";
