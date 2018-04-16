@@ -3,6 +3,8 @@ RewriteEngine on
 
 RewriteRule ^user?$ profile.php
 
+RewriteRUle ^user/ profile.php
+
 RewriteRule ^user/([a-z]+) profile.php?id=$1
 
 RewriteRule ^list/([a-z=\[\]&\@]+) list.php?$1
