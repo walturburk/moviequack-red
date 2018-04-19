@@ -14,7 +14,7 @@ $return = db_select("SELECT * FROM `user` WHERE `username` = '$username' OR `ema
 $output .= '<div class="padding"></div><div class="fullheight centeralign">';
 
 
-$output .= "<div class='fullheight darkwindow white paddingtop'>";
+$output .= "<div class='fullheight white paddingtop'>";
 
 if (!isset($_REQUEST["username"])) {
 
@@ -82,9 +82,9 @@ if ($success != true) {
 $output .= "</div>";
 $output .= "</div>";
 $content = $output;
-$layout = new Template("templates/layout.html");
+
 $foundation = new Template("templates/foundation.html");
-$body = $layout->output();
+$body = $output;
 echo $foundation->output();
 
 ?>
