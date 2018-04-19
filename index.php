@@ -11,10 +11,7 @@ $loginlinkclass = "red";
 if ($_SESSION["loggedin"] == true) {
 	$toplogin = "<a href='/user/".$_SESSION["user"]."''>".$_SESSION["user"]."</a>";
 	$logoutbutton = '<li><a href="/logout">logout</a></li>';
-} else {
-	$newURL = baseurl."/welcome.php";
-	header('Location: '.$newURL);
-}
+
 
 //$topsearchbarstyle = "display:none";
 $mscclass = "white";
@@ -39,6 +36,16 @@ $foundation = new Template("templates/foundation.html");
 $body = $layout->output();
 echo $foundation->output();
 
+} else {
 
+	$welcome = new Template("templates/welcome.html");
+
+	$foundation = new Template("templates/foundation.html");
+
+	$body = $welcome->output();
+
+	echo $foundation->output();
+
+}
 
 ?>
