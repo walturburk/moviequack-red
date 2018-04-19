@@ -44,7 +44,7 @@ if (!isset($_REQUEST["username"])) {
 	saveAutoLogin();
 
 	$newURL = baseurl."/buffet.php";
-	header('Location: /enteremail.php');
+	header('Location: /enteremail');
 
 }
 
