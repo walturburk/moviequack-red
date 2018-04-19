@@ -3,12 +3,14 @@
 include("db_functions.php");
 include("functions.php");
 
+if ($_SESSION["loggedin"] == true) {
+
 $user = $_SESSION["user"];
 
 $registerbtnclass = "redbtn";
 $loginlinkclass = "red";
 
-if ($_SESSION["loggedin"] == true) {
+
 	$toplogin = "<a href='/user/".$_SESSION["user"]."''>".$_SESSION["user"]."</a>";
 	$logoutbutton = '<li><a href="/logout">logout</a></li>';
 

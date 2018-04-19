@@ -9,12 +9,11 @@ $username = db_escape($rawusername);
 
 $password = db_escape($_REQUEST["password"]);
 
-$return = db_select("SELECT * FROM `user` WHERE `username` = '$username' OR `email` = '$email' LIMIT 1");
+$return = db_select("SELECT * FROM `user` WHERE `username` = '$username' LIMIT 1");
 
-$output .= '<div class="padding"></div><div class="fullheight centeralign">';
-
-
+$output .= '<div class=""></div><div class="fullheight centeralign content">';
 $output .= "<div class='fullheight darkwindow white paddingtop'>";
+
 
 if (!isset($_REQUEST["username"])) {
 
@@ -40,13 +39,6 @@ if (!isset($_REQUEST["username"])) {
 	";
 	db_query($query);
 
-
-	$sql = "UPDATE `post` SET `post`.`userid` = '".$username."' WHERE `post`.`userid` = '".$_SESSION['user']."' ";
-	db_query($sql);
-	$sql = "UPDATE `vote` SET `vote`.`user` = '".$username."' WHERE `vote`.`user` = '".$_SESSION['user']."' ";
-	db_query($sql);
-	$sql = "UPDATE `ratemovie` SET `ratemovie`.`user` = '".$username."' WHERE `ratemovie`.`user` = '".$_SESSION['user']."' ";
-	db_query($sql);
 
 	$_SESSION["loggedin"] = true;
 	$_SESSION["user"] = $username;
@@ -82,9 +74,8 @@ if ($success != true) {
 $output .= "</div>";
 $output .= "</div>";
 $content = $output;
-$layout = new Template("templates/layout.html");
 $foundation = new Template("templates/foundation.html");
-$body = $layout->output();
+$body = $content;
 echo $foundation->output();
 
 ?>
