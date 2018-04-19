@@ -12,7 +12,7 @@ $output .= '<div class="padding"></div><div class="fullheight centeralign">';
 
 $output .= "<div class='fullheight white paddingtop'>";
 
-if ($return[0]["email"] == $email) {
+if ($return[0]["email"] == $email && isset($_REQUEST["email"])) {
 	$output .= "This email is already registered! Try to log in or reset your password.";
 } else {
 	$success = true;
