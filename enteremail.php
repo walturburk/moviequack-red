@@ -14,7 +14,7 @@ $output .= "<div class='fullheight white paddingtop'>";
 
 if ($return[0]["email"] == $email && isset($_REQUEST["email"])) {
 	$output .= "This email is already registered! Try to log in or reset your password.";
-} else {
+} else if (isset($_REQUEST["email"]) && isset($_POST["submit"])) {
 	$success = true;
 
   $sql = "UPDATE `user` SET `user`.`email` = '".$email."' WHERE `user`.`username` = '".$_SESSION['user']."' ";
