@@ -15,7 +15,9 @@ setcookie ("logintime", null, -1, '/');
 setcookie ("loginhash", null, -1, '/');
 setcookie ("skipmovies", null, -1, '/');
 
+header('Location: /');
 
+/*
 include("functions.php");
 
 $movieinfo = db_select("SELECT backdrop FROM  `movie` WHERE backdrop != '' ORDER BY RAND() LIMIT 1");
@@ -35,7 +37,7 @@ $content = $output;
 $layout = new Template("templates/layout.html");
 $foundation = new Template("templates/foundation.html");
 $body = $layout->output();
-echo $foundation->output();
+echo $foundation->output();*/
 
 
 session_destroy();
