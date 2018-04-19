@@ -21,7 +21,7 @@ if ($return[0]["email"] == $email) {
 	db_query($sql);
 
 
-	header('Location: /index');
+	header('Location: /buffet');
 
 }
 
