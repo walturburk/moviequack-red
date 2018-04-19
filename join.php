@@ -3,13 +3,12 @@
 include("db_functions.php");
 include("functions.php");
 
-$email = db_escape($_REQUEST["email"]);
 $rawusername = $_REQUEST["username"];
 $username = db_escape($rawusername);
 
 $password = db_escape($_REQUEST["password"]);
 
-$return = db_select("SELECT * FROM `user` WHERE `username` = '$username' OR `email` = '$email' LIMIT 1");
+$return = db_select("SELECT * FROM `user` WHERE `username` = '$username' LIMIT 1");
 
 $output .= '<div class="padding"></div><div class="fullheight centeralign">';
 
@@ -26,8 +25,6 @@ if (!isset($_REQUEST["username"])) {
 	$output .= "Your username may be no longer than 22 characters";
 } else if ($return[0]["username"] == $username) {
 	$output .= "This username is taken!";
-} else if ($return[0]["email"] == $email) {
-	$output .= "This email is already registered!";
 } else if (!(preg_match('/[^a-zA-Z0-9_]/', $rawusername) == 0)) {
 	$output .= "Invalid characters in username!";
 
@@ -36,17 +33,9 @@ if (!isset($_REQUEST["username"])) {
 	$password = createHash($password);
 	$ip = getUserIp();
 	$query = "INSERT INTO `user` (`username`, `password`, `email`, `ip`)
-	VALUES ('$username', '$password', '$email', '$ip');
+	VALUES ('$username', '$password', '', '$ip');
 	";
 	db_query($query);
-
-
-	$sql = "UPDATE `post` SET `post`.`userid` = '".$username."' WHERE `post`.`userid` = '".$_SESSION['user']."' ";
-	db_query($sql);
-	$sql = "UPDATE `vote` SET `vote`.`user` = '".$username."' WHERE `vote`.`user` = '".$_SESSION['user']."' ";
-	db_query($sql);
-	$sql = "UPDATE `ratemovie` SET `ratemovie`.`user` = '".$username."' WHERE `ratemovie`.`user` = '".$_SESSION['user']."' ";
-	db_query($sql);
 
 	$_SESSION["loggedin"] = true;
 	$_SESSION["user"] = $username;
@@ -54,10 +43,8 @@ if (!isset($_REQUEST["username"])) {
 
 	saveAutoLogin();
 
-	$output .= "<h2>Welcome to moviequack, <span class='red'>$username</span>!</h2>";
-
 	$newURL = baseurl."/buffet.php";
-	header('Location: '.$newURL);
+	header('Location: /enteremail.php');
 
 }
 
@@ -69,13 +56,6 @@ if ($success != true) {
 	$registerpage = new Template("templates/registerpage.html");
 	$output .= '<h2 class="padding2">join us</h2>';
 	$output .= $registerpage->output();
-
-	$feed = getFeed($_SESSION["user"]);
-	if ($feed) {
-		$output .= "<div class='centercontent narrow padding white'><p class='padding2 margintop large'>This activity will be brought to your new account</p>";
-		$output .= "".printFeed($feed)."</div>";
-	}
-
 }
 
 
