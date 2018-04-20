@@ -8,7 +8,8 @@ $q = $_REQUEST["q"];
 
 switch ($mode) {
 	case "GETUSERNAME":
-		echo getUserByName($q);
+		$user = getUserByName($q);
+		echo $user[0]["username"];
 		break;
 	case "POSTMESSAGE":
 		$id = newId("p");
