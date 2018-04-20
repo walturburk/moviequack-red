@@ -10,7 +10,7 @@ $password = db_escape($_REQUEST["password"]);
 
 $return = db_select("SELECT * FROM `user` WHERE `username` = '$username' LIMIT 1");
 
-$output .= "<div class='content narrow large white centeralign'>";
+$output .= "<div class='content narrow white centeralign'>";
 
 
 

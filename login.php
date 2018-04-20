@@ -9,8 +9,8 @@ if (isset($_REQUEST["username"]) && isset($_REQUEST["password"])) {
 	$password = mysqli_escape_string(db_connect(), $_REQUEST["password"]);
 }
 
-$output .= "<div class='content narrow large white centeralign'>";
-$output .= "<div class='white'>"
+$output .= "<div class='content narrow white centeralign'>";
+$output .= "<div class='white'>";
 if (isset($_REQUEST["username"]) && $_REQUEST["username"] != "") {
 
 $return = db_select("SELECT * FROM `user` WHERE username = '$username';");
