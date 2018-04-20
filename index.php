@@ -44,6 +44,10 @@ echo $foundation->output();
 
 	$foundation = new Template("templates/foundation.html");
 
+	$registerpage = new Template("templates/registerpage.html");
+
+	$register = $registerpage->output();
+
 	$body = $welcome->output();
 
 	echo $foundation->output();
