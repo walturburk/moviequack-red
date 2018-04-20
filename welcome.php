@@ -6,9 +6,10 @@ include("functions.php");
 $welcome = new Template("templates/welcome.html");
 
 $foundation = new Template("templates/foundation.html");
+
 $registerpage = new Template("templates/registerpage.html");
 
-$joinus = $registerpage->output();
+$register = $registerpage->output();
 
 $body = $welcome->output();
 
