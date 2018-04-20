@@ -7,7 +7,11 @@ jQuery(document).on("change", "#username", function() {
   };
 
   var returned = postAjaxPhp(obj).done(function(result) {
-    console.log(result);
+    if (result == username) {
+      jQuery("#usernamewarning").show();
+    } else {
+      jQuery("#usernamewarning").show();
+    }
   });
 
 });
