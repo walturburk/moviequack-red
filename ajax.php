@@ -7,6 +7,9 @@ $mode = $_REQUEST["mode"];
 $q = $_REQUEST["q"];
 
 switch ($mode) {
+	case "GETUSERNAME":
+		echo getUserByName($q);
+		break;
 	case "POSTMESSAGE":
 		$id = newId("p");
 		$movie = $_REQUEST["movie"];

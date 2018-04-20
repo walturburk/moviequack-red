@@ -28,3 +28,4 @@ RewriteRule ^join join.php
 RewriteRule ^enteremail enteremail.php
 RewriteRule ^buffet buffet.php
 RewriteRule ^settings settings.php
+RewriteRule ^mymovies mymovies.php

@@ -573,6 +573,12 @@ function getUsers($searchterm) {
 	return $users;
 }
 
+function getUserByName($username) {
+	$searchterm = mysqli_real_escape_string(db_connect(), $searchterm);
+	$users = db_select("SELECT * FROM  `user` WHERE  `username` = '".$username."'");
+	return $users;
+}
+
 function getExternalMovies($q) {
 	global $apikey;
 
