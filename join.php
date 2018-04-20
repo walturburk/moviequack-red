@@ -56,10 +56,11 @@ if ($success != true) {
 	$output .= "<div class='white'>";
 	$output .= '<h2 class="padding2">join us</h2>';
 	$output .= $registerpage->output();
+	$output .= "</div>";
 }
 
 
-$output .= "</div>";
+
 $output .= "</div>";
 $content = $output;
 
