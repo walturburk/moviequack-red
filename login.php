@@ -38,8 +38,8 @@ if ($success != true) {
 	$loginpage = new Template("templates/loginpage.html");
 
 
-	$output .= "<div class='loginpage padding2 inblock margin'>";
-	$output .= "<h1 class='darkred padding2'>Sign in</h1>";
+	$output .= "<div class='loginpage centeralign'>";
+	$output .= "<h1 class='padding2'>Sign in</h1>";
 	$output .= $loginpage->output();
 	$output .= "</div>";
 
