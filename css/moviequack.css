@@ -337,10 +337,11 @@ li.sortableli:hover .xinfo {
 	padding:1rem;
 	background-color:rgba(0,0,0,0.1);
 	margin:3px;
+	display:block;
 }
 .widebtn:hover {
 	background-color:rgba(0,0,0,0.2);
-	
+
 }
 input.userfilter {
 	display:none;
