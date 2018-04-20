@@ -9,7 +9,8 @@ $foundation = new Template("templates/foundation.html");
 
 $registerpage = new Template("templates/registerpage.html");
 
-$register = $registerpage->output();
+$register = '<h1 class="padding2">join us</h1>';
+$register .= $registerpage->output();
 
 $body = $welcome->output();
 

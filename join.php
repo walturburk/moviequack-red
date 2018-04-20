@@ -14,7 +14,6 @@ $output .= "<div class='content narrow white centeralign'>";
 
 
 
-
 if (!isset($_REQUEST["username"])) {
 
 } else if (strlen($password)<4) {
@@ -40,16 +39,10 @@ if (!isset($_REQUEST["username"])) {
 	$_SESSION["loggedin"] = true;
 	$_SESSION["user"] = $username;
 
-
 	saveAutoLogin();
 
 	header('Location: /enteremail');
-
 }
-
-
-
-
 
 if ($success != true) {
 	$registerpage = new Template("templates/registerpage.html");
@@ -58,8 +51,6 @@ if ($success != true) {
 	$output .= $registerpage->output();
 	$output .= "</div>";
 }
-
-
 
 $output .= "</div>";
 $content = $output;
