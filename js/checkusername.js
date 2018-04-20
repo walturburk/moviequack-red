@@ -10,7 +10,7 @@ jQuery(document).on("change", "#username", function() {
     if (result == username) {
       jQuery("#usernamewarning").show();
     } else {
-      jQuery("#usernamewarning").show();
+      jQuery("#usernamewarning").hide();
     }
   });
 
