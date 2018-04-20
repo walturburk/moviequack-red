@@ -1,6 +1,7 @@
 <form action="/join" method="post">
-  <input class="input marginbottom" type='name' placeholder="username" name='username' maxlength="50" required /><br>
+  <input id="username" class="input marginbottom" type='name' placeholder="username" name='username' maxlength="50" required /><br>
   <input class="input marginbottom" type='password' placeholder="password" name='password' maxlength="50"  required /><br>
   <input class="button {registerbtnclass}" id="register" type="submit" value="join"/>
 </form>
 <a class="inblock margin {loginlinkclass} smalltext" href="/login">Already a member? Sign in</a>
+<script src="/js/checkusername.js"></script>
