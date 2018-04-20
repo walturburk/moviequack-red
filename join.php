@@ -54,7 +54,7 @@ if (!isset($_REQUEST["username"])) {
 if ($success != true) {
 	$registerpage = new Template("templates/registerpage.html");
 	$output .= "<div class='white'>";
-	$output .= '<h2 class="padding2">join us</h2>';
+	$output .= '<h1 class="padding2">join us</h1>';
 	$output .= $registerpage->output();
 	$output .= "</div>";
 }

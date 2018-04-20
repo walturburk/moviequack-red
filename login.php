@@ -41,7 +41,7 @@ if ($success != true) {
 
 
 
-	$output .= "<h1 class='padding2'>Sign in</h1>";
+	$output .= "<h1 class='padding2'>sign in</h1>";
 	$output .= $loginpage->output();
 
 
