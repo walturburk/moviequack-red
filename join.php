@@ -10,10 +10,10 @@ $password = db_escape($_REQUEST["password"]);
 
 $return = db_select("SELECT * FROM `user` WHERE `username` = '$username' LIMIT 1");
 
-$output .= '<div class="padding"></div><div class="fullheight centeralign">';
+$output .= "<div class='content narrow large white centeralign'>";
 
 
-$output .= "<div class='fullheight white paddingtop'>";
+
 
 if (!isset($_REQUEST["username"])) {
 
@@ -53,6 +53,7 @@ if (!isset($_REQUEST["username"])) {
 
 if ($success != true) {
 	$registerpage = new Template("templates/registerpage.html");
+	$output .= "<div class='white'>";
 	$output .= '<h2 class="padding2">join us</h2>';
 	$output .= $registerpage->output();
 }
