@@ -24,6 +24,7 @@ if ($return && hashOk($password, $return[0]["password"])) {
 	$output .= "<h2>Welcome <span class='red'>".$return[0]["username"]."</span>!</h2>";
 	$success = true;
 	saveAutoLogin();
+	header('Location: /');
 } else if ($return) {
 	$output .= "Wrong password!";
 } else {
