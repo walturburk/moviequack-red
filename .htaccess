@@ -21,7 +21,7 @@ RewriteRule ^movie/([a-z0-9]+) movie.php?id=$1
 
 RewriteRule ^quack/([a-z0-9]+) quack.php?id=$1
 
-RewriteRule ^login login.php
+RewriteRule ^login /login
 RewriteRule ^register register.php
 RewriteRule ^logout logout.php
 RewriteRule ^join join.php

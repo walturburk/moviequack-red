@@ -9,11 +9,6 @@ if (isset($_REQUEST["username"]) && isset($_REQUEST["password"])) {
 	$password = mysqli_escape_string(db_connect(), $_REQUEST["password"]);
 }
 
-$movieinfo = db_select("SELECT backdrop FROM  `movie` WHERE backdrop != '' ORDER BY RAND() LIMIT 1");
-$backdropurl = $basebigbackdropurl.$movieinfo[0]["backdrop"];
-$output = '<div style="background-image:url('.$backdropurl.')" class="fullheight centeralign backgroundimage">';
-$output .= "<div class='fullheight darkwindow white paddingtop'>";
-
 if (isset($_REQUEST["username"]) && $_REQUEST["username"] != "") {
 
 $return = db_select("SELECT * FROM `user` WHERE username = '$username';");
@@ -57,8 +52,7 @@ unset($_REQUEST["username"]);
 unset($_REQUEST["password"]);
 
 $content = $output;
-$layout = new Template("templates/layout.html");
 $foundation = new Template("templates/foundation.html");
-$body = $layout->output();
+$body = $content;
 echo $foundation->output();
 ?>

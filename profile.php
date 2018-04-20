@@ -13,7 +13,7 @@ if (!isset($id)) {
 }
 
 if ($_SESSION["loggedin"] != true && $_SESSION["user"] == $id) {
-	$notloggedin = "<div class='urgentmessage'>Urgent message: You're not signed in! <br><a class='red' href='register.php'>Join us immediately</a> <br>or if you already have an account <a class='red' href='login.php'>sign in</a>.</div>";
+	$notloggedin = "<div class='urgentmessage'>Urgent message: You're not signed in! <br><a class='red' href='register.php'>Join us immediately</a> <br>or if you already have an account <a class='red' href='/login'>sign in</a>.</div>";
 } else {
 	$notloggedin = "";
 }

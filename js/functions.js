@@ -72,7 +72,7 @@ jQuery(document).on("click", ".votestar", function() {
 
 
 jQuery(document).on("click", ".gotologin", function() {
-	window.location.href = "login.php";
+	window.location.href = "/login";
 });
 
 jQuery(document).on("click", ".newtagbtn", function() {
