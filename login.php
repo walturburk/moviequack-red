@@ -9,11 +9,13 @@ if (isset($_REQUEST["username"]) && isset($_REQUEST["password"])) {
 	$password = mysqli_escape_string(db_connect(), $_REQUEST["password"]);
 }
 
+$output .= "<div class='content narrow large white centeralign'>";
+
 if (isset($_REQUEST["username"]) && $_REQUEST["username"] != "") {
 
 $return = db_select("SELECT * FROM `user` WHERE username = '$username';");
 
-$output .= "<div class='content narrow large white centeralign'>";
+
 
 if ($return && hashOk($password, $return[0]["password"])) {
 
@@ -38,10 +40,10 @@ if ($success != true) {
 	$loginpage = new Template("templates/loginpage.html");
 
 
-	$output .= "<div class='loginpage'>";
+
 	$output .= "<h1 class='padding2'>Sign in</h1>";
 	$output .= $loginpage->output();
-	$output .= "</div>";
+
 
 }
 
