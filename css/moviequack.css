@@ -312,6 +312,9 @@ li.sortableli:hover .xinfo {
 .button.addtolistbtn.activebtn {
 	background:none;
 }
+.button.wide {
+	width:100%;
+}
 .roundbutton {
 	border-radius:50%;
 	border-width:3px;
