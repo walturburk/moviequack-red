@@ -332,6 +332,16 @@ li.sortableli:hover .xinfo {
 .btn.activebtn {
 	color:#a13647;
 }
+.widebtn {
+	width:100%;
+	padding:1rem;
+	background-color:rgba(0,0,0,0.1);
+	margin:3px;
+}
+.widebtn:hover {
+	background-color:rgba(0,0,0,0.2);
+	
+}
 input.userfilter {
 	display:none;
 }

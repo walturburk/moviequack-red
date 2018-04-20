@@ -22,7 +22,7 @@ $profileoptions = "";
 if ($id == $_SESSION["user"]) {
   $isownprofile = true;
   if ($_SESSION["loggedin"]) {
-    $profileoptions = '<div class="floatright margin0"><a class="button whitebtn" href="/logout">Log out</a></div>';
+    $profileoptions = "";//'<div class="floatright margin0"><a class="button whitebtn" href="/logout">Log out</a></div>';
   }
 } else {
   $userid = $id;
