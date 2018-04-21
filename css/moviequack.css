@@ -22,6 +22,9 @@ img {
 i.material-icons {
 	font-size:inherit;
 }
+.fullwidth {
+	width:100%;
+}
 .content {
 	max-width:1280px;
 	margin:auto;
