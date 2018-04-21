@@ -65,11 +65,13 @@ function createId() {
 }
 
 function isDev() {
-	if ($_SERVER['SERVER_ADDR'] == "::1" || isset($_REQUEST["dev"])) {
+  echo "SERVER".$_SERVER['SERVER_NAME'];
+	if (!$_SERVER['SERVER_NAME'] == "moviequack.com" || isset($_REQUEST["dev"])) {
 		return true;
 	} else {
 	   return false;
    }
+
 }
 
 
