@@ -65,8 +65,7 @@ function createId() {
 }
 
 function isDev() {
-  echo "SERVER".$_SERVER['SERVER_NAME'];
-	if (!$_SERVER['SERVER_NAME'] == "moviequack.com" || isset($_REQUEST["dev"])) {
+	if (strpos("moviequack.com", $_SERVER['SERVER_NAME']) || isset($_REQUEST["dev"])) {
 		return true;
 	} else {
 	   return false;
