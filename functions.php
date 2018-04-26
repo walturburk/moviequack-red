@@ -1097,9 +1097,6 @@ function saveStreams($movieid, $title, $year) {
 
 	$streams = getExternalStreams($title, $year);
 
-	if (isDev()) {
-		print_r($streams);
-	}
 
 	$cleandbtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $title));
 	$cleanstreamtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $streams["items"][0]["title"]));

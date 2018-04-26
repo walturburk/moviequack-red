@@ -65,7 +65,8 @@ function createId() {
 }
 
 function isDev() {
-	if (strpos("moviequack.com", $_SERVER['SERVER_NAME']) < 1 || isset($_REQUEST["dev"])) {
+  echo "strpos moviequack.com:".strpos("moviequack.com", $_SERVER['SERVER_NAME']);
+	if (strpos("dev.moviequack.com", $_SERVER['SERVER_NAME']) > 0 || strpos("moviequack.com", $_SERVER['SERVER_NAME']) < 1 || isset($_REQUEST["dev"])) {
 		return true;
 	} else {
 	   return false;
@@ -75,7 +76,7 @@ function isDev() {
 
 
 function getConfig() {
-  
+
   if (isDev()) {
     $config = parse_ini_file("config-dev.ini");
   } else {
