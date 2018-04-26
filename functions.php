@@ -1057,6 +1057,8 @@ function getExternalStreams($title, $year = null)
 	$result = curl_exec($ch);
 	$result = json_decode($result, true);
 	//$streams = $result["items"][0]["offers"];
+	echo "Got external streams";
+	print_r($results);
 	return $result;
 }
 
@@ -1158,7 +1160,7 @@ function saveStreams($movieid, $title, $year) {
 		('$movieid', '$region', '$type', '$provider', '$price', '$currency', '$link', '$def', '$dateproviderid', '$timestamp')
 			";
 			//echo $query."<br>";
-		echo db_query($query);
+		db_query($query);
 
 	}
 
