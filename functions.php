@@ -1174,7 +1174,7 @@ function getStreams($movieid) {
 FROM  mqold.`stream`
 LEFT JOIN mqold.provider
 ON stream.provider = provider.id
-WHERE stream.movieid = '$movieid' 
+WHERE stream.movieid = '$movieid'
 GROUP BY short
 ORDER BY  `stream`.`price` ASC");
 
@@ -1183,7 +1183,7 @@ ORDER BY  `stream`.`price` ASC");
 
 function printStreams($movieid) {
 $streams = getStreams($movieid);
-	if (!empty($streams)) {
+	if (!empty($streams) && $streams[0]["link"]) {
 		//$print = "<h3 class='marginbottom'>This title is available for streaming</h3>";
 		foreach ($streams AS $stream) {
 			$print .= "<a href='";
