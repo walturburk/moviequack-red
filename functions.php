@@ -1136,7 +1136,7 @@ function saveStreams($movieid, $title, $year) {
 				//echo $query."<br>";
 			db_query($query);
 		}
-	} else if ($cleandbtitle == $cleanstreamtitle) {
+	} else {
 
 		$query = "DELETE FROM stream WHERE movieid = '$movieid'";
 
