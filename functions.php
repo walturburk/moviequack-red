@@ -1065,9 +1065,9 @@ function getExternalStreams($title, $year = null)
 function streamsAreOld($movieid) {
 	$strms = getStreams($movieid);
 	$week = 604800;
-	echo "<h3>streamtime: ".$strms[0]["timestamp"]." < ".time()." - ".$week."</h3>";
+	//echo "<h3>streamtime: ".$strms[0]["timestamp"]." < ".time()." - ".$week."</h3>";
 	if ($strms[0]["timestamp"] < time()-$week) {
-		echo "areold";
+		//echo "areold";
 		return true;
 	} else {
 		return false;
@@ -1112,7 +1112,7 @@ function saveStreams($movieid, $title, $year) {
 	echo "<br>";*/
 
 	if ($cleandbtitle == $cleanstreamtitle && is_array($streams["items"][0]["offers"])) {
-
+		echo "Update with new streams";
 		$query = "DELETE FROM stream WHERE movieid = '$movieid'";
 
 		db_query($query);
@@ -1140,7 +1140,7 @@ function saveStreams($movieid, $title, $year) {
 			db_query($query);
 		}
 	} else {
-
+		echo "Update empty";
 		$query = "DELETE FROM stream WHERE movieid = '$movieid'";
 
 		db_query($query);
