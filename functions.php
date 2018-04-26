@@ -1171,10 +1171,12 @@ function saveStreams($movieid, $title, $year) {
 function getStreams($movieid) {
 
 	$streams = db_select("SELECT *
-FROM  `stream`, `provider`
-WHERE stream.movieid = '$movieid' AND stream.provider = provider.id
+FROM  mqold.`stream`
+LEFT JOIN mqold.provider
+ON stream.provider = provider.id
+WHERE stream.movieid = '$movieid' 
 GROUP BY short
-ORDER BY  `stream`.`price` ASC ");
+ORDER BY  `stream`.`price` ASC");
 
 	return $streams;
 }
