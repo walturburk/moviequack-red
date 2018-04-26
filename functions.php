@@ -1136,6 +1136,29 @@ function saveStreams($movieid, $title, $year) {
 				//echo $query."<br>";
 			db_query($query);
 		}
+	} else if ($cleandbtitle == $cleanstreamtitle) {
+
+		$query = "DELETE FROM stream WHERE movieid = '$movieid'";
+
+		db_query($query);
+
+		$region = "en_SE";
+		$type = "";
+		$provider = "";
+		$price = "";
+		$currency = "";
+		$link = "";
+		$def = "";
+		$dateproviderid = "";
+		$timestamp = time();
+
+		$query = "INSERT INTO `".dbname."`.`stream`
+		(`movieid`, `region`, `type`, `provider`, `price`, `currency`, `link`, `def`, `dateproviderid`, `timestamp`)
+		VALUES
+		('$movieid', '$region', '$type', '$provider', '$price', '$currency', '$link', '$def', '$dateproviderid', '$timestamp')
+			";
+			//echo $query."<br>";
+		db_query($query);
 	}
 
 }
