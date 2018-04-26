@@ -1097,7 +1097,7 @@ GROUP BY m.id";
 
 function saveStreams($movieid, $title, $year) {
 
-
+	echo "savestreams<br>";
 	$streams = getExternalStreams($title, $year);
 
 
