@@ -1057,17 +1057,16 @@ function getExternalStreams($title, $year = null)
 	$result = curl_exec($ch);
 	$result = json_decode($result, true);
 	//$streams = $result["items"][0]["offers"];
-	echo "Got external streams";
-	print_r($results);
+	//echo "Got external streams";
+	//print_r($results);
 	return $result;
 }
 
 function streamsAreOld($movieid) {
 	$strms = getStreams($movieid);
 	$week = 604800;
-	echo "<h3>streamtime: ".$strms[0]["timestamp"]." < ".time()." - ".$week."<h3>";
+	//echo "<h3>streamtime: ".$strms[0]["timestamp"]." < ".time()." - ".$week."</h3>";
 	if ($strms[0]["timestamp"] < time()-$week) {
-		echo "areold";
 		return true;
 	} else {
 		return false;
