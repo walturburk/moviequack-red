@@ -1144,8 +1144,8 @@ function saveStreams($movieid, $title, $year) {
 
 		$region = "en_SE";
 		$type = "";
-		$provider = "";
-		$price = "";
+		$provider = 0;
+		$price = 0;
 		$currency = "";
 		$link = "";
 		$def = "";
