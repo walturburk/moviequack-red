@@ -1158,8 +1158,8 @@ function saveStreams($movieid, $title, $year) {
 		('$movieid', '$region', '$type', '$provider', '$price', '$currency', '$link', '$def', '$dateproviderid', '$timestamp')
 			";
 			//echo $query."<br>";
-		db_query($query);
-		echo "<h3>".$query."</h3>";
+		echo db_query($query);
+
 	}
 
 }
