@@ -1159,6 +1159,7 @@ function saveStreams($movieid, $title, $year) {
 			";
 			//echo $query."<br>";
 		db_query($query);
+		echo "<h3>".$query."</h3>";
 	}
 
 }
