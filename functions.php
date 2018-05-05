@@ -1062,11 +1062,12 @@ function getExternalStreams($title, $year = null)
 	return $result;
 }
 
+
 function streamsAreOld($movieid) {
 	$strms = getStreams($movieid);
 	$week = 604800;
 	//echo "<h3>streamtime: ".$strms[0]["timestamp"]." < ".time()." - ".$week."</h3>";
-	if ($strms[0]["timestamp"] < time()-$week) {
+	if (timecodeConvert(timecodeHowLongAgo($strms[0]["timestamp"], "w")) > 2) {
 		//echo "areold";
 		return true;
 	} else {
@@ -1074,8 +1075,33 @@ function streamsAreOld($movieid) {
 	}
 }
 
-function massUpdateStreams($movies, $hours = 48) {
-	$timeago = time() - (3600 * $hours);
+function timecodeConvert($time, $unit = "h") {
+	if ($unit == "h") {
+		$div = 3600;
+	} else if ($unit == "min") {
+		$div = 60;
+	} else if ($unit == "s") {
+		$div = 1;
+	} else if ($unit == "d") {
+		$div = 86400;
+	} else if ($unit == "w") {
+		$div = 604800;
+	} else if ($unit == "y") {
+		$div = 31536000;
+	}
+	$timeconvert = $time / $div;
+	return $timeconvert;
+}
+
+function timecodeHowLongAgo($time, $unit = "h") {
+	$diff = time() - $time;
+	$timediff = timecodeConvert($diff, $unit);
+
+	return $timediff;
+}
+
+function massUpdateStreams($movies) {
+	$timeago = time() - (3600 * 48);
 	$sqlpart = implode("' OR m.id = '", $movies);
 
 

@@ -36,6 +36,7 @@ if (!isset($_REQUEST["username"])) {
 	";
 	db_query($query);
 
+	$_SESSION["prevuser"] = $_SESSION["user"];
 	$_SESSION["loggedin"] = true;
 	$_SESSION["user"] = $username;
 

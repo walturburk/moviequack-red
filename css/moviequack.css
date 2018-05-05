@@ -52,6 +52,11 @@ i.material-icons {
 .middle {
 	vertical-align:middle;
 }
+.grid {
+	display: grid;
+	grid-template-columns: auto auto auto;
+	grid-gap:2px;
+}
 table#listitems {
 	display:table;
 	margin:auto;

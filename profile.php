@@ -8,9 +8,12 @@ $layout = new Template("templates/layout.html");
 $foundation = new Template("templates/foundation.html");
 
 $id = $_REQUEST["id"];
+
 if (!isset($id)) {
   $id = $_SESSION["user"];
 }
+
+$id = strtolower($id);
 
 if ($_SESSION["loggedin"] != true && $_SESSION["user"] == $id) {
 	$notloggedin = "<div class='urgentmessage'>Urgent message: You're not signed in! <br><a class='red' href='/join'>Join us immediately</a> <br>or if you already have an account <a class='red' href='/login'>sign in</a>.</div>";
@@ -38,8 +41,8 @@ if ($id == $_SESSION["user"]) {
 
 
 
-
-$userinfo = db_select("SELECT * FROM  `user` WHERE  `username` =  '".$id."'");
+$query = "SELECT * FROM  `user` WHERE  `username` =  '".$id."'";
+$userinfo = db_select($query);
 $user = $userinfo[0];
 
 if ($user) {

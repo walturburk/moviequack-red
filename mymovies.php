@@ -15,10 +15,11 @@ $allmovies = getFilteredItems($user, "bookmark");
 foreach ($allmovies AS $mov) {
   $moviesarray[] = $mov["item"];
 }
+
+
 massUpdateStreams($moviesarray, 48);
 
 $movies = getStreamableMovies($user, "bookmark");
-
 
 
 foreach ($movies AS $movie) {
