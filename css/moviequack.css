@@ -927,6 +927,7 @@ i.material-icons.small {
 	max-width: 680px;
 	display: inline-block;
 	width: 100%;
+	margin-bottom:16px;
 }
 .searchfield {
 	border-radius:2px;
