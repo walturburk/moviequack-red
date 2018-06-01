@@ -233,9 +233,7 @@ li.sortableli:hover .xinfo {
 .tag:hover {
 	border-color:white;
 }
-.tag.activebtn:hover {
 
-}
 .tag.activebtn {
 	color:#fff;
 	background-color:#5a1a2a;
@@ -927,6 +925,7 @@ i.material-icons.small {
 	max-width: 680px;
 	display: inline-block;
 	width: 100%;
+	margin-bottom:16px;
 }
 .searchfield {
 	border-radius:2px;
@@ -1023,7 +1022,11 @@ input {
 	text-align:center;
 }
 .topmenu h1 {
+<<<<<<< HEAD
 	padding:1.5rem 0;
+=======
+	padding:32px 16px;
+>>>>>>> b62826636f276e66928a18d6a403a4f18e5c743e
 	font-size:50px;
 	color:white;
 }
