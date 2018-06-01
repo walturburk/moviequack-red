@@ -1,5 +1,5 @@
 html {
-	background-color:#A13647;
+	background-color:#5a1a2a;
 	color:#fff;
 	overflow-x:hidden;
 }
@@ -238,7 +238,7 @@ li.sortableli:hover .xinfo {
 }
 .tag.activebtn {
 	color:#fff;
-	background-color:#a13647;
+	background-color:#5a1a2a;
 }
 .newtagbtn {
 	border: 0;
@@ -290,17 +290,17 @@ li.sortableli:hover .xinfo {
 	color:white;
 }
 .button.greybtn.activebtn {
-	border-color:#a13647;
-	background-color:#a13647;
+	border-color:#5a1a2a;
+	background-color:#5a1a2a;
 	color:white;
 }
 .button.redbtn {
-	border-color:#a13647;
-	color:#a13647;
+	border-color:#5a1a2a;
+	color:#5a1a2a;
 }
 .button.redbtn.activebtn {
-	border-color:#a13647;
-	background-color:#a13647;
+	border-color:#5a1a2a;
+	background-color:#5a1a2a;
 	color:white;
 }
 .button.whitebtn {
@@ -310,7 +310,7 @@ li.sortableli:hover .xinfo {
 .button.whitebtn.activebtn {
 	border-color:white;
 	background-color:white;
-	color:#a13647;
+	color:#5a1a2a;
 }
 .button.addtolistbtn {
 	display:block;
@@ -341,7 +341,7 @@ li.sortableli:hover .xinfo {
 	color:#353535;
 }
 .btn.activebtn {
-	color:#a13647;
+	color:#5a1a2a;
 }
 .widebtn {
 	width:100%;
@@ -505,10 +505,10 @@ footer.footer .third {
 	background-color:#27ae60;
 }
 .movievote .smallbtn.activebtn.downvote {
-	background-color:#a13647;
+	background-color:#5a1a2a;
 }
 .movievote .movievoteopt .button.activebtn {
-	color:#a13647;
+	color:#5a1a2a;
 }
 .movieinfowindow .movievote .movievoteopt {
 	width:33%;
@@ -761,7 +761,7 @@ nav#mainnav {
 	width:100%;
 	text-align:center;
 	margin:auto;
-	background-color:#a13647;
+	background-color:#5a1a2a;
 	z-index:11;
 	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
@@ -771,12 +771,12 @@ nav#mainnav ul li {
 }
 nav#mainnav ul li a {
 	display:inline-block;
-	padding:8px;
+	padding:1rem;
 	color:#fff;
 	width:100%;
 }
 nav#mainnav ul li a:hover {
-	color:#a13647;
+	color:#5a1a2a;
 	background-color:white;
 }
 nav#mainnav ul li i.material-icons {
@@ -786,10 +786,10 @@ i.material-icons.small {
 	font-size:0.9em;
 }
 .navdesc {
-	font-size: 24px;
+	font-size: 14px;
 	vertical-align: top;
-	display:inline-block;
-	padding:4px;
+	display:block;
+	
 }
 #main {
 	transition: margin-left .5s;
@@ -814,7 +814,7 @@ i.material-icons.small {
 }
 .toprowbutton:hover {
 	background-color:#fff;
-	color:#a13647;
+	color:#5a1a2a;
 }
 .mainlogo {
 	display:inline-block;
@@ -960,7 +960,7 @@ i.material-icons.small {
 {
 	position: relative;
 	max-width:100%;
-	background: #a13647;
+	background: #5a1a2a;
 	color:black;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
@@ -977,7 +977,7 @@ i.material-icons.small {
 	position: absolute;
 	border-style: solid;
 	border-width: 12px 15px 12px 0;
-	border-color: transparent #a13647;
+	border-color: transparent #5a1a2a;
 	display: block;
 	width: 0;
 	z-index: 1;
@@ -1023,7 +1023,7 @@ input {
 	text-align:center;
 }
 .topmenu h1 {
-	padding:16px;
+	padding:1.5rem 0;
 	font-size:50px;
 	color:white;
 }
@@ -1063,7 +1063,7 @@ input {
 	border-bottom-right-radius:0;
 }
 .darkred {
-	color:#a13647;
+	color:#5a1a2a;
 }
 .tt-open {
 	box-shadow: 0 2px 3px 0 rgba(0,0,0,.26);
@@ -1080,7 +1080,7 @@ input {
 	display:block;
 }
 .tt-open .tt-suggestion:hover {
-	background-color:#a13647;
+	background-color:#5a1a2a;
 	color:white;
 }
 #searchmovieform .tt-open .tt-suggestion {
@@ -1096,7 +1096,7 @@ form#addtag .tt-suggestion {
 	padding:8px;
 }
 form#addtag .tt-suggestion:hover {
-	background-color:#a13647;
+	background-color:#5a1a2a;
 	color:white;
 }
 #randommoviesug {
@@ -1172,7 +1172,7 @@ form#addtag .tt-suggestion:hover {
 		margin-bottom:54px;
 	}
 	.topmenu h1 {
-		font-size:32px;
+		font-size:42px;
 	}
 
 	.topmenu .togglesearch i.material-icons {
@@ -1194,7 +1194,7 @@ form#addtag .tt-suggestion:hover {
 	}
 	.button:hover {
 		background-color:white;
-		color:#a13647;
+		color:#5a1a2a;
 	}
 	table.feed td .poster:hover {
 		transform: scale(1.05);
@@ -1206,13 +1206,13 @@ form#addtag .tt-suggestion:hover {
 	color:white;
 }
 .button.greybtn.activebtn:hover {
-	border-color:#a13647;
-	background-color:#a13647;
+	border-color:#5a1a2a;
+	background-color:#5a1a2a;
 	color:white;
 }
 .button.redbtn:hover {
-	border-color:#a13647;
-	background-color:#a13647;
+	border-color:#5a1a2a;
+	background-color:#5a1a2a;
 	color:white;
 }
 }
