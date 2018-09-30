@@ -678,23 +678,24 @@ form.addtag {
 }
 form.addtag input[type="text"] {
 	padding:6px;
-	font-size:15px;
+	font-size:16px;
 	position:relative;
 	border-color:white;
 	border-radius:0;
 	max-width:120px;
+	border:2px solid white;
 }
 form.addtag input#submit {
-		background: #fff;
-		color:black;
+	background: initial;
+	color:black;
     padding: 8px;
     vertical-align: top;
     font-size: 16px;
-    height: 35px;
-		position: absolute;
+    height: 100%;
+	position: absolute;
     top: 0;
     right: 0;
-		border-radius:0;
+	border-radius:0;
 }
 form.usersearch {
 	position:relative;
