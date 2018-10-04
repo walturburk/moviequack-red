@@ -107,11 +107,22 @@ table.searchresults {
 }
 table.searchresults td {
 	vertical-align:middle;
-	padding:8px;
+	padding:1rem;
 }
 table.searchresults td .poster {
 	min-width:100px;
 	min-height:130px;
+}
+table.searchresults tr:nth-child(odd) td {
+	background-color:rgba(0,0,0,0.03);
+}
+table.searchresults tr:nth-child(even) td {
+	background-color:rgba(255,255,255,0.01);
+}
+.searchhit .grey {
+	font-family: "Varela Round";
+	margin-top: 0.5rem;
+	color:rgba(255,255,255,0.3) !IMPORTANT;
 }
 .wordbreak {
 	word-break:break-word;
@@ -457,6 +468,9 @@ footer.footer .third {
 	max-height:100%;
 	display:block;
 }
+header.movieheader .posterlarge {
+	margin-top:2rem;
+}
 .movieinfowindow .postersmall {
 	display:none;
 }
@@ -575,6 +589,7 @@ select.select {
 .widemsgholder .postmessage {
 	float:right;
 	width:100%;
+	position:relative;
 }
 .widemsgholder.emojiwidemsgholder .postmessage {
 	width:calc(100% - 67px);
@@ -585,9 +600,10 @@ input.widemsgtext {
 	border:0;
 	font-size:20px;
 	padding:16px;
-	width:calc(100% - 55px);
+	width:100%;
 	float:left;
 	border-bottom-left-radius: 2px;
+	padding-right:60px;
 }
 input.widemsgsubmit {
 	font-size:24px;
@@ -597,6 +613,10 @@ input.widemsgsubmit {
 	text-shadow:2px 2px 0 rgba(0,0,0,0.2);
 	border-radius:0;
 	border-bottom-right-radius: 2px;
+	height: 100%;
+	position: absolute;
+	right: 0;
+	top: 0;
 }
 input.widemsgsubmit:hover {
 	text-shadow:3px 3px 0 rgba(0,0,0,0.3);
@@ -768,7 +788,7 @@ nav#mainnav {
 }
 nav#mainnav ul li {
 	float:left;
-	width:calc(100% / 3);
+	width:calc(100% / 4);
 }
 nav#mainnav ul li a {
 	display:inline-block;
@@ -785,6 +805,11 @@ nav#mainnav ul li i.material-icons {
 }
 i.material-icons.small {
 	font-size:0.9em;
+}
+i.material-icons.inlined {
+	vertical-align: top;
+	font-size: 1.5rem;
+	line-height: 1rem;
 }
 .navdesc {
 	font-size: 14px;
@@ -835,6 +860,9 @@ i.material-icons.small {
 	margin:auto;
 	min-height:calc(100vh - 300px);
 	clear:both;
+	display:inline-block;
+	width:100%;
+	padding-bottom:84px;
 }
 .card {
 	text-align:left;
@@ -928,7 +956,6 @@ i.material-icons.small {
 	max-width: 680px;
 	display: inline-block;
 	width: 100%;
-	margin-bottom:16px;
 }
 .searchfield {
 	border-radius:2px;
