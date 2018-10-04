@@ -5,11 +5,13 @@ RewriteBase /
 RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
 RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
 
+RewriteRule ^$ mymovies.php
+
 RewriteRule ^user?$ profile.php
 
 RewriteRule ^user/([A-Za-z0-9]+) profile.php?id=$1
 
-RewriteRUle ^user/ profile.php
+RewriteRule ^user/ profile.php
 
 RewriteRule ^list/([a-z=\[\]&\@]+) list.php?$1
 
@@ -29,3 +31,4 @@ RewriteRule ^enteremail enteremail.php
 RewriteRule ^buffet buffet.php
 RewriteRule ^settings settings.php
 RewriteRule ^mymovies mymovies.php
+RewriteRule ^feed mainfeed.php
