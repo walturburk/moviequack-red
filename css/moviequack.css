@@ -451,6 +451,14 @@ footer.footer {
 footer.footer .third {
 	display:none;
 }
+.stickyheader {
+	padding: 2px 0;
+	position: sticky;
+	top: -1px;
+	background: #5a1a2a;
+	color:#00ffc6;
+	font-weight:bold;
+}
 .poster {
 	display:inline-block;
 	padding: 3px;

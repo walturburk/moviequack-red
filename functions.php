@@ -1176,7 +1176,7 @@ function saveStreams($movieid, $title, $year) {
 			db_query($query);
 		}
 	} else {
-		echo "Update empty";
+		//echo "Update empty";
 		$query = "DELETE FROM stream WHERE movieid = '$movieid'";
 
 		db_query($query);
