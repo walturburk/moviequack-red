@@ -18,6 +18,8 @@ define("basepostermurl", "https://image.tmdb.org/t/p/w185/");
 define("baseposterurl", "https://image.tmdb.org/t/p/w342/");
 define("basebackdropurl", "https://image.tmdb.org/t/p/w780/");
 
+$basicfilemtime = filemtime(__DIR__."/css/basic.css");
+$moviequackfilemtime = filemtime(__DIR__."/css/moviequack.css");
 
 
 function addGenreNames() {
