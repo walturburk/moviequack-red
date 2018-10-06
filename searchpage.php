@@ -2,6 +2,7 @@
 include("db_functions.php");
 include("functions.php");
 
+$externalsearchfilemtime = filemtime(__DIR__."/js/externalsearch.js");
 
 $t = new Template("templates/searchpage.html");
 
