@@ -1177,7 +1177,7 @@ form#addtag .tt-suggestion:hover {
 	html, body {
     	max-width: 100%;
 	}
-	html {
+	body {
 		overflow-x:hidden;
 	}
 	h1 {
