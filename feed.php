@@ -7,9 +7,6 @@ $t = new Template("templates/feed.html");
 $layout = new Template("templates/layout.html");
 $foundation = new Template("templates/foundation.html");
 
-if ($_SESSION["loggedin"] != true) {
-	header("Location: /join");
-}
 
 $id = $_REQUEST["id"];
 if (!isset($id)) {

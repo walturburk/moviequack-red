@@ -5,6 +5,13 @@ $searchfieldholderclass = "";
 
 autoLogin();
 //getDontTag();
+if ($_SESSION["loggedin"]) {
+} else if (strpos($_SERVER['REQUEST_URI'], "welcome") > 0) {
+} else if (strpos($_SERVER['REQUEST_URI'], "join") > 0) {
+} else if (strpos($_SERVER['REQUEST_URI'], "login") > 0) {
+} else {
+	header("Location: /welcome");
+}
 
 $apikey = "0a9b195ddb48019271ac2de755730dd4";
 $userid = $_SESSION["user"];

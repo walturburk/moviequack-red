@@ -27,6 +27,7 @@ RewriteRule ^login login.php
 RewriteRule ^register join.php
 RewriteRule ^logout logout.php
 RewriteRule ^join join.php
+RewriteRule ^welcome welcome.php
 RewriteRule ^enteremail enteremail.php
 RewriteRule ^buffet buffet.php
 RewriteRule ^settings settings.php
