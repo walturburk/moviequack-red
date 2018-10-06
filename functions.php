@@ -27,6 +27,7 @@ define("basebackdropurl", "https://image.tmdb.org/t/p/w780/");
 
 $basicfilemtime = filemtime(__DIR__."/css/basic.css");
 $moviequackfilemtime = filemtime(__DIR__."/css/moviequack.css");
+$functionsfilemtime = filemtime(__DIR__."/js/functions.js");
 
 
 function addGenreNames() {
