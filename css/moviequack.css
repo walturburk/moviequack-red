@@ -109,10 +109,6 @@ table.searchresults td {
 	vertical-align:middle;
 	padding:1rem;
 }
-table.searchresults td .poster {
-	min-width:100px;
-	min-height:130px;
-}
 table.searchresults tr:nth-child(odd) td {
 	background-color:rgba(0,0,0,0.03);
 }
@@ -1145,6 +1141,14 @@ form#addtag .tt-suggestion:hover {
 
 
 @media screen and (max-width: 769px) {
+	table.searchresults td {
+		padding:0;
+		font-size:0.8rem;
+		text-align:center;
+	}
+	table.searchresults td .poster {
+		margin:1rem 0;
+	}
 	nav#mainnav ul li a {
 		padding:0.5rem;
 		font-size:15px;

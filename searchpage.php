@@ -44,6 +44,8 @@ if (empty($movies)) {
 	}
 }
 
+$searchhits .= "<tr class='searchingformore'><td></td><td>Searching ...</td><td></td></tr>";
+
 $xsearchhits = "";
 
 $content = "";

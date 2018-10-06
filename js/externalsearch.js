@@ -11,5 +11,6 @@ console.log("performexternalsearch");
     //jQuery("#externalhits").html(result);
 
     jQuery('#searchresults > tbody:last-child').append(result);
+    jQuery('#searchresults tr.searchingformore').remove();
   });
 });

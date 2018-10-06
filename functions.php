@@ -1132,7 +1132,7 @@ GROUP BY m.id";
 
 function saveStreams($movieid, $title, $year) {
 
-	echo "savestreams<br>";
+	//echo "savestreams<br>";
 	$streams = getExternalStreams($title, $year);
 
 
@@ -1147,7 +1147,7 @@ function saveStreams($movieid, $title, $year) {
 	echo "<br>";*/
 
 	if ($cleandbtitle == $cleanstreamtitle && is_array($streams["items"][0]["offers"])) {
-		echo "Update with new streams";
+		//echo "Update with new streams";
 		$query = "DELETE FROM stream WHERE movieid = '$movieid'";
 
 		db_query($query);
