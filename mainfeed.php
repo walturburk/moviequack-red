@@ -29,14 +29,12 @@ $rawfeed = getPostsFeed();
 $printedfeed .= printMessage($rawfeed);
 
 
-$t = new Template("templates/indexpage.html");
+$t = new Template("templates/mainfeedpage.html");
 $content .= $t->output();
 $layout = new Template("templates/layout.html");
 $foundation = new Template("templates/foundation.html");
 $foundation = new Template("templates/foundation.html");
 $body = $layout->output();
 echo $foundation->output();
-
-
 
 ?>

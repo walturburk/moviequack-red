@@ -494,6 +494,92 @@ WHERE movie = '".$movie."'";
 	return $movie[0]["overall"];
 }
 
+function getMovieRatings() {
+	$sql = "SELECT movie, 
+	SUM(rating) / COUNT(rating) AS overall 
+	FROM mqold.ratemovie
+	GROUP BY movie";
+
+	$movies = db_select($sql);
+	return $movies;
+}
+
+function getWeightedMovieRatings($user) {
+	$sql = "SELECT movie, SUM((tb.corr*rm.rating)) / COUNT(rm.rating) AS overall 
+	FROM mqold.ratemovie as rm 
+	LEFT JOIN 
+	(SELECT corr, ((10+count)/10)*corr AS weight, user2 
+	FROM
+	(
+	SELECT user1, user2, count(*) as count,  
+	(avg(x * y) - avg(x) * avg(y)) / 
+	(sqrt(avg(x * x) - avg(x) * avg(x)) * sqrt(avg(y * y) - avg(y) * avg(y))
+	) 
+	AS corr
+	FROM
+	(
+	SELECT t.rating as x, s.rating as y, t.user AS user1, s.user AS user2 
+	FROM mqold.ratemovie t
+	INNER JOIN mqold.ratemovie s
+	ON (t.movie = s.movie)
+	WHERE (t.user = '".$user."') AND t.user != s.user) AS xandy
+	GROUP BY user2
+	ORDER BY corr DESC
+	) 
+	as tab
+	WHERE corr IS NOT NULL
+	ORDER BY weight DESC) as tb 
+	ON tb.user2 = rm.user
+	GROUP BY movie";
+
+	$movies = db_select($sql);
+	return $movies;
+}
+
+function getTopSuggestedMovies($user) {
+	$sql = "SELECT movieinfo.*, overall, (overall+COALESCE(weighted_overall, 0)) as total_overall 
+	FROM 
+	(SELECT movie AS movieid, rm.rating, SUM(rm.rating)/COUNT(rm.rating) as overall, SUM((tb.corr*(rm.rating-6))) / COUNT(rm.rating) AS weighted_overall
+	FROM mqold.ratemovie as rm 
+	LEFT JOIN 
+	(SELECT corr, user2 
+	FROM
+	(
+	SELECT user1, user2, count(*) as count,  
+	(avg(x * y) - avg(x) * avg(y)) / 
+	(sqrt(avg(x * x) - avg(x) * avg(x)) * sqrt(avg(y * y) - avg(y) * avg(y))
+	) 
+	AS corr
+	FROM
+	(
+	SELECT t.rating as x, s.rating as y, t.user AS user1, s.user AS user2 
+	FROM mqold.ratemovie t
+	INNER JOIN mqold.ratemovie s
+	ON (t.movie = s.movie)
+	WHERE (t.user = '".$user."') AND t.user != s.user
+	) 
+	AS xandy
+	GROUP BY user2
+	ORDER BY corr DESC
+	) 
+	as tab
+	WHERE corr IS NOT NULL
+	ORDER BY corr DESC) as tb 
+	ON tb.user2 = rm.user
+	GROUP BY movie) AS mega_table
+	LEFT JOIN (
+	SELECT * FROM mqold.ratemovie WHERE user = '".$user."' 
+	) AS user1rate 
+	ON movieid = user1rate.movie 
+	LEFT JOIN mqold.movie as movieinfo
+ON movieinfo.id = movieid 
+	WHERE user IS NULL 
+	ORDER BY total_overall DESC";
+
+	$movies = db_select($sql);
+	return $movies;
+}
+
 function getUsersMovieRating($movie, $user) {
 
 	$sql = "SELECT rating
@@ -1075,13 +1161,17 @@ function getExternalStreams($title, $year = null)
 
 function streamsAreOld($movieid) {
 	$strms = getStreams($movieid);
-	$week = 604800;
-	//echo "<h3>streamtime: ".$strms[0]["timestamp"]." < ".time()." - ".$week."</h3>";
-	if (timecodeConvert(timecodeHowLongAgo($strms[0]["timestamp"], "w")) > 2) {
-		//echo "areold";
-		return true;
+	if ($strms) {
+		$week = 604800;
+		//echo "<h3>streamtime: ".$strms[0]["timestamp"]." < ".time()." - ".$week."</h3>";
+		if (timecodeConvert(timecodeHowLongAgo($strms[0]["timestamp"], "w")) > 2) {
+			//echo "areold";
+			return true;
+		} else {
+			return false;
+		}
 	} else {
-		return false;
+		return true;
 	}
 }
 
@@ -1135,7 +1225,9 @@ function saveStreams($movieid, $title, $year) {
 
 	//echo "savestreams<br>";
 	$streams = getExternalStreams($title, $year);
-
+	if (isset($_GET["updateinfo"])) {
+		print_r($streams);
+	}
 
 	$cleandbtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $title));
 	$cleanstreamtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $streams["items"][0]["title"]));
