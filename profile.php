@@ -7,13 +7,11 @@ $t = new Template("templates/profile.html");
 $layout = new Template("templates/layout.html");
 $foundation = new Template("templates/foundation.html");
 
-$id = $_REQUEST["id"];
+$id = strtolower($_REQUEST["id"]);
 
 if (!isset($id)) {
   $id = $_SESSION["user"];
 }
-
-$id = strtolower($id);
 
 if ($_SESSION["loggedin"] != true && $_SESSION["user"] == $id) {
 	$notloggedin = "<div class='urgentmessage'>Urgent message: You're not signed in! <br><a class='red' href='/join'>Join us immediately</a> <br>or if you already have an account <a class='red' href='/login'>sign in</a>.</div>";
@@ -35,7 +33,7 @@ if ($id == $_SESSION["user"]) {
   } else {
     $activebtn = "";
   }
-  $profileoptions = '<div class="floatright margin0 button whitebtn followbtn '.$activebtn.'" data-followedid="'.$id.'">Follow</div>';
+  $profileoptions = '<div class="floatright margin0 button whitebtn followbtn '.$activebtn.'" data-followedid="'.$userid.'">Follow</div>';
 }
 
 

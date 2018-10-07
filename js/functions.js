@@ -397,7 +397,7 @@ jQuery(document).on("click", ".postmessage .submit", function(e) {
 
 		var obj = {
 			mode: "FOLLOW",
-			follows: follows,
+			follows: follows
 			};
 
       if (isactive) {

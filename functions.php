@@ -1023,8 +1023,9 @@ function getUsersByLetter($q) {
 }
 
 function checkIfUserExist($q) {
-	$tags1 = db_select("SELECT username FROM user WHERE username = '$q'");
-	if ($tags1[0]["username"] == $q && $q != "") {
+	$sql = "SELECT username FROM `".dbname."`.user WHERE username = '$q'";
+	$tags1 = db_select($sql);
+	if (strtolower($tags1[0]["username"]) == strtolower($q) && $q != "") {
 		$ret = true;
 	} else {
 		$ret = false;
@@ -1407,7 +1408,9 @@ function get_browser_name($user_agent)
 }
 
 function checkiffollows($follower, $follows) {
-	$user = db_select("SELECT `timestamp` FROM  `follow` WHERE `follower` = '$follower' AND `follows` = '$follows'");
+	$sql = "SELECT `timestamp` FROM  `".dbname."`.`follow` WHERE `follower` = '$follower' AND `follows` = '$follows'";
+	$user = db_select($sql);
+
 	return $user[0]["timestamp"];
 }
 
@@ -1415,21 +1418,23 @@ function follow($follows = null) {
 	$follower = $_SESSION["user"];
 
 		if (checkiffollows($follower, $follows)) {
-			$query = "DELETE FROM `follow` WHERE `follower` = '$follower' AND `follows` = '$follows';";
+			$query = "DELETE FROM `".dbname."`.`follow` WHERE `follower` = '$follower' AND `follows` = '$follows';";
 			$ret = false;
 		} else {
 
 			if (checkIfUserExist($follows)) {
-			$timestamp = time();
-			$query = "INSERT INTO `".dbname."`.`follow`
-			(`follower`, `follows`, `timestamp`)
-			VALUES ('$follower', '$follows', '$timestamp');";
-			$ret = true;
-		} else {
-			$ret = false;
+				$timestamp = time();
+				$query = "INSERT INTO `".dbname."`.`follow`
+				(`follower`, `follows`, `timestamp`)
+				VALUES ('$follower', '$follows', '$timestamp');";
+				$ret = true;
+			} else {
+				$ret = false;
+			}
 		}
-		}
+		
 	db_query($query);
+
 	return $ret;
 
 }
@@ -1767,11 +1772,21 @@ $fdivend = "</div>";
 				$print .= $fdivstart;
 				$print .= $fusername;
 				$print .= $ficonstart;
-				$print .= "star";
+				$print .= "";
 				$print .= $ficonend;
 				$print .= $fconstart;
-				$print .= "<div class='red large'>".($row["rating"]/2)."</div> stars to ";
+				$print .= "<div class='red large'>";
+				for ($i=0; $i<5; $i++) {
+					if ($i<($row["rating"]/2)) {
+						$print .= '<i class="material-icons">star</i>';
+					} else {
+						$print .= '<i style="opacity:0.2" class="material-icons">star</i>';
+					}
+					
+				}
+				$print .= "</div> ";
 				$print .= "<div class='red large nowrap'>".$row["title"]."</div>";
+				$print .= "<div style='display:none'>".date("d-M-Y G:i", $row["timestamp"])."</div>";
 				$print .= $fconend;
 				$print .= $fposter;
 				$print .= $fdivend;

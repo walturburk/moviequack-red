@@ -466,9 +466,14 @@ footer.footer .third {
 	display:inline-block;
 	padding: 3px;
 	margin:3px;
-	background: white;
+	background: black;
 	box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
 	border-radius:1px;
+	filter:saturate(80%);
+	transition:.25s;
+}
+.poster:hover {
+	filter:saturate(120%);
 }
 .poster img {
 	max-height:100%;
