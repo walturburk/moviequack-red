@@ -36,7 +36,7 @@ function getCorrelations($user, $everyone = false) {
      ) 
      as tab
      WHERE corr IS NOT NULL
-     ORDER BY weight DESC';
+     ORDER BY corr DESC';
 	$correlations = db_select($sql);
 
 	return $correlations;
