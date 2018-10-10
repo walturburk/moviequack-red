@@ -704,11 +704,15 @@ input.widemsgsubmit:hover {
 .addtags {
 	vertical-align:top;
 }
+.recommendlist {
+	white-space:normal;
+}
 form.addtag {
 	position:relative;
 }
 form.addtag input[type="text"] {
 	padding:6px;
+	padding-right:1rem;
 	font-size:16px;
 	position:relative;
 	border-color:white;
@@ -734,6 +738,7 @@ form.usersearch {
 }
 form.usersearch input[type="text"] {
 	padding:6px;
+	padding-right:1rem;
 	font-size:16px;
 	position:relative;
 	border-color:white;
@@ -974,7 +979,6 @@ i.material-icons.inlined {
 #searchmovieform {
 	margin: auto;
 	max-width: 680px;
-	display: inline-block;
 	width: 100%;
 }
 .searchfield {
@@ -1164,6 +1168,9 @@ form#addtag .tt-suggestion:hover {
 
 
 @media screen and (max-width: 769px) {
+	.recommendlist.addtags .tag {
+		display:block;
+	}
 	table.searchresults td {
 		padding:0;
 		font-size:0.8rem;
