@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `mqold` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `mqold`;
 -- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
 -- Host: localhost    Database: mqold
@@ -28,7 +30,7 @@ CREATE TABLE `collection` (
   `poster` text NOT NULL,
   `backdrop` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +45,7 @@ CREATE TABLE `follow` (
   `follows` varchar(15) NOT NULL,
   `timestamp` int(10) NOT NULL,
   UNIQUE KEY `follower` (`follower`,`follows`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -57,7 +59,7 @@ CREATE TABLE `genre` (
   `movie` varchar(15) NOT NULL,
   `genre` smallint(6) NOT NULL,
   UNIQUE KEY `movie` (`movie`,`genre`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,7 +73,7 @@ CREATE TABLE `genrenames` (
   `id` smallint(6) NOT NULL,
   `name` varchar(16) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -85,7 +87,7 @@ CREATE TABLE `incollection` (
   `collection` mediumint(9) NOT NULL,
   `movie` varchar(15) NOT NULL,
   UNIQUE KEY `collection` (`collection`,`movie`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -99,7 +101,7 @@ CREATE TABLE `language` (
   `movie` varchar(15) NOT NULL,
   `lang` varchar(3) NOT NULL,
   UNIQUE KEY `movie` (`movie`,`lang`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -129,7 +131,7 @@ CREATE TABLE `movie` (
   `tmdbid` mediumint(9) NOT NULL,
   `searchstring` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -147,7 +149,7 @@ CREATE TABLE `post` (
   `userid` varchar(15) NOT NULL,
   `timestamp` int(10) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -161,7 +163,7 @@ CREATE TABLE `producedby` (
   `movie` varchar(15) NOT NULL,
   `company` smallint(6) NOT NULL,
   UNIQUE KEY `movie` (`movie`,`company`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -175,7 +177,7 @@ CREATE TABLE `producedin` (
   `movie` varchar(15) NOT NULL,
   `country` varchar(6) NOT NULL,
   UNIQUE KEY `movie` (`movie`,`country`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -189,7 +191,7 @@ CREATE TABLE `productioncompany` (
   `id` smallint(6) NOT NULL,
   `name` varchar(120) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -206,7 +208,7 @@ CREATE TABLE `provider` (
   `slug` varchar(32) NOT NULL,
   `id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -222,7 +224,7 @@ CREATE TABLE `ratemovie` (
   `rating` tinyint(4) NOT NULL,
   `timestamp` int(10) NOT NULL,
   UNIQUE KEY `movie` (`movie`,`user`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -239,7 +241,7 @@ CREATE TABLE `region` (
   `currency` varchar(4) NOT NULL,
   `currencyname` varchar(32) NOT NULL,
   PRIMARY KEY (`locale`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -253,7 +255,7 @@ CREATE TABLE `reply` (
   `reply` varchar(15) NOT NULL,
   `original` varchar(15) NOT NULL,
   UNIQUE KEY `reply` (`reply`,`original`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -271,7 +273,7 @@ CREATE TABLE `session` (
   `user` varchar(15) NOT NULL,
   UNIQUE KEY `time` (`time`,`user`),
   UNIQUE KEY `id` (`id`,`user`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -294,7 +296,7 @@ CREATE TABLE `stream` (
   `timestamp` int(10) NOT NULL,
   UNIQUE KEY `movieid` (`movieid`,`region`,`type`,`provider`,`def`),
   UNIQUE KEY `movieid_2` (`movieid`,`region`,`type`,`provider`,`def`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -310,7 +312,7 @@ CREATE TABLE `tag` (
   `tag` varchar(20) NOT NULL,
   `timestamp` int(10) NOT NULL,
   UNIQUE KEY `movie` (`movie`,`user`,`tag`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -326,7 +328,7 @@ CREATE TABLE `user` (
   `email` varchar(255) NOT NULL,
   `ip` varchar(45) NOT NULL,
   PRIMARY KEY (`username`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -344,7 +346,7 @@ CREATE TABLE `vote` (
   `downvote` tinyint(1) NOT NULL,
   PRIMARY KEY (`post`,`user`),
   UNIQUE KEY `post` (`post`,`user`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -356,4 +358,4 @@ CREATE TABLE `vote` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-13 23:58:06
+-- Dump completed
