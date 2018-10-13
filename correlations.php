@@ -20,9 +20,9 @@ function getCorrelations($user, $everyone = false) {
     (
     SELECT user1, user2, count(*) as count,  
     (avg(x * y) - avg(x) * avg(y)) / 
-    (sqrt(avg(x * x) - avg(x) * avg(x)) * sqrt(avg(y * y) - avg(y) * avg(y))
-    ) 
-    AS corr
+    (sqrt(avg(x * x) - avg(x) * avg(x)) * sqrt(avg(y * y) - avg(y) * avg(y) ) ) 
+    AS corr2, 
+    ( SUM( x * y ) - SUM( x ) * SUM( y ) / COUNT( x ) ) / COUNT( x ) as corr 
     FROM
     (
     SELECT t.rating as x, s.rating as y, t.user AS user1, s.user AS user2 
@@ -38,7 +38,7 @@ function getCorrelations($user, $everyone = false) {
      WHERE corr IS NOT NULL
      ORDER BY corr DESC';
 	$correlations = db_select($sql);
-
+    //echo $sql;
 	return $correlations;
 }
 
