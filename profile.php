@@ -12,8 +12,8 @@ $id = strtolower($_REQUEST["id"]);
 if (!isset($id)) {
   $id = $_SESSION["user"];
 }
-echo "TESTy";
-print_r($_SESSION["user"]);
+
+print_r($_SESSION);
 if ($_SESSION["loggedin"] != true && $_SESSION["user"] == $id) {
 	$notloggedin = "<div class='urgentmessage'>Urgent message: You're not signed in! <br><a class='red' href='/join'>Join us immediately</a> <br>or if you already have an account <a class='red' href='/login'>sign in</a>.</div>";
 } else {
