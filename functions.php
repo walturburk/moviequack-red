@@ -1510,28 +1510,6 @@ function getPostsFeed($user = null) {
 			$order = "ORDER BY `votes` DESC";
 		}
 
-		/*
-		SELECT
-		reply.reply,
-		user.username AS user1, user.username AS user1id,
-		post.timestamp AS timestamp, post.emoji,
-		post.id, post.message, post.userid, post.movieid, movie.year AS movieyear, movie.poster AS poster,
-	(SUM((10+od.upvote-od.downvote)*1000/(UNIX_TIMESTAMP()-post.timestamp)))
-		AS votes
-		FROM user
-		LEFT JOIN post
-		ON user.username = post.userid
-		LEFT JOIN vote od
-		ON post.id = od.post
-		LEFT JOIN reply
-		ON reply.reply = post.id
-		LEFT JOIN movie
-		ON post.movieid = movie.id
-		WHERE post.movieid = '$movie' AND reply.reply IS NULL
-		GROUP BY post.id
-		ORDER BY `votes` DESC
-		*/
-
 		$sql = "SELECT 'post' AS feedtype, movie.title AS movietitle, movie.id AS movieid, movie.year AS movieyear, movie.poster AS poster, movie.backdrop AS backdrop, reply.original AS origmsg,
 		user.username AS user1, user.username AS user1id, post.message, post.emoji, post.timestamp AS timestamp, post.id AS id,
 		(SUM((10+od.upvote-od.downvote)*1000/(UNIX_TIMESTAMP()-post.timestamp)))
