@@ -1285,7 +1285,7 @@ function saveStreams($movieid, $title, $year) {
 			VALUES
 			('$movieid', '$region', '$type', '$provider', '$price', '$currency', '$link', '$def', '$dateproviderid', '$timestamp')
 				";
-				//echo $query."<br>";
+				echo $query."<br>";
 			db_query($query);
 		}
 	} else {

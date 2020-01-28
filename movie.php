@@ -29,9 +29,9 @@ if (!$movie["id"]) {
 	$movie = $movieinfo[0];
 }
 
-echo "<div style='white-space:pre-wrap'>";
-print_r(getExternalStreams($movie["title"], $movie["year"]));
-echo "</div>";
+/*echo "<div style='white-space:pre-wrap'>";
+print_r(getExternalStreams($movie["title"], $movie["year"])["items"][0]["offers"]);
+echo "</div>";*/
 
 $movieid = $movie["id"];
 $movietitle = $movie["title"];
@@ -44,7 +44,7 @@ $runtime = $movie["runtime"];
 $genre = $movie["genre"];
 $plot = $movie["overview"];
 
-
+saveStreams($movieid, $movietitle, $year);
 if (streamsAreOld($movieid) || isset($_REQUEST["updateinfo"])) {
 	saveStreams($movieid, $movietitle, $year);
 }
