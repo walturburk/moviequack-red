@@ -1169,8 +1169,8 @@ function getExternalStreams($title, $year = null)
 
 	$result = json_decode($result, true);
 	$streams = $result["items"][0]["offers"];
-	echo "Got external streams";
-	print_r($result);
+	//echo "Got external streams";
+	//print_r($result);
 	return $result;
 }
 
@@ -1180,13 +1180,13 @@ function streamsAreOld($movieid) {
 	
 	if ($strms) {
 		$week = 604800;
-		echo "<h3>streamtime: ".$strms[0]["timestamp"]." < ".time()." - ".$week."</h3>";
+		//echo "<h3>streamtime: ".$strms[0]["timestamp"]." < ".time()." - ".$week."</h3>";
 		if ( $strms[0]["timestamp"] < time() - $week ) {
 			//echo "areold";
 			return true;
 		} else {
-			echo "<h3>streamtime: ".$strms[0]["timestamp"]." < ".time()." - ".$week."</h3>";
-			echo "WEEKS OLD:".($strms[0]["timestamp"] < time() - $week);
+			//echo "<h3>streamtime: ".$strms[0]["timestamp"]." < ".time()." - ".$week."</h3>";
+			//echo "WEEKS OLD:".($strms[0]["timestamp"] < time() - $week);
 			return false;
 		}
 	} else {
@@ -1250,13 +1250,13 @@ function saveStreams($movieid, $title, $year) {
 
 	$cleandbtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $title));
 	$cleanstreamtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $streams["items"][0]["title"]));
-	echo "<br>";
+	//echo "<br>";
 	if ($cleandbtitle == $cleanstreamtitle) {
-		echo "yes <br>".$cleandbtitle ."<br>". $cleanstreamtitle;
+		//echo "yes <br>".$cleandbtitle ."<br>". $cleanstreamtitle;
 	} else {
-		echo "no <br>".$cleandbtitle ."<br>". $cleanstreamtitle;
+		//echo "no <br>".$cleandbtitle ."<br>". $cleanstreamtitle;
 	}
-	echo "<br>";
+	//echo "<br>";
 
 	if ($cleandbtitle == $cleanstreamtitle && is_array($streams["items"][0]["offers"])) {
 		//echo "Update with new streams";
@@ -1266,7 +1266,7 @@ function saveStreams($movieid, $title, $year) {
 
 		$streams = $streams["items"][0]["offers"];
 
-		print_r($streams);
+		//print_r($streams);
 
 		$timestamp = time();
 
