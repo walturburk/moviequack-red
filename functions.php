@@ -773,14 +773,15 @@ function sortByGenre($movies) {
 }
 
 function reAddMovie($id) {
-
-	$movieinfo = db_select("SELECT * FROM  `movie` WHERE  `id` =  '".$id."'");
+	$sql = "SELECT * FROM  `movie` WHERE  `id` =  '".$id."'";
+	$movieinfo = db_select($sql);
 	$movie = $movieinfo[0];
-
 	if ($movie["id"]) {
 		db_query("DELETE FROM movie WHERE id = '".$id."'");
-		addMovie($movie["id"]);
 	}
+
+	$mid = substr($id, 1); //remove the "m"
+	addMovie($mid); 
 
 }
 
@@ -821,12 +822,18 @@ if ($err) {
 } else {
   $json = $response;
 }
+
+$url = "https://api.themoviedb.org/3/movie/".$id."?api_key=".$apikey;
+$json = file_get_contents($url);
 		$movie = json_decode($json, true);
 		$movie = array_change_key_case($movie, CASE_LOWER);
 		$printablemovie = $movie;
 		//addPoster($movie["poster"]);
 		//$movie = array_map('mysql_escape_string', $movie);
-
+		/*echo "<h4>".$url;
+		print_r($response);
+		
+		echo "</h4>";*/
 		foreach ($movie AS $key => $value) {
 			if (!is_array($value)) {
 				$movie[$key] = mysqli_real_escape_string(db_connect(), $value);
@@ -839,27 +846,25 @@ if ($err) {
 		$searchstring = iconv('UTF-8', 'ASCII//TRANSLIT', $searcht);//strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $searcht));
 
 		if ($movie["id"] > 0) {
-		$mqid = "m".$movie["id"];
+			$mqid = "m".$movie["id"];
 
+			$query = "INSERT INTO `".dbname."`.`movie`
+			(`id`, `title`, `originaltitle`, `year`, `releasedate`, `backdrop`, `budget`, `homepage`,
+				`imdbid`, `language`, `overview`, `poster`, `revenue`, `runtime`, `status`, `tagline`, `tmdbid`, `searchstring`)
+				VALUES
+				('".$mqid."', '".$movie["title"]."', '".$movie["original_title"]."', '".$year."', '".$movie["release_date"]."',
+				'".$movie["backdrop_path"]."', '".$movie["budget"]."', '".$movie["homepage"]."', '".$movie["imdb_id"]."',
+				'".$movie["original_language"]."', '".$movie["overview"]."', '".$movie["poster_path"]."',
+				'".$movie["revenue"]."', '".$movie["runtime"]."', '".$movie["status"]."', '".$movie["tagline"]."', '".$movie["id"]."', '".$searchstring."');";
 
+			db_query($query);
 
-		$query = "INSERT INTO `".dbname."`.`movie`
-		(`id`, `title`, `originaltitle`, `year`, `releasedate`, `backdrop`, `budget`, `homepage`,
-			`imdbid`, `language`, `overview`, `poster`, `revenue`, `runtime`, `status`, `tagline`, `tmdbid`, `searchstring`)
-			VALUES
-			('".$mqid."', '".$movie["title"]."', '".$movie["original_title"]."', '".$year."', '".$movie["release_date"]."',
-			'".$movie["backdrop_path"]."', '".$movie["budget"]."', '".$movie["homepage"]."', '".$movie["imdb_id"]."',
-			'".$movie["original_language"]."', '".$movie["overview"]."', '".$movie["poster_path"]."',
-			'".$movie["revenue"]."', '".$movie["runtime"]."', '".$movie["status"]."', '".$movie["tagline"]."', '".$movie["id"]."', '".$searchstring."');";
-
-		db_query($query);
-
-		addGenresForMovie($movie["genres"], $mqid);
-		addCompanies($movie["production_companies"], $mqid);
-		addProdCountries($movie["production_countries"], $mqid);
-		addLanguages($movie["spoken_languages"], $mqid);
-		addCollections($movie["belongs_to_collection"], $mqid);
-	}
+			addGenresForMovie($movie["genres"], $mqid);
+			addCompanies($movie["production_companies"], $mqid);
+			addProdCountries($movie["production_countries"], $mqid);
+			addLanguages($movie["spoken_languages"], $mqid);
+			addCollections($movie["belongs_to_collection"], $mqid);
+		}
 		//$movie = $printablemovie;
 	}
 //$movie["mqid"] = $mqid;
@@ -1142,7 +1147,9 @@ function getExternalStreams($title, $year = null)
     $data = array("query" => $title, "release_year_from" => $year, "release_year_until" => $year);
 	$data_string = json_encode($data);
 
-	$ch = curl_init('https://api.justwatch.com/titles/'.$locale.'/popular');
+	$url = 'https://apis.justwatch.com/content/titles/'.$locale.'/popular';
+	
+	$ch = curl_init($url);
 	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1152,23 +1159,30 @@ function getExternalStreams($title, $year = null)
 	);
 
 	$result = curl_exec($ch);
+
+	
+	//$json = file_get_contents($url);
+
 	$result = json_decode($result, true);
-	//$streams = $result["items"][0]["offers"];
-	//echo "Got external streams";
-	//print_r($results);
+	$streams = $result["items"][0]["offers"];
+	echo "Got external streams";
+	print_r($result);
 	return $result;
 }
 
 
 function streamsAreOld($movieid) {
 	$strms = getStreams($movieid);
+	
 	if ($strms) {
 		$week = 604800;
-		//echo "<h3>streamtime: ".$strms[0]["timestamp"]." < ".time()." - ".$week."</h3>";
-		if (timecodeConvert(timecodeHowLongAgo($strms[0]["timestamp"], "w")) > 2) {
+		echo "<h3>streamtime: ".$strms[0]["timestamp"]." < ".time()." - ".$week."</h3>";
+		if ( $strms[0]["timestamp"] < time() - $week ) {
 			//echo "areold";
 			return true;
 		} else {
+			echo "<h3>streamtime: ".$strms[0]["timestamp"]." < ".time()." - ".$week."</h3>";
+			echo "WEEKS OLD:".($strms[0]["timestamp"] < time() - $week);
 			return false;
 		}
 	} else {
@@ -1232,13 +1246,13 @@ function saveStreams($movieid, $title, $year) {
 
 	$cleandbtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $title));
 	$cleanstreamtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $streams["items"][0]["title"]));
-	/*echo "<br>";
+	echo "<br>";
 	if ($cleandbtitle == $cleanstreamtitle) {
 		echo "yes <br>".$cleandbtitle ."<br>". $cleanstreamtitle;
 	} else {
 		echo "no <br>".$cleandbtitle ."<br>". $cleanstreamtitle;
 	}
-	echo "<br>";*/
+	echo "<br>";
 
 	if ($cleandbtitle == $cleanstreamtitle && is_array($streams["items"][0]["offers"])) {
 		//echo "Update with new streams";
@@ -1247,6 +1261,8 @@ function saveStreams($movieid, $title, $year) {
 		db_query($query);
 
 		$streams = $streams["items"][0]["offers"];
+
+		print_r($streams);
 
 		$timestamp = time();
 
