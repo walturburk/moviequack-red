@@ -682,8 +682,10 @@ function getExternalMovies($q) {
 
 	$curl = curl_init();
 
+	$url = "https://api.themoviedb.org/3/search/movie?include_adult=false&page=1&query=".$apiq."&api_key=".$apikey;
+
 	curl_setopt_array($curl, array(
-	  CURLOPT_URL => "https://api.themoviedb.org/3/search/movie?include_adult=false&page=1&query=".$apiq."&api_key=".$apikey,
+	  CURLOPT_URL => $url,
 	  CURLOPT_RETURNTRANSFER => true,
 	  CURLOPT_ENCODING => "",
 	  CURLOPT_MAXREDIRS => 10,
@@ -704,7 +706,9 @@ function getExternalMovies($q) {
 	  $print = $response;
 	}
 
-$movies = getMovies($q);
+
+	$print = file_get_contents($url);
+	$movies = getMovies($q);
 
 	$html = json_decode($print, true);
 
