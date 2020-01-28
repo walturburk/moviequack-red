@@ -1278,7 +1278,7 @@ function saveStreams($movieid, $title, $year) {
 			$currency = $stream["currency"];
 			$link = $stream["urls"]["standard_web"];
 			$def = $stream["presentation_type"];
-			$dateproviderid = date("Y-m-d", strtotime($stream["date_provider_id"]);
+			$dateproviderid = date("Y-m-d", strtotime($stream["date_provider_id"]));
 
 			$query = "INSERT INTO `".dbname."`.`stream`
 			(`movieid`, `region`, `type`, `provider`, `price`, `currency`, `link`, `def`, `dateproviderid`, `timestamp`)
