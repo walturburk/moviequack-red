@@ -30,7 +30,7 @@ if (!$movie["id"]) {
 }
 
 
-//print_r(getExternalStreams($movie["title"], $movie["year"]));
+print_r(getExternalStreams($movie["title"], $movie["year"]));
 
 $movieid = $movie["id"];
 $movietitle = $movie["title"];
