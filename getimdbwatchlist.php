@@ -53,7 +53,8 @@ foreach ( $lines as $line ) {
 
 foreach ($data as $key => $val) {
     echo $val["Const"];
-    //addMovie($val["Const"]);
+    addMovie($val["Const"]);
+break;
 }
 
 ?>
