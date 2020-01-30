@@ -2,7 +2,7 @@
 
 
 $searchfieldholderclass = "";
-$q = 0;
+$q = "";
 
 autoLogin();
 //getDontTag();
@@ -794,7 +794,7 @@ function addMovie($id) {
 
 	global $apikey;
 	$isimdbid = false;
-	if (strpos($id, 'tt')) {
+	if (strpos($id, 'tt') !== false ) {
 		$isimdbid = true;
 		$sql = "SELECT * FROM  `movie` WHERE  `imdbid` =  '".$id."'";
 	} else {
@@ -832,8 +832,8 @@ if ($isimdbid) {
 	$url = "https://api.themoviedb.org/3/find/".$id."?api_key=".$apikey."&language=en-US&external_source=imdb_id";
 	$json = file_get_contents($url);
 	$arr = json_decode($json, true);
-	//echo $url;
-	//print_r($arr);
+	echo $url;
+	print_r($arr);
 	$id = $arr["movie_results"]["id"];
 	addTag($id, "bookmark");
 }
@@ -841,7 +841,7 @@ if ($isimdbid) {
 
 		$url = "https://api.themoviedb.org/3/movie/".$id."?api_key=".$apikey;
 		$json = file_get_contents($url);
-		echo $url;
+		
 		$movie = json_decode($json, true);
 		$movie = array_change_key_case($movie, CASE_LOWER);
 		$printablemovie = $movie;
