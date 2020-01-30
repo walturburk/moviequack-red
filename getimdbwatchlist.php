@@ -9,12 +9,7 @@ $html = file_get_contents($url);
 $classname = "pageId";
 $dom = new DOMDocument;
 $dom->loadHTML($html);
-$xpath = new DOMXPath($dom);
-$results = $xpath->query("//[property='pageId']");
-
-if ($results->length > 0) {
-    echo $review = $results->item(0)->nodeValue;
-}
+var_dump($dom);
 
 
 ?>
