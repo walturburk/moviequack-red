@@ -804,6 +804,16 @@ function addMovie($id) {
 	$movieinfo = db_select($sql);
 	$movie = $movieinfo[0];
 	$mqid = $movie["id"];
+
+	if ($isimdbid) {
+		$url = "https://api.themoviedb.org/3/find/".$id."?api_key=".$apikey."&language=en-US&external_source=imdb_id";
+		$json = file_get_contents($url);
+		$arr = json_decode($json, true);
+		echo $url;
+		print_r($arr);
+		$id = $arr["movie_results"]["id"];
+	}
+	
 	if (!$movie["id"]) {
 		/*$curl = curl_init();
 
@@ -828,14 +838,6 @@ if ($err) {
 } else {
   $json = $response;
 }*/
-if ($isimdbid) {
-	$url = "https://api.themoviedb.org/3/find/".$id."?api_key=".$apikey."&language=en-US&external_source=imdb_id";
-	$json = file_get_contents($url);
-	$arr = json_decode($json, true);
-	echo $url;
-	print_r($arr);
-	$id = $arr["movie_results"]["id"];
-}
 
 
 		$url = "https://api.themoviedb.org/3/movie/".$id."?api_key=".$apikey;
