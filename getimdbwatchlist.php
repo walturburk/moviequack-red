@@ -6,15 +6,15 @@ $url = "https://www.imdb.com/user/ur4517943/watchlist";
 
 $html = file_get_contents($url);
 
-$dom = new DOMDocument();
+$classname = "pageId";
+$dom = new DOMDocument;
 $dom->loadHTML($html);
-
 $xpath = new DOMXPath($dom);
-$result = '';
-foreach($xpath->evaluate('//metaiv[@property="pageId"]/node()') as $childNode) {
-  $result .= $dom->saveHtml($childNode);
+$results = $xpath->query("//*[@property='" . $classname . "']");
+
+if ($results->length > 0) {
+    echo $review = $results->item(0)->nodeValue;
 }
-var_dump($result);
 
 
 ?>
