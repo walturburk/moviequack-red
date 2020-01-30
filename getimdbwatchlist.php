@@ -1,6 +1,6 @@
 <?php
 
-echo phpinfo();
+//echo phpinfo();
 
 $url = "https://www.imdb.com/user/ur4517943/watchlist";
 
