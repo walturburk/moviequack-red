@@ -10,7 +10,7 @@ $classname = "pageId";
 $dom = new DOMDocument;
 $dom->loadHTML($html);
 $xpath = new DOMXPath($dom);
-$results = $xpath->query("//*[@property='" . $classname . "']");
+$results = $xpath->query("//[property='pageId']");
 
 if ($results->length > 0) {
     echo $review = $results->item(0)->nodeValue;
