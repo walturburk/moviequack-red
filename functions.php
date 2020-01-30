@@ -835,7 +835,6 @@ if ($isimdbid) {
 	echo $url;
 	print_r($arr);
 	$id = $arr["movie_results"]["id"];
-	addTag($id, "bookmark");
 }
 
 
@@ -884,6 +883,7 @@ if ($isimdbid) {
 		}
 		//$movie = $printablemovie;
 	}
+	addTag($id, "bookmark");
 //$movie["mqid"] = $mqid;
 	return $mqid;
 }
