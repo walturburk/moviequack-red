@@ -792,8 +792,9 @@ function reAddMovie($id) {
 function addMovie($id) {
 
 	global $apikey;
-
+	$isimdbid = false;
 	if (strpos($id, 'tt') !== false) {
+		$isimdbid = true;
 		$sql = "SELECT * FROM  `movie` WHERE  `imdbid` =  '".$id."'";
 	} else {
 		$sql = "SELECT * FROM  `movie` WHERE  `id` =  '".$id."'";
@@ -803,7 +804,7 @@ function addMovie($id) {
 	$movie = $movieinfo[0];
 	$mqid = $movie["id"];
 	if (!$movie["id"]) {
-		$curl = curl_init();
+		/*$curl = curl_init();
 
 curl_setopt_array($curl, array(
   CURLOPT_URL => "https://api.themoviedb.org/3/movie/".$id."?api_key=".$apikey,
@@ -825,10 +826,15 @@ if ($err) {
   $json = "cURL Error #:" . $err;
 } else {
   $json = $response;
+}*/
+if ($isimdbid) {
+	$url = "https://api.themoviedb.org/3/find/".$id."?api_key=".$apikey."&language=en-US&external_source=imdb_id";
+	$json = file_get_contents($url);
+	$id = json_decode($json, true)["movie_results"]["id"];
 }
 
-$url = "https://api.themoviedb.org/3/movie/".$id."?api_key=".$apikey;
-$json = file_get_contents($url);
+		$url = "https://api.themoviedb.org/3/movie/".$id."?api_key=".$apikey;
+		$json = file_get_contents($url);
 		$movie = json_decode($json, true);
 		$movie = array_change_key_case($movie, CASE_LOWER);
 		$printablemovie = $movie;

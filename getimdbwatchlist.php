@@ -46,11 +46,10 @@ foreach ( $lines as $line ) {
 
 }
 
-print_r($data);
+//print_r($data);
 
 foreach ($data as $key => $val) {
-    echo $val["Const"];
-    echo "<br>";
+    addMovie($val["Const"]);
 }
 
 ?>
