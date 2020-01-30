@@ -805,16 +805,20 @@ function addMovie($id) {
 	$movie = $movieinfo[0];
 	$mqid = $movie["id"];
 
-	if ($isimdbid) {
-		$url = "https://api.themoviedb.org/3/find/".$id."?api_key=".$apikey."&language=en-US&external_source=imdb_id";
-		$json = file_get_contents($url);
-		$arr = json_decode($json, true);
-		echo $url;
-		print_r($arr);
-		$id = $arr["movie_results"]["id"];
-	}
 	
+
 	if (!$movie["id"]) {
+
+		if ($isimdbid) {
+			$url = "https://api.themoviedb.org/3/find/".$id."?api_key=".$apikey."&language=en-US&external_source=imdb_id";
+			$json = file_get_contents($url);
+			$arr = json_decode($json, true);
+			echo $url;
+			print_r($arr);
+			$id = $arr["movie_results"]["id"];
+			addTag($id, "bookmark");
+		}
+
 		/*$curl = curl_init();
 
 curl_setopt_array($curl, array(
@@ -884,8 +888,11 @@ if ($err) {
 			addCollections($movie["belongs_to_collection"], $mqid);
 		}
 		//$movie = $printablemovie;
+		
+	} else if ($isimdbid) {
+		addTag($movie["id"], "bookmark");
 	}
-	addTag($id, "bookmark");
+	
 //$movie["mqid"] = $mqid;
 	return $mqid;
 }
