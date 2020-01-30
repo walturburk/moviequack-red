@@ -29,9 +29,6 @@ if (!$movie["id"]) {
 	$movie = $movieinfo[0];
 }
 
-/*echo "<div style='white-space:pre-wrap'>";
-print_r(getExternalStreams($movie["title"], $movie["year"])["items"][0]["offers"]);
-echo "</div>";*/
 
 $movieid = $movie["id"];
 $movietitle = $movie["title"];

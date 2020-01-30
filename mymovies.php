@@ -17,7 +17,7 @@ foreach ($allmovies AS $mov) {
 }
 
 
-massUpdateStreams($moviesarray, 48);
+massUpdateStreams($moviesarray);
 
 $movies = getStreamableMovies($user, "bookmark");
 
