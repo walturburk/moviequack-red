@@ -29,12 +29,24 @@ $url2 = "https://www.imdb.com/list/".$listid."/export"; //this is the url for cs
 
 $csv = file_get_contents($url2); //get file contents of the csv
 
-$csvarray = str_getcsv($csv);
 
-print_r($csvarray);
+$lines = explode( "\n", $csv );
+$headers = str_getcsv( array_shift( $lines ) );
+$data = array();
+foreach ( $lines as $line ) {
 
-foreach ($csvarray AS $value) {
-    echo $value."<br>"; 
+	$row = array();
+
+	foreach ( str_getcsv( $line ) as $key => $field )
+		$row[ $headers[ $key ] ] = $field;
+
+	$row = array_filter( $row );
+
+	$data[] = $row;
+
 }
+
+
+print_r($data);
 
 ?>
