@@ -10,7 +10,7 @@ $dom = new DOMDocument();
 $dom->loadHTML($html);
 
 $xpath = new DOMXPath($dom);
-$divContent = $xpath->query('//div[class="export"]');
+$divContent = $xpath->query('//meta[property="pageId"]');
 
 echo $divContent;
 print_r($divContent);
