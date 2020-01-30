@@ -3,8 +3,8 @@
 $input = "https://www.imdb.com/user/ur4517943/watchlist?ref_=uspf_ci";
 $pos = strpos($input, "ur");
 $substr = substr($input, $pos+2);
-$arr = str_split($substr, 20);
-
+$arr = str_split($substr);
+print_r($arr);
 $usernumbers = array("u", "r");
 foreach ($arr AS $char) {
     if (is_int($char)) {
