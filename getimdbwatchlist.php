@@ -11,9 +11,8 @@ $array = explode('"', $exploded[1]);
 
 $url2 = "https://www.imdb.com/list/".$array[0]."/export";
 
-echo "<h1>".$url2."</h1>";
-print_r($exploded);
+$csv = file_get_contents($url2);
 
-print_r(file_get_contents($url2));
+print_r($csv);
 
 ?>
