@@ -7,7 +7,7 @@ $arr = str_split($substr);
 print_r($arr);
 $usernumbers = array("u", "r");
 foreach ($arr AS $char) {
-    if (is_int($char)) {
+    if ($char >= 0) {
         $usernumbers[] = $char;
     } else {
         break;
