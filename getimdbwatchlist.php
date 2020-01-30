@@ -10,9 +10,17 @@ $metatags = get_meta_tags($url);
 
 $doc = new DOMDocument();
 @$doc->loadHTML($html);
-$nodes = $doc->getElementsByTagName('meta');
+
+$searchNodes = $doc->getElementsByTagName( "meta" );
+
+foreach( $searchNodes as $searchNode )
+{
+    $valueID = $searchNode->getAttribute('pageId');
+    print_r($searchNode);
+
+}
 var_dump($metatags);
-var_dump($nodes);
+var_dump($valueID);
 
 
 ?>
