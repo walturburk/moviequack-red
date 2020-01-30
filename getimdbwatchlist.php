@@ -1,8 +1,23 @@
 <?php
 
-//echo phpinfo();
+$input = "https://www.imdb.com/user/ur4517943/watchlist?ref_=uspf_ci";
+$pos = strpos($input, "ur");
+$substr = substr($input, $pos+2);
+$arr = str_split($substr, 20);
 
-$url = "https://www.imdb.com/user/ur4517943/watchlist";
+$usernumbers = array("u", "r");
+foreach ($arr AS $char) {
+    if (is_int($char)) {
+        $usernumbers[] = $char;
+    } else {
+        break;
+    }
+}
+
+$userid = implode("", $usernumbers);
+//$userid = "ur4517943";
+
+$url = "https://www.imdb.com/user/".$userid."/watchlist";
 
 $html = file_get_contents($url);
 
