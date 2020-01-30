@@ -52,7 +52,8 @@ foreach ( $lines as $line ) {
 //print_r($data);
 
 foreach ($data as $key => $val) {
-    addMovie($val["Const"]);
+    echo $val["Const"];
+    //addMovie($val["Const"]);
 }
 
 ?>

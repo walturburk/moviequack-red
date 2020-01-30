@@ -836,8 +836,10 @@ if ($isimdbid) {
 	echo $arr["movie_results"]["id"];
 }
 
+
 		$url = "https://api.themoviedb.org/3/movie/".$id."?api_key=".$apikey;
 		$json = file_get_contents($url);
+		echo $url;
 		$movie = json_decode($json, true);
 		$movie = array_change_key_case($movie, CASE_LOWER);
 		$printablemovie = $movie;
