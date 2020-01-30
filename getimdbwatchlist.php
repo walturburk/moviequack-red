@@ -46,9 +46,11 @@ foreach ( $lines as $line ) {
 
 }
 
+print_r($data);
+
 foreach ($data as $key => $val) {
     if ($key == "Const") {
-        echo $val;
+        print_r($val);
         echo "<br>";
     }
 }
