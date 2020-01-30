@@ -18,6 +18,7 @@ $userid = implode("", $usernumbers);
 //$userid = "ur4517943";
 
 $url = "https://www.imdb.com/user/".$userid."/watchlist";
+echo "url:".$url;
 
 $html = file_get_contents($url);
 
