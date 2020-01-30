@@ -793,7 +793,7 @@ function addMovie($id) {
 
 	global $apikey;
 	$isimdbid = false;
-	if (strpos($id, 'tt') !== false) {
+	if (strpos($id, 'tt')) {
 		$isimdbid = true;
 		$sql = "SELECT * FROM  `movie` WHERE  `imdbid` =  '".$id."'";
 	} else {
@@ -830,7 +830,10 @@ if ($err) {
 if ($isimdbid) {
 	$url = "https://api.themoviedb.org/3/find/".$id."?api_key=".$apikey."&language=en-US&external_source=imdb_id";
 	$json = file_get_contents($url);
-	$id = json_decode($json, true)["movie_results"]["id"];
+	$arr = json_decode($json, true);
+	echo $url;
+	print_r($arr);
+	echo $arr["movie_results"]["id"];
 }
 
 		$url = "https://api.themoviedb.org/3/movie/".$id."?api_key=".$apikey;
