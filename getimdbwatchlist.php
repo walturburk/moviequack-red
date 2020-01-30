@@ -1,5 +1,8 @@
 <?php
 
+include("db_functions.php");
+include("functions.php");
+
 $input = "https://www.imdb.com/user/ur4517943/watchlist?ref_=uspf_ci";
 $pos = strpos($input, "ur"); //get pos of imdb username prefix
 $substr = substr($input, $pos+2); //get all chars after username prefix "ur"
