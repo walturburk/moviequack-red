@@ -2,6 +2,7 @@
 
 
 $searchfieldholderclass = "";
+$q = 0;
 
 autoLogin();
 //getDontTag();
@@ -831,9 +832,10 @@ if ($isimdbid) {
 	$url = "https://api.themoviedb.org/3/find/".$id."?api_key=".$apikey."&language=en-US&external_source=imdb_id";
 	$json = file_get_contents($url);
 	$arr = json_decode($json, true);
-	echo $url;
-	print_r($arr);
-	echo $arr["movie_results"]["id"];
+	//echo $url;
+	//print_r($arr);
+	$id = $arr["movie_results"]["id"];
+	addTag($id, "bookmark");
 }
 
 
