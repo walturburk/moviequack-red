@@ -1,13 +1,14 @@
 <script>
 function getImdbWatchlist(imdbusr) {
-
+  var imdbusr = imdbusr.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+  console.log("imdb"+imdbusr);
   var page = "/getimdbwatchlist.php";
   var obj = {
     "imdbusr": imdbusr
   };
 
   postAjaxPhp(obj, page);
-
+  
   window.location.href = "/buffet";
 }
 </script>
