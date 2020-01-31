@@ -2,7 +2,7 @@
 function getImdbWatchlist(e) {
   e.preventDefault();
   
-  var imdbusr = jQuery(this).find('imdbusr').val().toLowerCase().replace(/[^a-z0-9]+/g,'-');
+  var imdbusr = jQuery("#imdbusr").val().toLowerCase().replace(/[^a-z0-9]+/g,'-');
   console.log("imdb"+imdbusr);
   var page = "/getimdbwatchlist.php";
   var obj = {
