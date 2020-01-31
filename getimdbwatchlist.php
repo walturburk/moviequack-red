@@ -3,7 +3,8 @@
 include("db_functions.php");
 include("functions.php");
 
-$input = "https://www.imdb.com/user/ur4517943/watchlist?ref_=uspf_ci";
+//$input = "https://www.imdb.com/user/ur4517943/watchlist?ref_=uspf_ci";
+$input = $_REQUEST["imdbusr"];
 $pos = strpos($input, "ur"); //get pos of imdb username prefix
 $substr = substr($input, $pos+2); //get all chars after username prefix "ur"
 $arr = str_split($substr); //split those into and array of characters
@@ -30,30 +31,44 @@ $listid = $array[0];
 
 $url2 = "https://www.imdb.com/list/".$listid."/export"; //this is the url for csv export of imdb lists by listid
 
-$csv = file_get_contents($url2); //get file contents of the csv
 
+if ($listid) {
 
-$lines = explode( "\n", $csv );
-$headers = str_getcsv( array_shift( $lines ) );
-$data = array();
-foreach ( $lines as $line ) {
+    $csv = file_get_contents($url2); //get file contents of the csv
 
-	$row = array();
+    $lines = explode( "\n", $csv ); //split csv by linebreaks
+    $headers = str_getcsv( array_shift( $lines ) ); //remove and store first line that contains header names for the data in new header-array
+    $data = array();
+    foreach ( $lines as $line ) {
 
-	foreach ( str_getcsv( $line ) as $key => $field )
-		$row[ $headers[ $key ] ] = $field;
+        $row = array();
 
-	$row = array_filter( $row );
+        foreach ( str_getcsv( $line ) as $key => $field ) 
+            $row[ $headers[ $key ] ] = $field; //use header-array values as keys for the rest of the data in csv
 
-	$data[] = $row;
+        $row = array_filter( $row );
 
+        $data[] = $row;
+
+    }
+
+    if (!empty($data)) {
+
+        foreach ($data as $key => $val) {
+            echo $val["Const"];
+            addMovie($val["Const"]);
+        }
+
+    } else {
+        echo "List is empty";
+    }
+
+} else {
+    echo "Error<br>";
+    echo "user: ".$url;
+    echo "listid: ".$url2;
 }
 
-//print_r($data);
 
-foreach ($data as $key => $val) {
-    echo $val["Const"];
-    addMovie($val["Const"]);
-}
 
 ?>

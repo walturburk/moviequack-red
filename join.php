@@ -42,7 +42,7 @@ if (!isset($_REQUEST["username"])) {
 
 	saveAutoLogin();
 
-	header('Location: /enteremail');
+	header('Location: /enterimdbusr');
 }
 
 if ($success != true) {

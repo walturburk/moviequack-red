@@ -29,6 +29,7 @@ RewriteRule ^logout logout.php
 RewriteRule ^join join.php
 RewriteRule ^welcome welcome.php
 RewriteRule ^enteremail enteremail.php
+RewriteRule ^enterimdbusr enterimdbusr.php
 RewriteRule ^buffet buffet.php
 RewriteRule ^settings settings.php
 RewriteRule ^mymovies mymovies.php
