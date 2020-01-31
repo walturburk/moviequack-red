@@ -12,7 +12,9 @@ $return = db_select("SELECT * FROM `user` WHERE `username` = '$username' LIMIT 1
 
 $output .= "<div class='content narrow white centeralign'>";
 
-
+$invres = useInviteCode($_REQUEST["invid"], $_REQUEST["username"]);
+echo "invres";
+print_r($invres);
 
 if (!isset($_REQUEST["username"])) {
 
@@ -42,7 +44,7 @@ if (!isset($_REQUEST["username"])) {
 
 	saveAutoLogin();
 
-	header('Location: /enterimdbusr');
+	//header('Location: /enterimdbusr');
 }
 
 if ($success != true) {

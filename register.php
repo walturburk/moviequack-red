@@ -16,9 +16,7 @@ $output .= '<div class="padding"></div><div class="fullheight centeralign">';
 
 $output .= "<div class='fullheight white paddingtop'>";
 
-$invres = useInviteCode($_REQUEST["invid"], $_REQUEST["username"]);
-echo "invres";
-print_r($invres);
+
 
 if (!isset($_REQUEST["username"])) {
 
@@ -35,7 +33,6 @@ if (!isset($_REQUEST["username"])) {
 } else if (!(preg_match('/[^a-zA-Z0-9_]/', $rawusername) == 0)) {
 	$output .= "Invalid characters in username!";
 
-} else if (!$invres) {
 } else {
 
 	
@@ -65,7 +62,7 @@ if (!isset($_REQUEST["username"])) {
 	$output .= "<h2>Welcome to moviequack, <span class='red'>$username</span>!</h2>";
 
 	$newURL = baseurl."/buffet.php";
-	//header('Location: '.$newURL);
+	header('Location: '.$newURL);
 
 }
 
