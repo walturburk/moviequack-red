@@ -498,7 +498,7 @@ WHERE movie = '".$movie."'";
 function getMovieRatings() {
 	$sql = "SELECT movie, 
 	SUM(rating) / COUNT(rating) AS overall 
-	FROM mqold.ratemovie
+	FROM ".dbname.".ratemovie
 	GROUP BY movie";
 
 	$movies = db_select($sql);
@@ -507,7 +507,7 @@ function getMovieRatings() {
 
 function getWeightedMovieRatings($user) {
 	$sql = "SELECT movie, SUM((tb.corr*rm.rating)) / COUNT(rm.rating) AS overall 
-	FROM mqold.ratemovie as rm 
+	FROM ".dbname.".ratemovie as rm 
 	LEFT JOIN 
 	(SELECT corr, ((10+count)/10)*corr AS weight, user2 
 	FROM
@@ -520,8 +520,8 @@ function getWeightedMovieRatings($user) {
 	FROM
 	(
 	SELECT t.rating as x, s.rating as y, t.user AS user1, s.user AS user2 
-	FROM mqold.ratemovie t
-	INNER JOIN mqold.ratemovie s
+	FROM ".dbname.".ratemovie t
+	INNER JOIN ".dbname.".ratemovie s
 	ON (t.movie = s.movie)
 	WHERE (t.user = '".$user."') AND t.user != s.user) AS xandy
 	GROUP BY user2
@@ -541,7 +541,7 @@ function getTopSuggestedMovies($user) {
 	$sql = "SELECT movieinfo.*, overall, (overall+COALESCE(weighted_overall, 0)) as total_overall 
 	FROM 
 	(SELECT movie AS movieid, rm.rating, SUM(rm.rating)/COUNT(rm.rating) as overall, SUM((tb.corr*(rm.rating-6))) / COUNT(rm.rating) AS weighted_overall
-	FROM mqold.ratemovie as rm 
+	FROM ".dbname.".ratemovie as rm 
 	LEFT JOIN 
 	(SELECT corr, user2 
 	FROM
@@ -554,8 +554,8 @@ function getTopSuggestedMovies($user) {
 	FROM
 	(
 	SELECT t.rating as x, s.rating as y, t.user AS user1, s.user AS user2 
-	FROM mqold.ratemovie t
-	INNER JOIN mqold.ratemovie s
+	FROM ".dbname.".ratemovie t
+	INNER JOIN ".dbname.".ratemovie s
 	ON (t.movie = s.movie)
 	WHERE (t.user = '".$user."') AND t.user != s.user
 	) 
@@ -569,10 +569,10 @@ function getTopSuggestedMovies($user) {
 	ON tb.user2 = rm.user
 	GROUP BY movie) AS mega_table
 	LEFT JOIN (
-	SELECT * FROM mqold.ratemovie WHERE user = '".$user."' 
+	SELECT * FROM ".dbname.".ratemovie WHERE user = '".$user."' 
 	) AS user1rate 
 	ON movieid = user1rate.movie 
-	LEFT JOIN mqold.movie as movieinfo
+	LEFT JOIN ".dbname.".movie as movieinfo
 ON movieinfo.id = movieid 
 	WHERE user IS NULL 
 	ORDER BY total_overall DESC";
@@ -1343,8 +1343,8 @@ function saveStreams($movieid, $title, $year) {
 function getStreams($movieid) {
 
 	$streams = db_select("SELECT *
-FROM  mqold.`stream`
-LEFT JOIN mqold.provider
+FROM  ".dbname.".`stream`
+LEFT JOIN ".dbname.".provider
 ON stream.provider = provider.id
 WHERE stream.movieid = '$movieid'
 GROUP BY short

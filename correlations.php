@@ -8,7 +8,7 @@ $foundation = new Template("templates/foundation.html");
 
 function getCorrelations($user, $everyone = false) {
     if (!$everyone) {
-        $rightjoin = 'RIGHT JOIN mqold.follow as f 
+        $rightjoin = 'RIGHT JOIN '.dbname.'.follow as f 
                     ON (t.user = f.follower AND s.user = f.follows)';
     } else {
         $rightjoin = "";
@@ -26,8 +26,8 @@ function getCorrelations($user, $everyone = false) {
     FROM
     (
     SELECT t.rating as x, s.rating as y, t.user AS user1, s.user AS user2 
-    FROM mqold.ratemovie t
-    INNER JOIN mqold.ratemovie s
+    FROM '.dbname.'.ratemovie t
+    INNER JOIN '.dbname.'.ratemovie s
      ON (t.movie = s.movie)
       '.$rightjoin.' 
      WHERE (t.user = "'.$user.'") AND t.user != s.user) AS xandy
