@@ -15,10 +15,14 @@ function getImdbWatchlist(e) {
 }
 </script>
 
-<form onsubmit="return getImdbWatchlist(event)" action="" method="post">
-  <input value="" class="input marginbottom" type='text' placeholder="imdb url" name='imdbusr' id='imdbusr' maxlength="200"/>
-  <input class="button {registerbtnclass}" id="submit" name="submit" type="submit" value="import watchlist"/>
-</form>
-<span id="textmessage"></span>
+<div class="content">
 
-<a class="button inblock margin" href="/buffet">Skip</a>
+  <form onsubmit="return getImdbWatchlist(event)" action="" method="post">
+    <input value="" class="input marginbottom" type='text' placeholder="imdb url" name='imdbusr' id='imdbusr' maxlength="200"/>
+    <input class="button {registerbtnclass}" id="submit" name="submit" type="submit" value="import watchlist"/>
+  </form>
+  <span id="textmessage"></span>
+
+  <a class="button inblock margin" href="/buffet">Skip</a>
+
+</div>
