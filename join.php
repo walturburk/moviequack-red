@@ -14,7 +14,7 @@ $output .= "<div class='content narrow white centeralign'>";
 
 $invid = "";
 
-if (!isset($_REQUEST["username"])) {
+if (isset($_REQUEST["username"])) {
 	$invid = $_REQUEST["inv"];
 	$invres = useInviteCode($invid, $_REQUEST["username"]);
 	echo "invres";
