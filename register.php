@@ -65,7 +65,7 @@ if (!isset($_REQUEST["username"])) {
 	$output .= "<h2>Welcome to moviequack, <span class='red'>$username</span>!</h2>";
 
 	$newURL = baseurl."/buffet.php";
-	header('Location: '.$newURL);
+	//header('Location: '.$newURL);
 
 }
 
