@@ -1,5 +1,6 @@
 <script>
 function getImdbWatchlist(imdbusr) {
+  
   var imdbusr = imdbusr.toLowerCase().replace(/[^a-z0-9]+/g,'-');
   console.log("imdb"+imdbusr);
   var page = "/getimdbwatchlist.php";
@@ -13,7 +14,7 @@ function getImdbWatchlist(imdbusr) {
 }
 </script>
 
-<form onsubmit="getImdbWatchlist(jQuery(this).find('imdbusr').val())" action="" method="post">
+<form onsubmit="preventDefault();getImdbWatchlist(jQuery(this).find('imdbusr').val())" action="" method="post">
   <input value="" class="input marginbottom" type='text' placeholder="imdb url" name='imdbusr' id='imdbusr' maxlength="200"/>
   <input class="button {registerbtnclass}" id="submit" name="submit" type="submit" value="import watchlist"/>
 </form>
