@@ -1,8 +1,21 @@
-<script>alert("test");</script>
+<script>
+function getImdbWatchlist(imdbusr) {
 
-<form action="/enterimdbusr" method="post">
-  <input value="" class="input marginbottom" type='text' placeholder="imdb url" name='email' maxlength="200"/><br>
-  <input class="button {registerbtnclass}" id="submit" name="submit" type="submit" value="get movies"/>
+  var page = "/getimdbwatchlist.php";
+  var obj = {
+    "imdbusr": imdbusr
+  };
+
+  postAjaxPhp(obj, page);
+
+  window.location.href = "/buffet";
+}
+</script>
+
+<form onsubmit="getImdbWatchlist(jQuery(this).find('imdbusr').val())" action="" method="post">
+  <input value="" class="input marginbottom" type='text' placeholder="imdb url" name='imdbusr' id='imdbusr' maxlength="200"/>
+  <input class="button {registerbtnclass}" id="submit" name="submit" type="submit" value="import watchlist"/>
 </form>
+<span id="textmessage"></span>
 
-<a class="button inblock margin" href="/buffet">Next</a>
+<a class="button inblock margin" href="/buffet">Skip</a>
