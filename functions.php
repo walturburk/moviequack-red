@@ -121,7 +121,7 @@ function newId($prefix) {
 
 function createInviteCode($owner) {
 	$id = newId("i");
-	$query = "INSERT INTO `invite` (`id`, `owner`, `consumedby`, `consumedat`) VALUES ('".$id."', '".$owner."', '', '');
+	$query = "INSERT INTO `invite` (`id`, `owner`, `consumedby`, `consumedat`) VALUES ('".$id."', '".$owner."', '', 0);
 	";
 	return db_query($query);
 }
