@@ -110,11 +110,31 @@ function newId($prefix) {
 			$idfromdb = db_select("SELECT id FROM `user` WHERE username = '$id'");
 		} else if ($prefix == "p") {
 			$idfromdb = db_select("SELECT id FROM `post` WHERE username = '$id'");
+		} else if ($prefix == "i") {
+			$idfromdb = db_select("SELECT id FROM `invite` WHERE id = '$id'");
 		}
 	} while ($id == $idfromdb[0]["id"]);
 
 	return $id;
 }
+
+
+function createInviteCode($owner) {
+	$id = newId("i");
+	$query = "INSERT INTO `invite` (`id`, `owner`, `consumedby`, `consumedat`) VALUES ('".$id."', '".$owner."', '', '".time()."');
+	";
+	return db_query($query);
+}
+
+createInviteCode($_SESSION["user"]);
+
+function useInviteCode($id, $consumer) {
+	$query = "UPDATE `invite` SET `consumedby` = '".$consumer."', `consumedat` = '".time()."' WHERE `invite`.`".$id.""` = 'asdasda';";
+	$ret = db_query($query);
+	echo "consumed";
+	return $ret;
+}
+
 
 function getSession($user, $time) {
 
