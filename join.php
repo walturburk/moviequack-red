@@ -17,8 +17,6 @@ $invid = "";
 if (isset($_REQUEST["username"])) {
 	$invid = $_REQUEST["inv"];
 	$invres = useInviteCode($invid, $_REQUEST["username"]);
-	echo "invres";
-	print_r($invres);
 }
 
 if (!isset($_REQUEST["username"])) {
@@ -50,7 +48,7 @@ if (!isset($_REQUEST["username"])) {
 
 	saveAutoLogin();
 
-	//header('Location: /enterimdbusr');
+	header('Location: /enterimdbusr');
 }
 
 if ($success != true) {
