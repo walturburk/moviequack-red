@@ -129,10 +129,15 @@ function createInviteCode($owner) {
 createInviteCode($_SESSION["user"]);
 
 function useInviteCode($id, $consumer) {
-	$query = "UPDATE `invite` SET `consumedby` = '".$consumer."', `consumedat` = '".time()."' WHERE `invite`.`id` = '".$id."';";
-	$ret = db_query($query);
-	echo "consumed";
-	return $ret;
+	$inv = db_select("SELECT id FROM `invite` WHERE `invite`.`id` = '".$id."' ");
+	if ($inv) {
+		$query = "UPDATE `invite` SET `consumedby` = '".$consumer."', `consumedat` = '".time()."' WHERE `invite`.`id` = '".$id."';";
+		$ret = db_query($query);
+		return $ret;
+	} else {
+		return false;
+	}
+	
 }
 
 
