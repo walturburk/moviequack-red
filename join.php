@@ -12,9 +12,14 @@ $return = db_select("SELECT * FROM `user` WHERE `username` = '$username' LIMIT 1
 
 $output .= "<div class='content narrow white centeralign'>";
 
-$invres = useInviteCode($_REQUEST["invid"], $_REQUEST["username"]);
-echo "invres";
-print_r($invres);
+$invid = "";
+
+if (!isset($_REQUEST["username"])) {
+	$invid = $_REQUEST["inv"];
+	$invres = useInviteCode($invid, $_REQUEST["username"]);
+	echo "invres";
+	print_r($invres);
+}
 
 if (!isset($_REQUEST["username"])) {
 
