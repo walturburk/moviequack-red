@@ -28,7 +28,8 @@ if (!isset($_REQUEST["username"])) {
 	$output .= "This username is taken!";
 } else if (!(preg_match('/[^a-zA-Z0-9_]/', $rawusername) == 0)) {
 	$output .= "Invalid characters in username!";
-
+} else if (!$invres) {
+	$output .= "Invalid invite code";
 } else {
 	$success = true;
 	$password = createHash($password);
