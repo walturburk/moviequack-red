@@ -28,6 +28,7 @@ RewriteRule ^register join.php
 RewriteRule ^logout logout.php
 RewriteRule ^join join.php
 RewriteRule ^welcome welcome.php
+RewriteRule ^getimdbwatchlist getimdbwatchlist.php
 RewriteRule ^enteremail enteremail.php
 RewriteRule ^enterimdbusr enterimdbusr.php
 RewriteRule ^buffet buffet.php
