@@ -48,7 +48,7 @@ if (!isset($_REQUEST["username"])) {
 
 	saveAutoLogin();
 
-	header('Location: /enterimdbusr');
+	header('Location: /buffet');
 }
 
 if ($success != true) {
