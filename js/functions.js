@@ -85,7 +85,7 @@ jQuery(document).on("click", ".replybutton", function() {
 	console.log(expand);
 });
 
-function postAjaxPhp(message, page, callback) {
+function postAjaxPhp(message, page, callback = function(x) {}) {
 
 	page = typeof page !== 'undefined' ? page : "/ajax.php";
 
