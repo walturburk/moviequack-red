@@ -11,10 +11,10 @@ $arr = str_split($substr); //split those into and array of characters
 
 $usernumbers = array("u", "r"); //declare array that starts with imdbs standard username prefix
 foreach ($arr AS $char) { //loop through those characters
-    if ($char >= 0) { //if it is a number
+    if ($char >= 0 && $char <= 9) { //if it is a number
         $usernumbers[] = $char; //put it in the array
     } else {
-        break; //if encounter not-a-number, stop looping
+        $arr = array();
     }
 }
 
