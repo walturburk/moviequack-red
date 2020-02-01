@@ -9,6 +9,7 @@ $foundation = new Template("templates/foundation.html");
 
 $user = $_SESSION["user"];
 $inviteurl = getInviteCode($user);
+$officialurl = officialurl;
 
 $content = $t->output();
 $body = $layout->output();

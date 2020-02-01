@@ -13,7 +13,9 @@ $config = getConfig();
 define("dbname", $config["dbname"]);
 $baseurl = $config["baseurl"];
 define("baseurl", $baseurl);
+define("officialurl", $config["officialurl"]);
 $locale = "en_SE";
+
 date_default_timezone_set('Europe/Stockholm');
 
 error_reporting(E_ALL & ~E_NOTICE);
