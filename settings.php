@@ -8,6 +8,7 @@ $layout = new Template("templates/layout.html");
 $foundation = new Template("templates/foundation.html");
 
 $user = $_SESSION["user"];
+$inviteurl = getInviteCode($user);
 
 $content = $t->output();
 $body = $layout->output();
