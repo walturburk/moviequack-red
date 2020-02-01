@@ -15,6 +15,7 @@ foreach ($arr AS $char) { //loop through those characters
         $usernumbers[] = $char; //put it in the array
     } else {
         $arr = array();
+        break;
     }
 }
 
