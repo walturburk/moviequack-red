@@ -41,7 +41,9 @@ $output .= "</div>";
 $content = $output;
 
 $foundation = new Template("templates/foundation.html");
-$body = $output;
+$layout = new Template("templates/layout.html");
+
+$body = $layout->output();
 echo $foundation->output();
 
 ?>
