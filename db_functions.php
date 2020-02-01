@@ -80,6 +80,9 @@ function getConfig() {
 
   if (isDev()) {
     $config = parse_ini_file("config-dev.ini");
+    if (!$config) {
+      $config = parse_ini_file("../../config.ini");
+    }
   } else {
     $config = parse_ini_file("../../config-live.ini");
     $config["baseurl"] = "http://" . $_SERVER['SERVER_NAME'] ;
