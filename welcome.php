@@ -3,6 +3,8 @@
 include("db_functions.php");
 include("functions.php");
 
+$inv = "";
+
 $welcome = new Template("templates/welcome.html");
 
 $foundation = new Template("templates/foundation.html");

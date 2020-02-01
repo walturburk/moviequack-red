@@ -21,7 +21,7 @@ if ($return[0]["email"] == $email && isset($_REQUEST["email"])) {
 	db_query($sql);
 
 
-	header('Location: /moveactivity.php');
+	//header('Location: /moveactivity.php');
 
 }
 

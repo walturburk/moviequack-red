@@ -94,7 +94,7 @@ function postAjaxPhp(message, page, callback) {
     type: "POST",
     data: message,
     success: function(result){
-      //callback(result);
+      callback(result);
     },
     error: function(){
         console.log('error');

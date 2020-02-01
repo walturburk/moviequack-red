@@ -9,9 +9,12 @@ function getImdbWatchlist(e) {
     "imdbusr": imdbusr
   };
 
-  postAjaxPhp(obj, page);
+  postAjaxPhp(obj, page, function() {
+    console.log("callbacked imdb");
+    jQuery("#textmessage").text("Watchlist successfully imported");
+  });
   
-  window.location.href = "/buffet";
+  jQuery("#textmessage").text("Importing movies...");
 }
 </script>
 
@@ -30,7 +33,8 @@ function getImdbWatchlist(e) {
   </form>
   <span id="textmessage"></span>
 
-  <a class="button inblock margin" href="/buffet">Skip</a>
+  <a class="inblock margin smalltext" href="/settings">Back</a>
+
 
 </div>
 </div>
