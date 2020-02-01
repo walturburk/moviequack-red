@@ -128,7 +128,7 @@ function createInviteCode($owner) {
 
 function getInviteCode($user) {
 	$inv = db_select("SELECT id FROM `invite` WHERE `invite`.`owner` = '".$user."' AND consumedby = '' ");
-	return $inv;
+	return $inv[0]["id"];
 }
 
 function useInviteCode($id, $consumer) {
