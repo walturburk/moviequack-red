@@ -126,10 +126,8 @@ function createInviteCode($owner) {
 	return db_query($query);
 }
 
-createInviteCode($_SESSION["user"]);
-
 function useInviteCode($id, $consumer) {
-	$inv = db_select("SELECT id FROM `invite` WHERE `invite`.`id` = '".$id."' ");
+	$inv = db_select("SELECT id FROM `invite` WHERE `invite`.`id` = '".$id."' AND consumedby = '' ");
 	if ($inv) {
 		$query = "UPDATE `invite` SET `consumedby` = '".$consumer."', `consumedat` = '".time()."' WHERE `invite`.`id` = '".$id."';";
 		$ret = db_query($query);
@@ -504,6 +502,7 @@ function rateMovie($movie, $rating) {
 ON DUPLICATE KEY UPDATE
 		  timestamp=".$time.", rating=".$rating."
 	";
+	createInviteCode($_SESSION["user"]);
 	}
 
 	return db_query($query);
