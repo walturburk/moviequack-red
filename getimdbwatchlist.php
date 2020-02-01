@@ -65,7 +65,7 @@ if ($listid) {
 
 } else {
     echo "Error<br>";
-    echo "user: ".$url;
+    echo "user: ".$userid;
     echo "listid: ".$url2;
 }
 
