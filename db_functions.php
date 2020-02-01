@@ -80,6 +80,7 @@ function getConfig() {
 
   if (isDev()) {
     $config = parse_ini_file("config-dev.ini");
+    $config = parse_ini_file("../../config.ini");
     if (!$config) {
       $config = parse_ini_file("../../config.ini");
     }
