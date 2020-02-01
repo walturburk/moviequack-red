@@ -25,15 +25,15 @@ function getImdbWatchlist(e) {
 <div class="content">
 
   <h1>Get watchlist from IMDb (optional)</h1>
-  <p>Enter a link to your IMDb-watchlist</p>
+  <p class="padding">Enter a link to your IMDb-watchlist</p>
 
-  <form onsubmit="return getImdbWatchlist(event)" action="" method="post">
+  <form class="padding" onsubmit="return getImdbWatchlist(event)" action="" method="post">
     <input value="" class="input marginbottom" type='text' placeholder="imdb.com/user/ur1234567/watchlist" name='imdbusr' id='imdbusr' maxlength="200"/>
     <input class="button {registerbtnclass}" id="submit" name="submit" type="submit" value="import watchlist"/>
   </form>
   <span id="textmessage"></span>
 
-  <a class="inblock margin smalltext" href="/settings">Back</a>
+  <a class="margin smalltext" href="/settings">Back</a>
 
 
 </div>

@@ -1,5 +1,5 @@
 html {
-	background-color:#5a1a2a;
+	background-color:#4f1725;
 	color:#fff;
 }
 body {
@@ -451,16 +451,16 @@ footer.footer .third {
 	display:none;
 }
 .stickyheader {
-	padding: 3px;
-	position: sticky;
-	top: -1px;
-	background: #5a1a2a;
-	color:#00ffc6;
-	font-weight:bold;
-	max-width:680px;
-	margin:auto;
-	text-align:center;
-	z-index:1;
+    padding: 0.5rem;
+    position: sticky;
+    top: -1px;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    font-weight: bold;
+    max-width: 680px;
+    margin: auto;
+    text-align: center;
+    z-index: 1;
 }
 .poster {
 	display:inline-block;
