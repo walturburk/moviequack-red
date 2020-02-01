@@ -451,11 +451,11 @@ footer.footer .third {
 	display:none;
 }
 .stickyheader {
-    padding: 0.5rem;
+    padding: 0rem;
     position: sticky;
     top: -1px;
-    background: rgba(0,0,0,0.8);
-    color: white;
+    background: #4f1725;
+    color: rgba(255,255,255,0.5);
     font-weight: bold;
     max-width: 680px;
     margin: auto;

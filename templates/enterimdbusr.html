@@ -9,9 +9,9 @@ function getImdbWatchlist(e) {
     "imdbusr": imdbusr
   };
 
-  postAjaxPhp(obj, page, function() {
+  postAjaxPhp(obj, page, function(res) {
     console.log("callbacked imdb");
-    jQuery("#textmessage").text("Watchlist successfully imported");
+    jQuery("#textmessage").text("Watchlist successfully imported "+res);
   });
   
   jQuery("#textmessage").text("Importing movies...");
@@ -24,7 +24,7 @@ function getImdbWatchlist(e) {
 
 <div class="content">
 
-  <h1>Get watchlist from IMDb (optional)</h1>
+  <h1>Get watchlist from IMDb</h1>
   <p class="padding">Enter a link to your IMDb-watchlist</p>
 
   <form class="padding" onsubmit="return getImdbWatchlist(event)" action="" method="post">
