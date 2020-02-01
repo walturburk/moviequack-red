@@ -451,7 +451,7 @@ footer.footer .third {
 	display:none;
 }
 .stickyheader {
-    padding: 0rem;
+    padding: 4px;
     position: sticky;
     top: -1px;
     background: #4f1725;

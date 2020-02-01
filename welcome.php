@@ -3,7 +3,7 @@
 include("db_functions.php");
 include("functions.php");
 
-$inv = "";
+$invid = "";
 
 $welcome = new Template("templates/welcome.html");
 
