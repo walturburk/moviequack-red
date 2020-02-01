@@ -8,8 +8,8 @@ autoLogin();
 //getDontTag();
 if ($_SESSION["loggedin"]) {
 } else if (strpos($_SERVER['REQUEST_URI'], "welcome") > 0) {
-} else if (strpos($_SERVER['REQUEST_URI'], "join") > 0) {
 } else if (strpos($_SERVER['REQUEST_URI'], "login") > 0) {
+} else if (strpos($_SERVER['REQUEST_URI'], "join") > 0 && isset($_REQUEST["inv"])) {
 } else {
 	header("Location: /welcome");
 }
