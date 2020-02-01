@@ -13,9 +13,9 @@ $return = db_select("SELECT * FROM `user` WHERE `username` = '$username' LIMIT 1
 $output .= "<div class='content narrow white centeralign'>";
 
 $invid = "";
+$invid = $_REQUEST["inv"];
 
 if (isset($_REQUEST["username"])) {
-	$invid = $_REQUEST["inv"];
 	$invres = useInviteCode($invid, $_REQUEST["username"]);
 }
 
