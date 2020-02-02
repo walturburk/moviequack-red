@@ -7,21 +7,28 @@
     bottom:0; 
     right:0; 
     padding:1rem;
-    margin:1rem; 
     background-color:#5a1a2a;
 }
 .buffet__bottom .buffet__text {
     font-size:30px;
+    padding:16px;
 }
 .buffet__bottom .buffet__text i.material-icons {
     font-size:30px;
 }
+.buffet__grid {
+    
+}
 @media screen and (max-width: 769px) {
     .buffet__bottom .buffet__text {
         font-size:16px;
+        padding:6px;
     }
     .buffet__bottom .buffet__text i.material-icons {
         font-size:16px;
+    }
+    .buffet__grid {
+        grid-template-columns: auto;
     }
 }
 </style>
@@ -31,7 +38,7 @@
 
 </div>
 
-<div style="background-color:black" class="grid">
+<div style="background-color:black" class="grid buffet__grid">
 {squares}
 </div>
 
