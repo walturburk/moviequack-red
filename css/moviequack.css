@@ -1,5 +1,5 @@
 html {
-	background-color:mqbackgroundcolor;
+	background-color:#222831;
 	color:#fff;
 }
 body {
@@ -13,7 +13,7 @@ a:visited {
 
 }
 a:hover {
-	color:mqaccentcolor;
+	color:#ec625f;
 }
 img {
 
@@ -94,7 +94,7 @@ table td.fixedcell {
 	float:left;
 }
 .feeditemcell.feedicon {
-	color:mqaccentcolor;
+	color:#ec625f;
 	font-size:2rem;
 }
 .feeditemcell.feedcontent {
@@ -242,7 +242,7 @@ li.sortableli:hover .xinfo {
 
 .tag.activebtn {
 	color:#fff;
-	background-color:mqprimarycolor;
+	background-color:#262D38;
 }
 .newtagbtn {
 	border: 0;
@@ -294,17 +294,17 @@ li.sortableli:hover .xinfo {
 	color:white;
 }
 .button.greybtn.activebtn {
-	border-color:mqprimarycolor;
-	background-color:mqprimarycolor;
+	border-color:#262D38;
+	background-color:#262D38;
 	color:white;
 }
 .button.redbtn {
-	border-color:mqprimarycolor;
-	color:mqprimarycolor;
+	border-color:#262D38;
+	color:#262D38;
 }
 .button.redbtn.activebtn {
-	border-color:mqprimarycolor;
-	background-color:mqprimarycolor;
+	border-color:#262D38;
+	background-color:#262D38;
 	color:white;
 }
 .button.whitebtn {
@@ -314,7 +314,7 @@ li.sortableli:hover .xinfo {
 .button.whitebtn.activebtn {
 	border-color:white;
 	background-color:white;
-	color:mqprimarycolor;
+	color:#262D38;
 }
 .button.addtolistbtn {
 	display:block;
@@ -335,7 +335,7 @@ li.sortableli:hover .xinfo {
 	vertical-align:top;
 }
 .smallbtn.activebtn, .qoptions .smallbtn.activebtn:hover {
-	color:mqaccentcolor;
+	color:#ec625f;
 }
 .btn {
 	cursor:pointer;
@@ -345,7 +345,7 @@ li.sortableli:hover .xinfo {
 	color:#353535;
 }
 .btn.activebtn {
-	color:mqprimarycolor;
+	color:#262D38;
 }
 .widebtn {
 	width:100%;
@@ -374,7 +374,7 @@ input.tagfilter {
 
 }
 input:checked + .filterbtn, .filterbtn.active {
-	border-bottom:3px solid mqaccentcolor;
+	border-bottom:3px solid #ec625f;
 
 	color:#fff;
 }
@@ -453,7 +453,7 @@ footer.footer .third {
     padding: 4px;
     position: sticky;
     top: -1px;
-    background: mqbackgroundcolor;
+    background: #222831;
     color: rgba(255,255,255,0.5);
     font-weight: bold;
     max-width: 680px;
@@ -468,11 +468,9 @@ footer.footer .third {
 	background: black;
 	box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
 	border-radius:1px;
-	filter:saturate(80%);
 	transition:.25s;
 }
 .poster:hover {
-	filter:saturate(120%);
 }
 .poster img {
 	max-height:100%;
@@ -488,10 +486,10 @@ header.movieheader .posterlarge {
 	color:#999;
 }
 .darkrating.ratemovie .votestar.myrating {
-	color:mqaccentcolor;
+	color:#ec625f;
 }
 .redrating.ratemovie .votestar.myrating {
-	color:mqaccentcolor;
+	color:#ec625f;
 }
 .ratemovie .votestar {
 	color:white;
@@ -529,10 +527,10 @@ header.movieheader .posterlarge {
 	background-color:#27ae60;
 }
 .movievote .smallbtn.activebtn.downvote {
-	background-color:mqprimarycolor;
+	background-color:#262D38;
 }
 .movievote .movievoteopt .button.activebtn {
-	color:mqprimarycolor;
+	color:#262D38;
 }
 .movieinfowindow .movievote .movievoteopt {
 	width:33%;
@@ -617,7 +615,7 @@ input.widemsgtext {
 input.widemsgsubmit {
 	font-size:24px;
 	padding:15px;
-	background:mqaccentcolor;
+	background:#ec625f;
 	color:white;
 	text-shadow:2px 2px 0 rgba(0,0,0,0.2);
 	border-radius:0;
@@ -629,7 +627,7 @@ input.widemsgsubmit {
 }
 input.widemsgsubmit:hover {
 	text-shadow:3px 3px 0 rgba(0,0,0,0.3);
-	background:mqaccenthovercolor;
+	background:#BC4D4B;
 }
 .qtoprow {
 	width:100%;
@@ -684,10 +682,8 @@ input.widemsgsubmit:hover {
 	width:100px;
 }
 .qmovielink {
-	border-radius:50%;
 	transition:.35s;
 	overflow:hidden;
-	height:92px;
 	width:92px;
 	display:inline-block;
 	position:relative;
@@ -796,7 +792,7 @@ nav#mainnav {
 	width:100%;
 	text-align:center;
 	margin:auto;
-	background-color:mqprimarycolor;
+	background-color:#262D38;
 	z-index:11;
 	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
@@ -807,12 +803,12 @@ nav#mainnav ul li {
 nav#mainnav ul li a {
 	display:inline-block;
 	padding:0.7rem;
-	color:#fff;
+	color:rgba(255,255,255,0.7);
 	width:100%;
 }
 nav#mainnav ul li a:hover {
-	color:mqprimarycolor;
-	background-color:white;
+	color:white;
+	background-color:rgba(0,0,0,0.1);
 }
 nav#mainnav ul li i.material-icons {
 	font-size:1.5em;
@@ -865,7 +861,7 @@ i.material-icons.inlined {
 }
 .toprowbutton:hover {
 	background-color:#fff;
-	color:mqprimarycolor;
+	color:#262D38;
 }
 .mainlogo {
 	display:inline-block;
@@ -1012,7 +1008,7 @@ i.material-icons.inlined {
 {
 	position: relative;
 	max-width:100%;
-	background: mqprimarycolor;
+	background: #262D38;
 	color:black;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
@@ -1029,7 +1025,7 @@ i.material-icons.inlined {
 	position: absolute;
 	border-style: solid;
 	border-width: 12px 15px 12px 0;
-	border-color: transparent mqprimarycolor;
+	border-color: transparent #262D38;
 	display: block;
 	width: 0;
 	z-index: 1;
@@ -1037,7 +1033,7 @@ i.material-icons.inlined {
 	top: 22px;
 }
 .searchbutton {
-	background-color:mqaccentcolor;
+	background-color:#ec625f;
 	color:white;
 	border-radius:10px;
 	vertical-align:bottom;
@@ -1048,7 +1044,7 @@ i.material-icons.inlined {
 	cursor:pointer;
 }
 .searchbutton:hover, .searchbutton:active {
-	background-color:mqaccenthovercolor;
+	background-color:#BC4D4B;
 	color:white;
 	cursor:pointer;
 	transition:.3s;
@@ -1086,7 +1082,7 @@ input {
 	cursor:pointer;
 }
 .topmenu .togglesearch:hover {
-	background:mqaccentcolor;
+	background:#ec625f;
 	color:#fff;
 }
 .topmenu .togglesearch i.material-icons {
@@ -1114,7 +1110,7 @@ input {
 	border-bottom-right-radius:0;
 }
 .darkred {
-	color:mqprimarycolor;
+	color:#262D38;
 }
 .tt-open {
 	box-shadow: 0 2px 3px 0 rgba(0,0,0,.26);
@@ -1131,7 +1127,7 @@ input {
 	display:block;
 }
 .tt-open .tt-suggestion:hover {
-	background-color:mqprimarycolor;
+	background-color:#262D38;
 	color:white;
 }
 #searchmovieform .tt-open .tt-suggestion {
@@ -1147,7 +1143,7 @@ form#addtag .tt-suggestion {
 	padding:8px;
 }
 form#addtag .tt-suggestion:hover {
-	background-color:mqprimarycolor;
+	background-color:#262D38;
 	color:white;
 }
 #randommoviesug {
@@ -1260,7 +1256,7 @@ form#addtag .tt-suggestion:hover {
 	}
 	.button:hover {
 		background-color:white;
-		color:mqprimarycolor;
+		color:#262D38;
 	}
 	table.feed td .poster:hover {
 		transform: scale(1.05);
@@ -1272,13 +1268,13 @@ form#addtag .tt-suggestion:hover {
 	color:white;
 }
 .button.greybtn.activebtn:hover {
-	border-color:mqprimarycolor;
-	background-color:mqprimarycolor;
+	border-color:#262D38;
+	background-color:#262D38;
 	color:white;
 }
 .button.redbtn:hover {
-	border-color:mqprimarycolor;
-	background-color:mqprimarycolor;
+	border-color:#262D38;
+	background-color:#262D38;
 	color:white;
 }
 }
