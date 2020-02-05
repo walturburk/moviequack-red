@@ -11,7 +11,8 @@ function getImdbWatchlist(e) {
 
   postAjaxPhp(obj, page, function(res) {
     console.log("callbacked imdb");
-    jQuery("#textmessage").text("Watchlist successfully imported "+res);
+    jQuery("#textmessage").text("Watchlist successfully imported");
+    console.log(res);
   });
   
   jQuery("#textmessage").text("Importing movies...");

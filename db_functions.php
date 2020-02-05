@@ -67,7 +67,7 @@ function createId() {
 }
 
 function isDev() {
-	if (strpos($_SERVER['SERVER_NAME'], "localhost") > 0 || strpos($_SERVER['SERVER_NAME'], "moviequack.com") < 1 || isset($_REQUEST["dev"])) {
+	if (strpos($_SERVER['SERVER_NAME'], "localhost") > 0 || isset($_REQUEST["dev"])) {
 		return true;
 	} else {
 	   return false;

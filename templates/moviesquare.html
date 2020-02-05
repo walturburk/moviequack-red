@@ -1,5 +1,5 @@
 <div style="text-align:center; background-image:url({backdrop}); background-size:cover; position:relative;" class="">
-<div style="height:100%; z-index:1; position:absolute;width:100%; top:1; left:0" class="darkwindow padding"></div>
+<div style="height:100%; z-index:1; position:absolute;width:100%; top:0; left:0" class="darkwindow padding"></div>
   <div style="position:relative; z-index:2;min-height:100%; " class="padding">
 
 
@@ -20,6 +20,13 @@
      <div data-tag="bookmark" data-movie="{movieid}" class="button roundbutton tag {bookmarkactive}"><i class="material-icons">bookmark</i></div>
    </div>
 
+  </div>
+
+  <div class="button" onclick="jQuery('#{movieid}_description').height('auto');jQuery(this).hide();">More info</div>
+  <div id="{movieid}_description" style="height:0; overflow:hidden;">
+    
+    <div>{description}</div>
+  
   </div>
 
 

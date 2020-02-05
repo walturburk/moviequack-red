@@ -6,22 +6,21 @@
     position:fixed; 
     bottom:0; 
     right:0; 
-    padding:1rem;
+    padding:0.5rem;
     background-color:#5a1a2a;
 }
 .buffet__bottom .buffet__text {
-    font-size:30px;
     padding:16px;
 }
 .buffet__bottom .buffet__text i.material-icons {
     font-size:30px;
 }
 .buffet__grid {
-    
+    grid-gap: 12px;
 }
 @media screen and (max-width: 769px) {
     .buffet__bottom .buffet__text {
-        font-size:16px;
+        
         padding:6px;
     }
     .buffet__bottom .buffet__text i.material-icons {
@@ -38,9 +37,10 @@
     }
 }
 </style>
-<div class="content">
+<div class="padding">
 
-<h4 class="padding">What do you like?</h4>
+<div class="padding buffet__text"><i class="material-icons inlined">star</i> movies you have seen</div>
+<div class="padding buffet__text"><i class="material-icons inlined">bookmark</i> movies you want to see</div>
 
 </div>
 
@@ -49,8 +49,9 @@
 </div>
 
 <div class="buffet__bottom">
-    <div class="third padding buffet__text"><i class="material-icons inlined">star</i> movies you have seen</div>
-    <div class="third padding buffet__text"><i class="material-icons inlined">bookmark</i> movies you want to see</div>
-    <div class="third padding buffet__button"><a href="/mymovies" class="floatright button widebtn">Okay, I'm done<i class="material-icons inlined">navigate_next</i></a></div>
+    
+    <div class="buffet__button centercontent">
+        <a href="/mymovies" class="button widebtn">Okay, I'm done<i class="material-icons inlined">navigate_next</i></a>
+    </div>
 
 </div>

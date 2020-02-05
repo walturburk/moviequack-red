@@ -132,8 +132,9 @@ function getInviteCode($user) {
 }
 
 function useInviteCode($id, $consumer) {
-	$inv = db_select("SELECT id FROM `invite` WHERE `invite`.`id` = '".$id."' AND consumedby = '' ");
+	$inv = db_select("SELECT id, owner FROM `invite` WHERE `invite`.`id` = '".$id."' AND consumedby = '' ");
 	if ($inv) {
+		follow($inv[0]["owner"], $consumer);
 		$query = "UPDATE `invite` SET `consumedby` = '".$consumer."', `consumedat` = '".time()."' WHERE `invite`.`id` = '".$id."';";
 		$ret = db_query($query);
 		return $ret;
@@ -844,7 +845,7 @@ function addMovie($id) {
 			$arr = json_decode($json, true);
 			echo $url;
 			print_r($arr);
-			$id = $arr["movie_results"]["id"];
+			$id = $arr["movie_results"][0]["id"];
 			addTag($id, "bookmark");
 		}
 
@@ -875,6 +876,7 @@ if ($err) {
 
 		$url = "https://api.themoviedb.org/3/movie/".$id."?api_key=".$apikey;
 		$json = file_get_contents($url);
+		//echo "<br>urlwithid:".$url."<br>";
 		
 		$movie = json_decode($json, true);
 		$movie = array_change_key_case($movie, CASE_LOWER);
@@ -1486,8 +1488,11 @@ function checkiffollows($follower, $follows) {
 	return $user[0]["timestamp"];
 }
 
-function follow($follows = null) {
-	$follower = $_SESSION["user"];
+function follow($follows = null, $follower = null) {
+	if ($follower == null) {
+		$follower = $_SESSION["user"];
+	}
+	
 
 		if (checkiffollows($follower, $follows)) {
 			$query = "DELETE FROM `".dbname."`.`follow` WHERE `follower` = '$follower' AND `follows` = '$follows';";
