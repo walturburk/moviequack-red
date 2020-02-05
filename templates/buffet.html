@@ -7,7 +7,7 @@
     bottom:0; 
     right:0; 
     padding:0.5rem;
-    background-color:#5a1a2a;
+    background-color:mqprimarycolor;
 }
 .buffet__bottom .buffet__text {
     padding:16px;
@@ -18,9 +18,21 @@
 .buffet__grid {
     grid-gap: 12px;
 }
+.buffet__seedescription {
+    margin: 16px;
+    padding: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: bold;
+    color:rgba(255,255,255,0.4);
+}
+.buffet__seedescription:hover {
+    text-decoration: underline;
+    color:white;
+}
 @media screen and (max-width: 769px) {
     .buffet__bottom .buffet__text {
-        
         padding:6px;
     }
     .buffet__bottom .buffet__text i.material-icons {
@@ -37,7 +49,7 @@
     }
 }
 </style>
-<div class="padding">
+<div class="content padding">
 
 <div class="padding buffet__text"><i class="material-icons inlined">star</i> movies you have seen</div>
 <div class="padding buffet__text"><i class="material-icons inlined">bookmark</i> movies you want to see</div>

@@ -22,8 +22,8 @@
 
   </div>
 
-  <div class="button" onclick="jQuery('#{movieid}_description').height('auto');jQuery(this).hide();">More info</div>
-  <div id="{movieid}_description" style="height:0; overflow:hidden;">
+  <div class="buffet__seedescription" onclick="document.getElementById('{movieid}_description').style.display = 'block';jQuery(this).hide()">Read description</div>
+  <div class="padding" id="{movieid}_description" style="display:none;">
     
     <div>{description}</div>
   

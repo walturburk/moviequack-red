@@ -18,7 +18,7 @@ foreach ($moviearr AS $movie) {
   $movieid = $movie["id"];
   $backdrop = basebackdropurl.$movie["backdrop"];
   $posterurl = basethumburl.$movie["poster"];
-  $description = print_r($movie, true);
+  $description = $movie["overview"];
 
   $rating = getMovieRating($movieid);
   $urate = getUsersMovieRating($movieid, $user);
