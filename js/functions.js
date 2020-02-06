@@ -7,6 +7,16 @@ function toggleExpand(elem) {
   }
 }
 
+function getGenreNames(movie, callback) {
+  obj = {
+    mode: "GETGENRES",
+    movie: movie
+  };
+  postAjaxPhp(obj).done(function(result) {
+    callback(result);
+  });
+}
+
 jQuery(document).on("click", function(e) {
   var par = jQuery(e.target).parents(".popup");
   jQuery(".popup").not(e.target).not(par).hide();
@@ -298,7 +308,9 @@ jQuery(document).on("click", ".postmessage .submit", function(e) {
 			form.find("input#tag").val("");
 			jQuery("span#tagscontent").html(result);
 		});
-	});
+  });
+  
+  
 
 	jQuery(document).on("click", ".tag", function(e) {
 		var movie = jQuery(this).attr("data-movie");

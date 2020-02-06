@@ -47,7 +47,7 @@ usort($ss["Buy"], function($a, $b) {
 });
 
 foreach ($ss AS $key => $streamsite) {
-$print .= "<div style='position:relative; text-align:center; '><p class='stickyheader'>".$key."</p><div class='content narrow' >";
+$print .= "<div style='position:relative; text-align:center; '><p class='stickyheader'>".$key."</p><div class='content' >";
   foreach ($streamsite AS $s) {
     $print .= "<h3 style='padding-bottom:1rem'>".$s["clear"]." (".$s["count"].")</h3>";
     foreach ($s["movie"] AS $movie) {

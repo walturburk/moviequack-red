@@ -17,6 +17,18 @@
 }
 .buffet__grid {
     grid-gap: 12px;
+    max-width:100%
+}
+.buffet__grid .poster img {
+    max-width:100%;
+    margin:auto;
+}
+.buffet__grid .poster.tag.activebtn {
+    background-color:#ec625f;
+    border-color:#ec625f;
+}
+.buffet__grid > div {
+    max-width:100%
 }
 .buffet__seedescription {
     margin: 16px;
@@ -30,6 +42,14 @@
 .buffet__seedescription:hover {
     text-decoration: underline;
     color:white;
+}
+.buffet__moviedesc {
+    line-height: 1.5;
+    font-weight: lighter;
+    font-size: 16px;
+    color: #888;
+    letter-spacing: 0.5px;
+    font-style: italic;
 }
 @media screen and (max-width: 769px) {
     .buffet__bottom .buffet__text {
@@ -49,14 +69,27 @@
     }
 }
 </style>
-<div class="content padding">
 
-<div class="padding buffet__text"><i class="material-icons inlined">star</i> movies you have seen</div>
-<div class="padding buffet__text"><i class="material-icons inlined">bookmark</i> movies you want to see</div>
+<script>
+jQuery(document).on("click", ".buffet__seedescription", function() {
+    var movieid = jQuery(this).attr("data-movieid");
+    document.getElementById(movieid+'_description').style.display = 'block';
+    jQuery(this).hide()
+    getGenreNames(movieid, function(res) {
+        jQuery("#"+movieid+"_genres").text(res);
+        console.log("res:"+res);
+    });
+});
+</script>
+
+<div class="content padding">
+<div class="padding buffet__text"><h3>{followingstring} wants to watch these movies</h3></div>
+<div class="padding buffet__text"><i class="material-icons inlined">bookmark</i> Select the ones you also want to watch</div>
+<div class="padding buffet__text"><i class="material-icons inlined">star</i> Rate movies you have already seen</div>
 
 </div>
 
-<div style="background-color:black" class="grid buffet__grid">
+<div class="grid buffet__grid">
 {squares}
 </div>
 

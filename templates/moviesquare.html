@@ -1,10 +1,10 @@
-<div style="text-align:center; background-image:url({backdrop}); background-size:cover; position:relative;" class="">
+<div style="text-align:center; position:relative;" class="">
 <div style="height:100%; z-index:1; position:absolute;width:100%; top:0; left:0" class="darkwindow padding"></div>
   <div style="position:relative; z-index:2;min-height:100%; " class="padding">
 
 
 
-<div style="margin-right:1rem;" class="poster postersmall">
+<div data-tag="bookmark" data-movie="{movieid}" style="margin:1rem auto;" class="poster postersmall tag">
     <img src="{posterurl}"/>
    </div>
 <h4>{movietitle}</h4>
@@ -22,9 +22,9 @@
 
   </div>
 
-  <div class="buffet__seedescription" onclick="document.getElementById('{movieid}_description').style.display = 'block';jQuery(this).hide()">Read description</div>
-  <div class="padding" id="{movieid}_description" style="display:none;">
-    
+  <div data-movieid="{movieid}" class="buffet__seedescription" onclick="">What is this?</div>
+  <div class="padding buffet__moviedesc" id="{movieid}_description" style="display:none;">
+    <div style="margin-bottom:1rem"><span data-movieid="{movieid}" id="{movieid}_genres"></span> from {movieyear}</div>
     <div>{description}</div>
   
   </div>

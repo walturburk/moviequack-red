@@ -56,8 +56,12 @@ if ($listid) {
     if (!empty($data)) {
 
         foreach ($data as $key => $val) {
-            echo $val["Const"];
-            addMovie($val["Const"]);
+            if ($val["Title Type"] == "movie" || $val["Title Type"] == "tvMovie" || $val["Title Type"] == "tvShort"  || $val["Title Type"] == "short") {
+                echo "<a href='".$val["URL"]."'>".$val["Title"]."</a><br>";
+                addMovie($val["Const"]);
+            } else {
+                echo "Did not add: <a href='".$val["URL"]."'>".$val["Title"]."</a> is a ".$val["Title Type"]." not a movie<br>";
+            }
         }
 
     } else {

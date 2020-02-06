@@ -38,13 +38,13 @@ $users = "<label class='button filterbtn userfilter'><input ".$checked." name='u
 
 if (is_array($allusers)) {
 	foreach ($allusers AS $u) {
-		if (is_array($u)) {
+
 			if(in_array($u, $ischeckedu)) {
 				$checked = "checked='checked'";
 			} else {
 				$checked = "";
 			}
-		}
+
 		$users .= "<input ".$checked." name='user[]' class='userfilter' id='".$u."' value='".$u."' type='checkbox'><label for='".$u."' class='tabbtn filterbtn'>".$u."</label>";
 	}
 }
@@ -52,13 +52,13 @@ if (is_array($allusers)) {
 
 
 foreach ($alltags AS $tag) {
-	if (is_array($tag["tag"])) {
+
 		if(in_array($tag["tag"], $ischeckedt)) {
 			$checked = "checked='checked'";
 		} else {
 			$checked = "";
 		}
-	}
+
 	$tagsbuttons .= "<input ".$checked." name='tag[]' class='tagfilter' id='".$tag["tag"]."' value='".$tag["tag"]."' type='checkbox'><label for='".$tag["tag"]."' class='tabbtn filterbtn'>".$tag["tag"]."</label>";
 }
 
@@ -145,7 +145,10 @@ $listitems .= "</td>";
 
 
 
-
+/*print_r($allusers);
+print_r($alltags);
+print_r($ischeckedu);
+print_r($ischeckedt);*/
 
 
 

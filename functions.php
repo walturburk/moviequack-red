@@ -40,9 +40,7 @@ function addGenreNames() {
 	  CURLOPT_ENCODING => "",
 	  CURLOPT_MAXREDIRS => 10,
 	  CURLOPT_TIMEOUT => 30,
-	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-	  CURLOPT_CUSTOMREQUEST => "GET",
-	  CURLOPT_POSTFIELDS => "{}",
+	  CURLOPT_CUSTOMREQUEST => "GET"
 	));
 
 	$response = curl_exec($curl);
@@ -63,6 +61,11 @@ function addGenreNames() {
 			echo $query;
 		}
 	}
+	
+}
+
+function getGenreNamesForMovie($movie) {
+	return db_select("SELECT genrenames.name FROM `genrenames` LEFT JOIN `genre` ON `genre`.`genre` = `genrenames`.`id` WHERE movie = '".$movie."'");
 }
 
 
@@ -843,10 +846,9 @@ function addMovie($id) {
 			$url = "https://api.themoviedb.org/3/find/".$id."?api_key=".$apikey."&language=en-US&external_source=imdb_id";
 			$json = file_get_contents($url);
 			$arr = json_decode($json, true);
-			echo $url;
-			print_r($arr);
 			$id = $arr["movie_results"][0]["id"];
-			addTag($id, "bookmark");
+			$mqid = "m".$id;
+			addTag($mqid, "bookmark");
 		}
 
 		/*$curl = curl_init();
@@ -1908,11 +1910,11 @@ function getFilteredItems($user, $tag) {
 				$users[] = $u;
 			}
 		}
-		$wuser = implode("' OR user = '", $users);
-		$wuser = "user = '$wuser'";
+		$wuser = implode("' OR tag.user = '", $users);
+		$wuser = "tag.user = '$wuser'";
 	} else {
 		$wuser = $user;
-		$wuser = "user = '$wuser'";
+		$wuser = "tag.user = '$wuser'";
 	}
 	if (is_array($tag)) {
 		foreach ($tag AS $t) {
@@ -1923,17 +1925,20 @@ function getFilteredItems($user, $tag) {
 				$tags[] = $t;
 			}
 		}
-		$wtag = implode("' OR tag = '", $tags);
+		$wtag = implode("' OR tag.tag = '", $tags);
 	} else {
 		$wtag = $tag;
 	}
 
-	$sql = "SELECT tag.movie AS item, movie.title, movie.year, movie.poster
+
+	$sql = "SELECT tag.movie AS item, movie.*, SUM(r.rating) AS rate
 	FROM tag
 	LEFT JOIN movie ON movie.id = tag.movie
+	LEFT JOIN ratemovie AS r ON r.movie = movie.id
 	WHERE ($wuser)
-	AND (tag = '$wtag')
-	GROUP BY movie";
+	AND (tag.tag = '$wtag')
+	GROUP BY tag.movie
+	ORDER BY rate DESC";
 
 	$items = db_select($sql);
 	return $items;

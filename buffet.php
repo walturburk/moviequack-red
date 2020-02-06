@@ -8,17 +8,21 @@ $t = new Template("templates/buffet.html");
 $layout = new Template("templates/foundation.html");
 
 
-$moviearr = getBuffet();
 $user = $_SESSION["user"];
+$following = getFollowing($user);
+$moviearr = getFilteredItems($following, "bookmark");
+
+$followingstring = implode(", ", $following);
 
 foreach ($moviearr AS $movie) {
   $sq = new Template("templates/moviesquare.html");
-
+  $dump = print_r($movie, true);
   $movietitle = $movie["originaltitle"];
   $movieid = $movie["id"];
   $backdrop = basebackdropurl.$movie["backdrop"];
-  $posterurl = basethumburl.$movie["poster"];
+  $posterurl = baseposterurl.$movie["poster"];
   $description = $movie["overview"];
+  $movieyear = $movie["year"];
 
   $rating = getMovieRating($movieid);
   $urate = getUsersMovieRating($movieid, $user);

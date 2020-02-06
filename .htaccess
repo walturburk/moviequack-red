@@ -13,13 +13,16 @@ RewriteRule ^user/([A-Za-z0-9]+) profile.php?id=$1
 
 RewriteRule ^user/ profile.php
 
-RewriteRule ^list/([a-z=\[\]&\@]+) list.php?$1
+RewriteRule ^list/?([a-zA-Z0-9\=\?\[\]\&\@\%5BD]+) list.php?$1 
+
 
 RewriteRule ^list/ list.php
 
 RewriteRule ^list list.php
 
 RewriteRule ^movie/([a-z0-9]+) movie.php?id=$1
+
+RewriteRule ^join/([a-z0-9]+) join.php?inv=$1
 
 RewriteRule ^quack/([a-z0-9]+) quack.php?id=$1
 

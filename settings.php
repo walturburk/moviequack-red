@@ -10,7 +10,7 @@ $foundation = new Template("templates/foundation.html");
 $user = $_SESSION["user"];
 $invitecode = getInviteCode($user);
 if ($invitecode) {
-    $inviteurl = "/join?inv=".$invitecode;
+    $inviteurl = "/join/".$invitecode;
     $inviteurltext = "moviequack.com".$inviteurl;
 } else {
     $inviteurl = "#";

@@ -35,6 +35,14 @@ switch ($mode) {
 		$post = $_REQUEST["post"];
 		echo getVotes($post);
 		break;
+	case "GETGENRES":
+		$movie = $_REQUEST["movie"];
+		$genrearr = getGenreNamesForMovie($movie);
+		foreach ($genrearr AS $name) {
+			$arry[] = $name["name"];
+		}
+		echo implode(" ", $arry);
+		break;
 	case "ADDMOVIESTODB":
 		$q = $_REQUEST["searchterm"];
 		$omdbq = str_replace(" ", "+", $q);
