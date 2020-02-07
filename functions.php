@@ -1939,7 +1939,7 @@ function getFilteredItems($user, $tag) {
 	AND (tag.tag = '$wtag')
 	GROUP BY tag.movie
 	ORDER BY rate DESC";
-
+	//echo $sql;
 	$items = db_select($sql);
 	return $items;
 }

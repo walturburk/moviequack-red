@@ -20,7 +20,7 @@ foreach ($moviearr AS $movie) {
   $movietitle = $movie["originaltitle"];
   $movieid = $movie["id"];
   $backdrop = basebackdropurl.$movie["backdrop"];
-  $posterurl = baseposterurl.$movie["poster"];
+  $posterurl = basepostermurl.$movie["poster"];
   $description = $movie["overview"];
   $movieyear = $movie["year"];
 

@@ -330,6 +330,7 @@ li.sortableli:hover .xinfo {
 .roundbutton {
 	border-radius:50%;
 	border-width:3px;
+	padding:0.75rem;
 }
 .roundbutton i {
 	vertical-align:top;

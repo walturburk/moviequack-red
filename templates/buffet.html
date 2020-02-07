@@ -17,7 +17,8 @@
 }
 .buffet__grid {
     grid-gap: 12px;
-    max-width:100%
+    max-width:100%;
+    grid-template-columns: auto auto auto auto;
 }
 .buffet__grid .poster img {
     max-width:100%;
@@ -50,6 +51,15 @@
     color: #888;
     letter-spacing: 0.5px;
     font-style: italic;
+}
+.buffet__grid .poster.tag:hover {
+    border-color: transparent;
+    background-color:white;
+}
+@media screen and (max-width: 1280px) {
+    .buffet__grid {
+        grid-template-columns: auto auto auto;
+    }
 }
 @media screen and (max-width: 769px) {
     .buffet__bottom .buffet__text {
