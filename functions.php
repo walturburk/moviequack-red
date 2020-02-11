@@ -1125,6 +1125,7 @@ function getAllTagsByUser($user = NULL) {
 	$sql = "SELECT * FROM `tag` ".$where." GROUP BY tag ORDER BY `tag` DESC";
 
 	$tags = db_select($sql);
+	
 	return $tags;
 
 }
@@ -1939,9 +1940,22 @@ function getFilteredItems($user, $tag) {
 	AND (tag.tag = '$wtag')
 	GROUP BY tag.movie
 	ORDER BY rate DESC";
-	//echo $sql;
+	
 	$items = db_select($sql);
 	return $items;
+
+	/*SELECT * 
+FROM 
+(SELECT tag.movie AS item, movie.*, SUM(r.rating) AS rate, count(*) as num_users 
+FROM tag 
+LEFT JOIN movie ON movie.id = tag.movie 
+LEFT JOIN ratemovie AS r ON r.movie = movie.id 
+WHERE (tag.user = 'walturburk' OR tag.user = 'nilsth') 
+AND (tag.tag = '') 
+GROUP BY tag.movie 
+ORDER BY rate DESC) 
+as customtable
+WHERE num_users >= 2*/
 }
 
 
@@ -2002,7 +2016,7 @@ function getBuffet() {
 	ON r.movie = m.id
 	GROUP BY m.id
 	ORDER BY rate DESC");
-
+	
 	return $movies;
 
 }
