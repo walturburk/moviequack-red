@@ -1276,7 +1276,7 @@ function timecodeHowLongAgo($time, $unit = "h") {
 }
 
 function massUpdateStreams($movies) {
-	$timeago = time() - (3600 * 48);
+	$timeago = time() - (60 * 60 * 24 * 14);
 	$sqlpart = implode("' OR m.id = '", $movies);
 
 
@@ -1932,30 +1932,33 @@ function getFilteredItems($user, $tag) {
 	}
 
 
-	$sql = "SELECT tag.movie AS item, movie.*, SUM(r.rating) AS rate
+	/*$sql = "SELECT tag.movie AS item, movie.*, SUM(r.rating) AS rate
 	FROM tag
 	LEFT JOIN movie ON movie.id = tag.movie
 	LEFT JOIN ratemovie AS r ON r.movie = movie.id
 	WHERE ($wuser)
 	AND (tag.tag = '$wtag')
 	GROUP BY tag.movie
-	ORDER BY rate DESC";
+	ORDER BY rate DESC";*/
+
+	$sql = "SELECT * 
+	FROM 
+	(SELECT tag.movie AS item, movie.*, SUM(r.rating) AS rate, count(*) as num_users 
+	FROM tag 
+	LEFT JOIN movie ON movie.id = tag.movie 
+	LEFT JOIN ratemovie AS r ON r.movie = movie.id 
+	WHERE ($wuser) 
+	AND (tag.tag = '$wtag') 
+	GROUP BY tag.movie 
+	ORDER BY rate DESC) 
+	as customtable
+	WHERE num_users >= ".count($users);
+	//echo $sql;
 	
 	$items = db_select($sql);
 	return $items;
 
-	/*SELECT * 
-FROM 
-(SELECT tag.movie AS item, movie.*, SUM(r.rating) AS rate, count(*) as num_users 
-FROM tag 
-LEFT JOIN movie ON movie.id = tag.movie 
-LEFT JOIN ratemovie AS r ON r.movie = movie.id 
-WHERE (tag.user = 'walturburk' OR tag.user = 'nilsth') 
-AND (tag.tag = '') 
-GROUP BY tag.movie 
-ORDER BY rate DESC) 
-as customtable
-WHERE num_users >= 2*/
+	
 }
 
 

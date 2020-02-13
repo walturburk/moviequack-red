@@ -18,17 +18,20 @@
 
 <div class="narrow movieinfowindow">
 
-	<div class="poster postertiny">
+	<div class="poster postersmall">
 			<img src="{posterurl}"/>
 		 </div>
 
 <div class="movievote voteparent fullwidth" data-postid="{movieid}">
-	<div class="movievoteopt">
-		<div data-tag="favourite" data-movie="{movieid}" class="button roundbutton tag {favouriteactive}"><i class="material-icons">favorite</i></div>
-	</div>
+	
 	<div class="movievoteopt">
 		<div data-tag="bookmark" data-movie="{movieid}" class="button roundbutton tag {bookmarkactive}"><i class="material-icons">bookmark</i></div>
 	</div>
+	
+	<div class="movievoteopt">
+		<div data-tag="favourite" data-movie="{movieid}" class="button roundbutton tag {favouriteactive}"><i class="material-icons">favorite</i></div>
+	</div>
+	
 	<div style="clear:none" class="movievoteopt">
 		<div data-expand="recommendlist" class="button roundbutton"><i class="material-icons">share</i></div>
 

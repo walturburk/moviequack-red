@@ -47,11 +47,11 @@ usort($ss["Buy"], function($a, $b) {
 });
 
 foreach ($ss AS $key => $streamsite) {
-$print .= "<div style='position:relative; text-align:center; '><p class='stickyheader'>".$key."</p><div class='content' >";
+  $print .= "<div style='position:relative; text-align:center; '><p class='stickyheader'>".$key."</p><div class='content' >";
   foreach ($streamsite AS $s) {
     $print .= "<h3 style='padding-bottom:1rem'>".$s["clear"]." (".$s["count"].")</h3>";
     foreach ($s["movie"] AS $movie) {
-      $print .= "<a class='poster postersmall' href='/movie/".$movie["movieid"]."'><img src='".basethumburl.$movie["poster"]."'/></a>";
+      $print .= "<a class='poster postertiny' href='/movie/".$movie["movieid"]."'><img src='".basethumburl.$movie["poster"]."'/></a>";
     }
     $print .= "<div style='padding:2rem 0;'></div>";
   }
