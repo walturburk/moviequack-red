@@ -1387,7 +1387,7 @@ ORDER BY  `stream`.`price` ASC");
 	return $streams;
 }
 
-function printStreams($movieid) {
+function printStreams($streams) {
 $streams = getStreams($movieid);
 	if (!empty($streams) && $streams[0]["link"]) {
 		//$print = "<h3 class='marginbottom'>This title is available for streaming</h3>";
@@ -1899,7 +1899,7 @@ $fdivend = "</div>";
 }
 
 
-function getFilteredItems($user, $tag) {
+function getFilteredItems($user, $tag, $options = array()) {
 
 	if (empty($user)) {
 		$wuser = "user != '1'";
@@ -1943,10 +1943,14 @@ function getFilteredItems($user, $tag) {
 
 	$sql = "SELECT * 
 	FROM 
-	(SELECT tag.movie AS item, movie.*, SUM(r.rating) AS rate, count(*) as num_users 
+	(SELECT s.*, p.*, tag.movie AS item, movie.*, SUM(r.rating) AS rate, count(*) as num_users 
 	FROM tag 
 	LEFT JOIN movie ON movie.id = tag.movie 
 	LEFT JOIN ratemovie AS r ON r.movie = movie.id 
+	LEFT JOIN stream AS s
+	ON s.movieid = movie.id
+	LEFT JOIN provider AS p
+	ON p.id = s.provider
 	WHERE ($wuser) 
 	AND (tag.tag = '$wtag') 
 	GROUP BY tag.movie 
