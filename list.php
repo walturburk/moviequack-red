@@ -121,7 +121,7 @@ $listitems .= "</td>";
 
 			$listitems .= "<td>";
 			$listitems .= '<div id="streams" class="streams darkstreams">';
-			$listitems .= printStreams($item["item"]);
+			$listitems .= printStreams(getStreams($item["item"]));
 			$listitems .= "</div>";
 			$listitems .= "</td>";
 

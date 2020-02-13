@@ -63,7 +63,7 @@ if ($posts == "") {
 $tagsarr = getTags($movieid);
 $tags = printTags($tagsarr, $movieid);
 $taglist = printAllTags($movieid);
-$streams = printStreams($movieid);
+$streams = printStreams(getStreams($movieid));
 
 $rating = getMovieRating($movieid);
 $urate = getUsersMovieRating($movieid, $user);

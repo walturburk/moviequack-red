@@ -68,7 +68,7 @@ $tagsarr = getTags($movieid);
 $tags = printTags($tagsarr, $movieid);
 $taglist = printAllTags($movieid);
 $friendstaglist = printAllFriendsTags($movieid);
-$streams = printStreams($movieid);
+$streams = printStreams(getStreams($movieid));
 
 $rating = getMovieRating($movieid);
 $urate = getUsersMovieRating($movieid, $user);

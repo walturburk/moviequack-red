@@ -1387,8 +1387,8 @@ ORDER BY  `stream`.`price` ASC");
 	return $streams;
 }
 
-function printStreams($movieid) {
-$streams = getStreams($movieid);
+function printStreams($streams) {
+
 	if (!empty($streams) && $streams[0]["link"]) {
 		//$print = "<h3 class='marginbottom'>This title is available for streaming</h3>";
 		foreach ($streams AS $stream) {
