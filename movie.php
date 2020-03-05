@@ -41,8 +41,6 @@ $runtime = $movie["runtime"];
 $genre = $movie["genre"];
 $plot = $movie["overview"];
 
-echo "DEV TEST";
-
 if (streamsAreOld($movieid) || isset($_REQUEST["updateinfo"])) {
 	saveStreams($movieid, $movietitle, $year);
 }

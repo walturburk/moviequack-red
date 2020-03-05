@@ -1207,14 +1207,15 @@ function getSvtPlayStreams($title, $year = null)
     $data = array();//"query" => $title, "release_year_from" => $year, "release_year_until" => $year);
 	$data_string = json_encode($data);
 
-	$url = 'https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=SearchPage&variables=%7B%22querystring%22%3A%22'.$searchstring.'%22%7D&extensions=%7B%22persistedQuery%22%3A%7B%22version%22%3A1%2C%22sha256Hash%22%3A%22a57cbf0cb04919ebe71ed93abb5f96a35af02d4f4e22acf9e475c5bf59806607%22%7D%7D';
+	$url = 'https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=SearchPage&variables=%7B%22querystring%22%3A%22'.$title.'%22%7D&extensions=%7B%22persistedQuery%22%3A%7B%22version%22%3A1%2C%22sha256Hash%22%3A%22a57cbf0cb04919ebe71ed93abb5f96a35af02d4f4e22acf9e475c5bf59806607%22%7D%7D';
 	
 	$ch = curl_init($url);
 	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-	//curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-		'Content-Type: application/json'
+		'Content-Type: application/json',
+		'Content-Length: ' . strlen($data_string))
 	);
 
 	$result = curl_exec($ch);
