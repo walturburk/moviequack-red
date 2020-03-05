@@ -67,7 +67,7 @@ function createId() {
 }
 
 function isDev() {
-	if (strpos($_SERVER['SERVER_NAME'], "localhost") > 0 || isset($_REQUEST["dev"])) {
+	if (strpos($_SERVER['SERVER_NAME'], "localhost") > 0 || isset($_REQUEST["dev"]) || strpos($_SERVER['SERVER_NAME'], "dev.moviequack.com") > 0) {
 		return true;
 	} else {
 	   return false;
@@ -88,7 +88,7 @@ function getConfig() {
     $config = parse_ini_file("../../config-live.ini");
     $config["baseurl"] = "https://" . $_SERVER['SERVER_NAME'] ;
   }
-
+  
 
   return $config;
 

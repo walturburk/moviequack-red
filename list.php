@@ -26,16 +26,6 @@ $alltags = getAllTagsByUser($ischeckedu);
 
 
 
-/*if(in_array($user, $ischeckedu)) {
-	$checked = "checked='checked'";
-} else {
-	$checked = "";
-}
-$users = "<label class='button filterbtn userfilter'><input ".$checked." name='user[]' class='userfilter' value='".$user."' type='checkbox'>".$user."</label>";
-*/
-//$users .= "<label class='button filterbtn userfilter'><input name='user[]' class='userfilter' value='friends' type='checkbox'>Friends</label>";
-//$users .= "<label class='button filterbtn userfilter'><input name='user[]' class='userfilter' value='everyone' type='checkbox'>Everyone</label>";
-
 if (is_array($allusers)) {
 	foreach ($allusers AS $u) {
 
@@ -72,7 +62,7 @@ $items = getFilteredItems($ischeckedu, $ischeckedt);
 
 if (empty($items) && $selectedlist != "") {
   $listitems = "<div style='' class='content narrow centeralign large'>This list is empty!</div>";
-} else if ($_REQUEST["listmode"] == "compact") {
+} else if ($_REQUEST["view"] == "compact") {
 	$listitems .= "<ul class='clear floatleft sortablelist'>";
 	 foreach ($items AS $item) {
 		 $listitems .= "<li class='sortableli' style=''><a href='/movie/".$item["item"]."' class='handle absolutecenter'><img alt='".$item["title"]."' class='handle' src='".basethumburl.$item["poster"]."'>";

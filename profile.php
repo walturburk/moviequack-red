@@ -33,7 +33,7 @@ if ($id == $_SESSION["user"]) {
   } else {
     $activebtn = "";
   }
-  $profileoptions = '<div class="floatright margin0 button whitebtn followbtn '.$activebtn.'" data-followedid="'.$userid.'">Follow</div>';
+  $profileoptions = '<div class="floatright margin0 button whitebtn followbtn smallerbtn '.$activebtn.'" data-followedid="'.$userid.'">Follow</div>';
 }
 
 

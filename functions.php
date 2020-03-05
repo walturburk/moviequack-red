@@ -1943,18 +1943,12 @@ function getFilteredItems($user, $tag, $options = array()) {
 
 	$sql = "SELECT * 
 	FROM 
-	(SELECT s.*, p.*, tag.movie AS item, movie.*, SUM(r.rating) AS rate, count(*) as num_users 
+	(SELECT tag.movie AS item, movie.*, count(*) as num_users 
 	FROM tag 
 	LEFT JOIN movie ON movie.id = tag.movie 
-	LEFT JOIN ratemovie AS r ON r.movie = movie.id 
-	LEFT JOIN stream AS s
-	ON s.movieid = movie.id
-	LEFT JOIN provider AS p
-	ON p.id = s.provider
 	WHERE ($wuser) 
 	AND (tag.tag = '$wtag') 
-	GROUP BY tag.movie 
-	ORDER BY rate DESC) 
+	GROUP BY item ) 
 	as customtable
 	WHERE num_users >= ".count($users);
 	//echo $sql;
@@ -2054,7 +2048,9 @@ function getStreamSites($user, $flatrate = true) {
 
 
 
-function getStreamableMovies($user, $tag = "bookmark") {
+function getStreamableMovies($moviesarray, $tag = "bookmark") {
+
+$where_sql = implode("' OR s.movieid = '", $moviesarray);
 
 	$sql = "SELECT * FROM ".dbname.".stream AS s
 LEFT JOIN ".dbname.".tag AS t
@@ -2063,11 +2059,10 @@ LEFT JOIN ".dbname.".movie AS m
 ON s.movieid = m.id
 LEFT JOIN ".dbname.".provider AS p
 ON p.id = s.provider
-WHERE t.tag = '".$tag."'
-AND t.user = '".$user."'
+WHERE s.movieid = '".$where_sql."' 
 GROUP BY movieid, provider
 ";
-
+//echo $sql;
 	$movies = db_select($sql);
 	return $movies;
 

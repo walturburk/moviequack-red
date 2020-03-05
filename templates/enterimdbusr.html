@@ -25,11 +25,17 @@ function getImdbWatchlist(e) {
 
 <div class="content">
 
-  <h1>Get watchlist from IMDb</h1>
-  <p class="padding">Enter a link to your IMDb-watchlist</p>
+  <h2>Get watchlist from IMDb</h2>
+  <p class="padding">
+    Enter a link to your IMDb-watchlist or just your IMDb user id (like ur1234567).
+  </p>
+  <p>
+    Make sure your watchlist is set to "Public". 
+    To do this, log in to IMDb.com > Your Watchlist > Edit > Settings > set Privacy to "Public"
+  </p>
 
   <form class="padding" onsubmit="return getImdbWatchlist(event)" action="" method="post">
-    <input value="" class="input marginbottom" type='text' placeholder="imdb.com/user/ur1234567/watchlist" name='imdbusr' id='imdbusr' maxlength="200"/>
+    <input value="" class="input marginbottom" type='text' placeholder="imdb.com/user/ur1234567/watchlist" name='imdbusr' id='imdbusr' maxlength="250"/>
     <input class="button {registerbtnclass}" id="submit" name="submit" type="submit" value="import watchlist"/>
   </form>
   <span id="textmessage"></span>

@@ -2,8 +2,24 @@
   jQuery(document).ready(function() {
     jQuery("input#searchfield").focus();
   });
-  </script>
 
-<div class="" style="padding-top:2rem">
+  $(function(){
+         $('#filters input').on('change',function(){
+            $('#filters').submit();
+            });
+        });
+</script>
+
+
+<form class="content narrow" id="filters" action="" method="get">
+  <div class="small paddingleft">
+    Watch together with 
+  </div>
+  <div class="users paddingtop0 paddingbottom hzscroll">
+    {users}
+  </div>
+</form>
+
+<div class="" style="">
   {print}
 </div>
