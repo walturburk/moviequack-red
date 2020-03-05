@@ -10,6 +10,7 @@ $foundation = new Template("templates/foundation.html");
 
 $user = $_SESSION["user"];
 
+
 $allmovies = getFilteredItems($user, "bookmark");
 
 foreach ($allmovies AS $mov) {

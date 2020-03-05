@@ -41,10 +41,16 @@ $runtime = $movie["runtime"];
 $genre = $movie["genre"];
 $plot = $movie["overview"];
 
+?>
+<div style="white-space:pre-wrap">
+<?php
 if (streamsAreOld($movieid) || isset($_REQUEST["updateinfo"])) {
 	saveStreams($movieid, $movietitle, $year);
 }
-saveStreams($movieid, $movietitle, $year);
+
+?>
+</div>
+<?php
 
 $upvoteactive = getVotebtnActive($movieid, true);
 $downvoteactive = getVotebtnActive($movieid, false);
