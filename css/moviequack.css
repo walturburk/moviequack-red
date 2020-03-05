@@ -485,9 +485,12 @@ footer.footer .third {
 	max-height:100%;
 	display:block;
 }
+.postertiny {
+	width:98px;
+	height:144px;
+}
 .postertiny img {
-	width:92px;
-	height:138px;
+	
 }
 header.movieheader .posterlarge {
 	margin-top:2rem;

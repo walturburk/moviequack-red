@@ -1198,6 +1198,60 @@ function printTagActive($tag) {
 	}
 }
 
+function getSvtPlayStreams($title, $year = null)
+{
+
+	global $locale;
+
+	$year = (int)$year;
+    $data = array("variables" => array("queryString" => $title));//"query" => $title, "release_year_from" => $year, "release_year_until" => $year);
+	$data_string = json_encode($data);
+
+	$url = 'https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=SearchPage&variables=%7B%22querystring%22%3A%22'.urlencode($title).'%22%7D&extensions=%7B%22persistedQuery%22%3A%7B%22version%22%3A1%2C%22sha256Hash%22%3A%22a57cbf0cb04919ebe71ed93abb5f96a35af02d4f4e22acf9e475c5bf59806607%22%7D%7D';
+	// create curl resource
+	$ch = curl_init();
+
+	// set url
+	curl_setopt($ch, CURLOPT_URL, $url);
+
+	//return the transfer as a string
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+	//problem with user agent
+	curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)');
+	curl_setopt($ch, CURLOPT_REFERER, 'https://www.moviequack.com/');
+
+	// $output contains the output string
+	$result = curl_exec($ch);
+
+	// close curl resource to free up system resources
+	curl_close($ch);      
+
+
+
+	print_r($result);
+	$result = json_decode($result, true);
+	
+	$streams = $result["data"]["search"][0];
+
+	if (strpos($streams["item"]["shortDescription"], "".$year) > 0) {
+		
+
+	$stream = array();
+	$stream["monetization_type"] = "flatrate";
+	$stream["provider_id"] = 901;
+	$stream["retail_price"] = 0;
+	$stream["currency"] = "SEK";
+	$stream["urls"]["standard_web"] = "https://www.svtplay.se".$streams["item"]["urls"]["svtplay"];
+	$stream["presentation_type"] = "HD";
+	$stream["date_provider_id"] = $streams["item"]["image"]["changed"]."_timestamp";
+
+	return $stream;
+	} else {
+		return false;
+	}
+}
+
 function getExternalStreams($title, $year = null)
 {
 
@@ -1300,6 +1354,11 @@ function saveStreams($movieid, $title, $year) {
 
 	//echo "savestreams<br>";
 	$streams = getExternalStreams($title, $year);
+	$svtplaystream = getSvtPlayStreams($title, $year);
+	if ($svtplaystream) {
+		$streams["items"][0]["offers"][] = $svtplaystream;
+	}
+	
 	if (isset($_GET["updateinfo"])) {
 		print_r($streams);
 	}
@@ -2064,6 +2123,7 @@ GROUP BY movieid, provider
 ";
 //echo $sql;
 	$movies = db_select($sql);
+	
 	return $movies;
 
 }

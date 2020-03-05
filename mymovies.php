@@ -10,35 +10,8 @@ $foundation = new Template("templates/foundation.html");
 
 $user = $_SESSION["user"];
 
-$friends = getFollowing($user);
-$tagsbuttons = "";
 
-if (is_array($friends)) {
-	$allusers = $friends;
-	//array_unshift($allusers, $user);
-} else {
-	//$allusers[] = $user;
-}
-
-$ischeckedu = $_GET["user"];
-
-
-if (is_array($allusers)) {
-	foreach ($allusers AS $u) {
-
-			if(in_array($u, $ischeckedu)) {
-				$checked = "checked='checked'";
-			} else {
-				$checked = "";
-			}
-
-		$users .= "<input ".$checked." name='user[]' class='userfilter' id='".$u."' value='".$u."' type='checkbox'><label for='".$u."' class='tabbtn filterbtn'>".$u."</label>";
-	}
-}
-
-//$ischeckedu[] = $user;
-$mymovies = getFilteredItems($user, "bookmark");
-$othersmovies = getFilteredItems($ischeckedu, "bookmark");
+$allmovies = getFilteredItems($user, "bookmark");
 
 foreach ($allmovies AS $mov) {
   $moviesarray[] = $mov["item"];
