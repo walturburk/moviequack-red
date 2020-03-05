@@ -45,7 +45,7 @@ $plot = $movie["overview"];
 if (streamsAreOld($movieid) || isset($_REQUEST["updateinfo"])) {
 	saveStreams($movieid, $movietitle, $year);
 }
-
+saveStreams($movieid, $movietitle, $year);
 $upvoteactive = getVotebtnActive($movieid, true);
 $downvoteactive = getVotebtnActive($movieid, false);
 //$postsarray = getMessages($movieid);
