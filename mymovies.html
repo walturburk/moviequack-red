@@ -1,4 +1,8 @@
 <script>
+  jQuery(document).ready(function() {
+    jQuery("input#searchfield").focus();
+  });
+
   $(function(){
          $('#filters input').on('change',function(){
             $('#filters').submit();

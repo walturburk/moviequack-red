@@ -28,7 +28,7 @@ $movieid = $quack["movieid"];
 $movieinfo = db_select("SELECT * FROM  `movie` WHERE  `id` =  '".$movieid."' LIMIT 1");
 $movie = $movieinfo[0];
 
-saveStreams($movie["id"], $movie["title"], $movie["year"]);
+saveStreams($movie);
 
 //print_r(getExternalStreams($movie["title"], $movie["year"]));
 

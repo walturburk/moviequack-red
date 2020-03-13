@@ -490,7 +490,10 @@ footer.footer .third {
 	height:144px;
 }
 .postertiny img {
-	
+	width:100%;
+	height:100%;
+	object-fit:contain;
+	object-position:center;
 }
 header.movieheader .posterlarge {
 	margin-top:2rem;

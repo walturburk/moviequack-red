@@ -1229,7 +1229,7 @@ function getSvtPlayStreams($title, $year = null)
 
 
 
-	print_r($result);
+	//print_r($result);
 	$result = json_decode($result, true);
 	
 	$streams = $result["data"]["search"][0];
@@ -1238,7 +1238,7 @@ function getSvtPlayStreams($title, $year = null)
 		
 
 	$stream = array();
-	$stream["monetization_type"] = "flatrate";
+	$stream["monetization_type"] = "free";
 	$stream["provider_id"] = 901;
 	$stream["retail_price"] = 0;
 	$stream["currency"] = "SEK";
@@ -1346,27 +1346,35 @@ GROUP BY m.id";
 
 	foreach ($streams AS $stream) {
 		//echo $stream["movieid"]." ".$stream["title"]." ".$stream["year"]."<br>";
-		saveStreams($stream["movieid"], $stream["title"], $stream["year"]);
+		saveStreams($stream);
 	}
 }
 
-function saveStreams($movieid, $title, $year) {
-
-	//echo "savestreams<br>";
+function saveStreams($movie) {
+	$movieid = $movie["movieid"];
+	$title = $movie["title"];
+	$originaltitle = $movie["originaltitle"];
+	$year = $movie["year"];
+	
 	$streams = getExternalStreams($title, $year);
 	$svtplaystream = getSvtPlayStreams($title, $year);
 	if ($svtplaystream) {
 		$streams["items"][0]["offers"][] = $svtplaystream;
 	}
+	$svtplaystream = getSvtPlayStreams($originaltitle, $year);
+	if ($svtplaystream) {
+		$streams["items"][0]["offers"][] = $svtplaystream;
+	}
 	
 	if (isset($_GET["updateinfo"])) {
-		print_r($streams);
+		//print_r($streams);
 	}
 
 	$cleandbtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $title));
+	$cleandboriginaltitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $originaltitle));
 	$cleanstreamtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $streams["items"][0]["title"]));
 	//echo "<br>";
-	if ($cleandbtitle == $cleanstreamtitle) {
+	if ($cleandbtitle == $cleanstreamtitle || $cleandboriginaltitle == $cleanstreamtitle) {
 		//echo "yes <br>".$cleandbtitle ."<br>". $cleanstreamtitle;
 	} else {
 		//echo "no <br>".$cleandbtitle ."<br>". $cleanstreamtitle;
@@ -1401,7 +1409,7 @@ function saveStreams($movieid, $title, $year) {
 			VALUES
 			('$movieid', '$region', '$type', '$provider', '$price', '$currency', '$link', '$def', '$dateproviderid', '$timestamp')
 				";
-				//echo $query."<br>";
+			//echo $query."<br>";
 			db_query($query);
 		}
 	} else {
@@ -1425,7 +1433,7 @@ function saveStreams($movieid, $title, $year) {
 		VALUES
 		('$movieid', '$region', '$type', '$provider', '$price', '$currency', '$link', '$def', '$dateproviderid', '$timestamp')
 			";
-			//echo $query."<br>";
+		//echo $query."<br>";
 		db_query($query);
 
 	}

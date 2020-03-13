@@ -10,8 +10,23 @@ $foundation = new Template("templates/foundation.html");
 
 $user = $_SESSION["user"];
 
+$allusers = getFollowing($user);
+$ischeckedu = $_GET["user"];
 
-$allmovies = getFilteredItems($user, "bookmark");
+if (is_array($allusers)) {
+	foreach ($allusers AS $u) {
+
+			if(in_array($u, $ischeckedu)) {
+				$checked = "checked='checked'";
+			} else {
+				$checked = "";
+			}
+
+		$users .= "<input ".$checked." name='user[]' class='userfilter' id='".$u."' value='".$u."' type='checkbox'><label for='".$u."' class='tabbtn filterbtn'>".$u."</label>";
+	}
+}
+
+$allmovies = getFilteredItems($ischeckedu, "bookmark");
 
 foreach ($allmovies AS $mov) {
   $moviesarray[] = $mov["item"];
@@ -30,10 +45,14 @@ foreach ($movies AS $movie) {
 
 }
 
-
+$ss["Free"] = $streamsites["free"];
 $ss["Subscription"] = $streamsites["flatrate"];
-$ss["Buy"] = $streamsites["buy"];
 $ss["Rent"] = $streamsites["rent"];
+$ss["Buy"] = $streamsites["buy"];
+
+usort($ss["Free"], function($a, $b) {
+  return $b['count'] <=> $a['count'];
+});
 
 usort($ss["Subscription"], function($a, $b) {
     return $b['count'] <=> $a['count'];
