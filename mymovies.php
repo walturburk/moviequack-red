@@ -26,7 +26,9 @@ if (is_array($allusers)) {
 	}
 }
 
+$ischeckedu[] = $user;
 $allmovies = getFilteredItems($ischeckedu, "bookmark");
+
 
 foreach ($allmovies AS $mov) {
   $moviesarray[] = $mov["item"];
