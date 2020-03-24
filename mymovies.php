@@ -32,6 +32,7 @@ $allmovies = getFilteredItems($ischeckedu, "bookmark");
 
 foreach ($allmovies AS $mov) {
   $moviesarray[] = $mov["item"];
+  $filteredmovies[$mov["item"]] = $mov;
 }
 
 
@@ -73,7 +74,20 @@ foreach ($ss AS $key => $streamsite) {
   foreach ($streamsite AS $s) {
     $print .= "<h3 style='padding-bottom:1rem'>".$s["clear"]." (".$s["count"].")</h3>";
     foreach ($s["movie"] AS $movie) {
-      $print .= "<a class='poster postertiny' href='/movie/".$movie["movieid"]."'><img src='".basethumburl.$movie["poster"]."'/></a>";
+      if (count($ischeckedu) == 1) {
+        $classes = "poster postertiny";
+      } else if ($filteredmovies[$movie["movieid"]]["num_users"] == 1) {
+        $classes = "poster postertiny";
+        $style = "background-color:initial; opacity: 30%;";
+      } else if ($filteredmovies[$movie["movieid"]]["num_users"] >= count($ischeckedu) && count($ischeckedu) > 1) {
+        $classes = "poster common_movie";
+        $style = " ";
+      } else {
+        $classes = "poster postertiny";
+        $style = "background-color:initial; opacity: ".(100/(count($ischeckedu)+1-($filteredmovies[$movie["movieid"]]["num_users"])))."%;";
+      }
+      //$print .= print_r($filteredmovies[$movie["movieid"]], true);
+      $print .= "<a class='$classes' style='$style' href='/movie/".$movie["movieid"]."'><img src='".basethumburl.$movie["poster"]."'/></a>";
     }
     $print .= "<div style='padding:2rem 0;'></div>";
   }

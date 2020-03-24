@@ -495,6 +495,9 @@ footer.footer .third {
 	object-fit:contain;
 	object-position:center;
 }
+.poster.common_movie {
+	background-color: #ec625f;
+}
 header.movieheader .posterlarge {
 	margin-top:2rem;
 }

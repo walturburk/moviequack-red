@@ -1999,14 +1999,7 @@ function getFilteredItems($user, $tag, $options = array()) {
 	}
 
 
-	/*$sql = "SELECT tag.movie AS item, movie.*, SUM(r.rating) AS rate
-	FROM tag
-	LEFT JOIN movie ON movie.id = tag.movie
-	LEFT JOIN ratemovie AS r ON r.movie = movie.id
-	WHERE ($wuser)
-	AND (tag.tag = '$wtag')
-	GROUP BY tag.movie
-	ORDER BY rate DESC";*/
+	
 
 	$sql = "SELECT * 
 	FROM 
@@ -2018,6 +2011,18 @@ function getFilteredItems($user, $tag, $options = array()) {
 	GROUP BY item ) 
 	as customtable
 	WHERE num_users >= ".count($users);
+
+	$sql = "SELECT * 
+	FROM 
+	(SELECT tag.movie AS item, movie.*, count(*) as num_users 
+	FROM tag 
+	LEFT JOIN movie ON movie.id = tag.movie 
+	WHERE ($wuser) 
+	AND (tag.tag = '$wtag') 
+	GROUP BY item ) 
+	as customtable
+	ORDER BY num_users DESC";
+
 	//echo $sql;
 	
 	$items = db_select($sql);

@@ -44,7 +44,7 @@ $plot = $movie["overview"];
 
 if (streamsAreOld($movieid) || isset($_REQUEST["updateinfo"])) {
 	?>
-	<div style="white-space:pre-wrap">
+	<div style="display:none;white-space:pre-wrap">
 	<?php
 	$moviearr = $movie;
 	$moviearr["movieid"] = $movieid;
