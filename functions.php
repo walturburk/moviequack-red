@@ -1198,6 +1198,63 @@ function printTagActive($tag) {
 	}
 }
 
+function getCineasternaStreams($title, $year = null)
+{
+
+	global $locale;
+
+	$year = (int)$year;
+    $data = array("variables" => array("queryString" => $title));//"query" => $title, "release_year_from" => $year, "release_year_until" => $year);
+	$data_string = json_encode($data);
+
+	$library_id = 6;
+
+	//get a list of titles https://backend.cineasterna.com/library/title/get_selected_titles?library_id=6&num_titles=10
+	$url = 'https://backend.cineasterna.com/library/title/get_titles?library_id='.$library_id.'&page=1&locale=sv&sort=asc&search='.urlencode($title).'&genres=%5B%5D&languages=%5B%5D&years=%5B'.$year.','.$year.'%5D&ratings=%5B%5D';
+	
+	// create curl resource
+	$ch = curl_init();
+
+	// set url
+	curl_setopt($ch, CURLOPT_URL, $url);
+
+	//return the transfer as a string
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+	//problem with user agent
+	curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)');
+	curl_setopt($ch, CURLOPT_REFERER, 'https://www.moviequack.com/');
+
+	// $output contains the output string
+	$resultc = curl_exec($ch);
+
+	// close curl resource to free up system resources
+	curl_close($ch);      
+
+
+
+	
+	$result = json_decode($resultc, true);
+	
+	$streams = $result["titles"][0];
+
+	if (strpos($streams["release_date"], "".$year) > -1) {
+		
+		$stream = array();
+		$stream["monetization_type"] = "free";
+		$stream["provider_id"] = 902;
+		$stream["retail_price"] = 0;
+		$stream["currency"] = "SEK";
+		$stream["urls"]["standard_web"] = "https://www.cineasterna.com/sv/library/".$library_id."/title/".$streams["id"];
+		$stream["presentation_type"] = "HD";
+		$stream["date_provider_id"] = date("Y-m-d", strtotime(time()))."_timestamp";
+		
+		return $stream;
+	} else {
+		return false;
+	}
+}
+
 function getSvtPlayStreams($title, $year = null)
 {
 
@@ -1360,6 +1417,10 @@ function saveStreams($movie) {
 	$svtplaystream = getSvtPlayStreams($title, $year);
 	if ($svtplaystream) {
 		$streams["items"][0]["offers"][] = $svtplaystream;
+	}
+	$cineasternastream = getCineasternaStreams($title, $year);
+	if ($cineasternastream) {
+		$streams["items"][0]["offers"][] = $cineasternastream;
 	}
 	$svtplaystream = getSvtPlayStreams($originaltitle, $year);
 	if ($svtplaystream) {

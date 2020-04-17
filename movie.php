@@ -30,6 +30,7 @@ if (!$movie["id"]) {
 }
 
 
+
 $movieid = $movie["id"];
 $movietitle = $movie["title"];
 $year = $movie["year"];
@@ -48,6 +49,7 @@ if (streamsAreOld($movieid) || isset($_REQUEST["updateinfo"])) {
 	<?php
 	$moviearr = $movie;
 	$moviearr["movieid"] = $movieid;
+	//getCineasternaStreams($movietitle, $year);
 	saveStreams($moviearr);
 	?>
 	</div>
