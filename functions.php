@@ -1348,12 +1348,14 @@ function getExternalStreams($title, $year = null)
 
 
 function streamsAreOld($movieid) {
+	$timeago = time() - (60 * 60 * 24 * 7);
+
 	$strms = getStreams($movieid);
 	
 	if ($strms) {
-		$week = 604800;
+		
 		//echo "<h3>streamtime: ".$strms[0]["timestamp"]." < ".time()." - ".$week."</h3>";
-		if ( $strms[0]["timestamp"] < time() - $week ) {
+		if ( $strms[0]["timestamp"] < $timeago ) {
 			//echo "areold";
 			return true;
 		} else {
@@ -1392,7 +1394,7 @@ function timecodeHowLongAgo($time, $unit = "h") {
 }
 
 function massUpdateStreams($movies) {
-	$timeago = time() - (60 * 60 * 24 * 14);
+	$timeago = time() - (60 * 60 * 24 * 30);
 	$sqlpart = implode("' OR m.id = '", $movies);
 
 

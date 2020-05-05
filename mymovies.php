@@ -36,7 +36,9 @@ foreach ($allmovies AS $mov) {
 }
 
 
-massUpdateStreams($moviesarray);
+if ($_REQUEST["updateinfo"] == 1) {
+  massUpdateStreams($moviesarray);
+}
 
 $movies = getStreamableMovies($moviesarray, "bookmark");
 
