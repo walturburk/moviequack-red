@@ -1238,7 +1238,12 @@ function getCineasternaStreams($title, $year = null)
 	
 	$streams = $result["titles"][0];
 
-	if (strpos($streams["release_date"], "".$year) > -1) {
+	$cleanstreamtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $streams["name_en"]));
+	$cleanstreamtitleswe = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $streams["name"]));
+	
+	$cleandbtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $title));
+
+	if (strpos($streams["release_date"], "".$year) > -1 && ($cleandbtitle == $cleanstreamtitle || $cleandbtitle == $cleanstreamtitleswe)) {
 		
 		$stream = array();
 		$stream["monetization_type"] = "free";
