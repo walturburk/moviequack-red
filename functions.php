@@ -1270,6 +1270,8 @@ function getSvtPlayStreams($title, $year = null)
 	$data_string = json_encode($data);
 
 	$url = 'https://api.svt.se/contento/graphql?ua=svtplaywebb-play-render-prod-client&operationName=SearchPage&variables=%7B%22querystring%22%3A%22'.urlencode($title).'%22%7D&extensions=%7B%22persistedQuery%22%3A%7B%22version%22%3A1%2C%22sha256Hash%22%3A%22a57cbf0cb04919ebe71ed93abb5f96a35af02d4f4e22acf9e475c5bf59806607%22%7D%7D';
+	echo "svtplayurl:".$url;
+	
 	// create curl resource
 	$ch = curl_init();
 
@@ -1296,9 +1298,17 @@ function getSvtPlayStreams($title, $year = null)
 	
 	$streams = $result["data"]["search"][0];
 
-	if (strpos($streams["item"]["shortDescription"], "".$year) > 0) {
-		
 
+
+	$cleanstreamtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $streams["item"]["name"]));
+
+	
+	$cleandbtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $title));
+
+
+	if (strpos($streams["item"]["shortDescription"], "".$year) > 0 && ($cleandbtitle == $cleanstreamtitle)) {
+	
+	
 	$stream = array();
 	$stream["monetization_type"] = "free";
 	$stream["provider_id"] = 901;
@@ -1432,11 +1442,12 @@ function saveStreams($movie) {
 	$svtplaystreamoriginal = getSvtPlayStreams($originaltitle, $year);
 	if ($svtplaystreamoriginal) {
 		$streams["items"][0]["offers"][] = $svtplaystreamoriginal;
-		print_r($svtplaystreamoriginal);
+		
 	}
-	
+	print_r($svtplaystreamoriginal);
+	print_r($svtplaystream);
 	if (isset($_GET["updateinfo"])) {
-		//print_r($streams);
+		print_r($streams);
 	}
 
 	$cleandbtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $title));
