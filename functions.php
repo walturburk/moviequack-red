@@ -1429,9 +1429,10 @@ function saveStreams($movie) {
 	if ($cineasternastream) {
 		$streams["items"][0]["offers"][] = $cineasternastream;
 	}
-	$svtplaystream = getSvtPlayStreams($originaltitle, $year);
-	if ($svtplaystream) {
-		$streams["items"][0]["offers"][] = $svtplaystream;
+	$svtplaystreamoriginal = getSvtPlayStreams($originaltitle, $year);
+	if ($svtplaystreamoriginal) {
+		$streams["items"][0]["offers"][] = $svtplaystreamoriginal;
+		print_r($svtplaystreamoriginal);
 	}
 	
 	if (isset($_GET["updateinfo"])) {

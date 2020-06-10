@@ -13,9 +13,10 @@ $foundation = new Template("templates/foundation.html");
 $user = $_SESSION["user"];
 $id = $_REQUEST["id"];
 
-//if (isset($_REQUEST["updateinfo"])) {
+if (isset($_REQUEST["updateinfo"])) {
 	reAddMovie($id);
-//}
+}
+
 
 $movieinfo = db_select("SELECT * FROM  `movie` WHERE  `id` =  '".$id."' LIMIT 1");
 $movie = $movieinfo[0];
