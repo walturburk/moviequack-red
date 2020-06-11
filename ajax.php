@@ -105,7 +105,19 @@ switch ($mode) {
 
 	case "ADDTAG":
 		$movie = $_REQUEST["movie"];
-		addTag($movie, $q);
+		if (strpos($q, "aka:") === 0) {
+			$q = str_replace("aka:", "", $q);
+			$q = trim($q);
+			addAkas($q, $movie);
+		} else if (strpos($q, "link:") === 0) {
+			$q = str_replace("link:", "", $q);
+			$q = trim($q);
+			addLinks($q, $movie);
+		} else {
+			addTag($movie, $q);
+			$tags = getTags($movie);
+		}
+		
 		$tags = getTags($movie);
 		echo printTags($tags, $movie);
 		break;

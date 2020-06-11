@@ -34,6 +34,7 @@ if (!$movie["id"]) {
 
 $movieid = $movie["id"];
 $movietitle = $movie["title"];
+$originaltitle = $movie["originaltitle"];
 $year = $movie["year"];
 $posterurl = baseposterurl.$movie["poster"];
 //$posterurl = checkImage($poster);
@@ -82,6 +83,7 @@ $tags = printTags($tagsarr, $movieid);
 $taglist = printAllTags($movieid);
 $friendstaglist = printAllFriendsTags($movieid);
 $streams = printStreams(getStreams($movieid));
+$links = printLinks(getLinks($movieid));
 
 $rating = getMovieRating($movieid);
 $urate = getUsersMovieRating($movieid, $user);

@@ -155,7 +155,7 @@ var bestPictures = new Bloodhound({
 jQuery('.searchfield.typeahead').typeahead(null, {
   minLength: 0,
   name: "searchresults",
-  display: "title",
+  display: "originaltitle",
   source: bestPictures,
 	templates: {
     empty: [
@@ -163,7 +163,7 @@ jQuery('.searchfield.typeahead').typeahead(null, {
     ].join('\n'),
 		suggestion: function(data) {
 
-    return '<div><a href="/movie/'+data.id+'"><strong>' + data.title + '</strong> (' + data.year + ')</a></div>';
+    return '<div><a href="/movie/'+data.id+'"><strong>' + data.originaltitle + '</strong> (' + data.year + ')</a></div>';
 	}
 },
 });
@@ -327,7 +327,8 @@ jQuery(document).on("click", ".postmessage .submit", function(e) {
 			mode: "ADDTAG",
 			movie: movie,
 			q: tag
-		};
+    };
+    console.log(obj);
 		postAjaxPhp(obj).done(function(result) {
 			form.find("input#tag").val("");
 			jQuery("span#tagscontent").html(result);

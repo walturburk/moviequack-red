@@ -27,12 +27,12 @@ if ($result["query"]["search"][0]["pageid"] > 0) {
     die ("No page id found from search");
 }
 
+
 $params = [
-    "action" => "parse",
-    "pageid" => $result["query"]["search"][0]["pageid"],
-    "prop" => "text",
-    "formatversion" => "2",
-    "format" => "json"
+    "action" => "query",
+    "format" => "json",
+    "titles" => $result["query"]["search"][0]["title"],
+    "prop" => "extlinks"
 ];
 
 $url = $endPoint . "?" . http_build_query( $params );
@@ -42,8 +42,15 @@ curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
 $output = curl_exec( $ch );
 curl_close( $ch );
 
-$result = json_decode( $output, true );
+$result2 = json_decode( $output, true );
 
-print_r($result);
+//echo "https://en.wikipedia.org/wiki/".str_replace(" ", "_", $result["parse"]["title"]);
+
+
+echo $result2["query"]["pages"][$result["query"]["search"][0]["pageid"]]["fullurl"];
+print_r($result2);
+
+
+
 
 ?>

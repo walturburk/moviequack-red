@@ -930,6 +930,83 @@ if ($err) {
 	return $mqid;
 }
 
+function getWikipediaLink($movie) {
+	$searchPage = "prometheus 2012 film";
+	$searchPage = $movie["title"]." ".$movie["year"]." film";
+
+	$endPoint = "https://en.wikipedia.org/w/api.php";
+	$params = [
+		"action" => "query",
+		"list" => "search",
+		"srsearch" => $searchPage,
+		"format" => "json"
+	];
+
+	$url = $endPoint . "?" . http_build_query( $params );
+
+	$ch = curl_init( $url );
+	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+	$output = curl_exec( $ch );
+	curl_close( $ch );
+
+	$result = json_decode( $output, true );
+
+
+	if ($result["query"]["search"][0]["pageid"] > 0) {
+		echo "Got first hit page id";
+	} else {
+		print_r($result);
+		die ("No page id found from search");
+	}
+
+
+	$params = [
+		"action" => "query",
+		"format" => "json",
+		"titles" => $result["query"]["search"][0]["title"],
+		"prop" => "info",
+		"inprop" => "url|talkid"
+	];
+
+	$url = $endPoint . "?" . http_build_query( $params );
+
+	$ch = curl_init( $url );
+	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+	$output = curl_exec( $ch );
+	curl_close( $ch );
+
+	$result2 = json_decode( $output, true );
+
+	//echo "https://en.wikipedia.org/wiki/".str_replace(" ", "_", $result["parse"]["title"]);
+
+
+	return $result2["query"]["pages"][$result["query"]["search"][0]["pageid"]]["fullurl"];
+
+}
+
+
+function matchMovieName($movie, $checknameo) {
+	
+	$movieid = $movie["id"];
+	$checkname = cleanTitle($checknameo);
+	echo "checkname:".$checkname;
+
+	if (cleanTitle($movie["title"]) == $checkname) {
+		return true;
+	}
+	if (cleanTitle($movie["originaltitle"]) == $checkname) {
+		return true;
+	}
+	$titles = db_select("SELECT * FROM `akas` WHERE `movieid` LIKE '".$movieid."' AND `title` LIKE '".$checknameo."'");
+	print_r($titles);
+	foreach ($titles AS $title) {
+		if (cleanTitle($title["title"]) == $checkname) {
+			return true;
+		}
+	}
+	return false;
+}
+
 function addGenresForMovie($genres, $movie) {
 	foreach ($genres AS $g) {
 		$query = "INSERT INTO `genre` (`movie`, `genre`)
@@ -984,6 +1061,27 @@ function addCollections($col, $movie) {
 	}
 }
 
+function addAkas($akas, $movieid) {
+	if (!is_array($akas)) {
+		$akas = array($akas);
+	}
+	foreach ($akas AS $a) {
+		$query = "INSERT INTO `akas` (`movieid`, `title`) VALUES ('".$movieid."', '".$a."');";
+		db_query($query);
+	}
+}
+
+function addLinks($links, $movieid) {
+	if (!is_array($links)) {
+		$links = array($links);
+	}
+	foreach ($links AS $l) {
+		$query = "INSERT INTO `link` (`movieid`, `linkname`, `url`, `timestamp`) VALUES ('".$movieid."', '', '".$l."', CURRENT_TIMESTAMP);";
+		db_query($query);
+	}
+}
+
+
 function addTag($movie, $tag) {
 
 	$user = $_SESSION["user"];
@@ -1010,6 +1108,25 @@ function removeTag($movie, $tag) {
 function getAllTags() {
 	$tags = db_select("SELECT movie, user, tag, timestamp, COUNT(user) AS c FROM  `tag` GROUP BY tag ORDER BY tag ASC");
 	return $tags;
+}
+
+function getLinks($movieid) {
+	$links = db_select("SELECT movieid, linkname, url, timestamp FROM link WHERE movieid = '".$movieid."'");
+	return $links;
+}
+
+function printLinks($links) {
+	$print = "";
+	foreach ($links AS $link) {
+		$print .= "<a class='link' href='".$link["url"]."' data-movie='".$link["movieid"]."'>";
+		if ($link["linkname"] != "") {
+			$print .= $link["linkname"];
+		} else {
+			$print .= $link["url"];
+		}
+		$print .= "</a>";
+	}
+	return $print;
 }
 
 function printAllTags($movie = null) {
@@ -1260,6 +1377,9 @@ function getCineasternaStreams($title, $year = null)
 	}
 }
 
+function cleanTitle($title) {
+	return strtolower(preg_replace('/[^A-Za-z0-9\- ]/','', $title));
+}
 function getSvtPlayStreams($title, $year = null)
 {
 
@@ -1296,7 +1416,8 @@ function getSvtPlayStreams($title, $year = null)
 	//print_r($result);
 	$result = json_decode($result, true);
 	
-	$streams = $result["data"]["search"][0];
+foreach ($result["data"]["search"] AS $streams) {
+	//$streams = $result["data"]["search"][0];
 
 
 
@@ -1305,23 +1426,26 @@ function getSvtPlayStreams($title, $year = null)
 	
 	$cleandbtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $title));
 
-
-	if (strpos($streams["item"]["shortDescription"], "".$year) > 0 && ($cleandbtitle == $cleanstreamtitle)) {
 	
-	
-	$stream = array();
-	$stream["monetization_type"] = "free";
-	$stream["provider_id"] = 901;
-	$stream["retail_price"] = 0;
-	$stream["currency"] = "SEK";
-	$stream["urls"]["standard_web"] = "https://www.svtplay.se".$streams["item"]["urls"]["svtplay"];
-	$stream["presentation_type"] = "HD";
-	$stream["date_provider_id"] = $streams["item"]["image"]["changed"]."_timestamp";
 
-	return $stream;
-	} else {
-		return false;
+	if (strpos($streams["item"]["shortDescription"], "".$year) > 0) {
+
+		$stream = array();
+		$stream = $streams["item"];
+		$stream["monetization_type"] = "free";
+		$stream["provider_id"] = 901;
+		$stream["retail_price"] = 0;
+		$stream["currency"] = "SEK";
+		$stream["urls"]["standard_web"] = "https://www.svtplay.se".$streams["item"]["urls"]["svtplay"];
+		$stream["presentation_type"] = "HD";
+		$stream["date_provider_id"] = $streams["item"]["image"]["changed"]."_timestamp";
+
+		$streamsarr[] = $stream;
 	}
+}
+
+	return $streamsarr;
+
 }
 
 function getExternalStreams($title, $year = null)
@@ -1432,20 +1556,32 @@ function saveStreams($movie) {
 	
 	$streams = getExternalStreams($title, $year);
 	$svtplaystream = getSvtPlayStreams($title, $year);
+	
 	if ($svtplaystream) {
-		$streams["items"][0]["offers"][] = $svtplaystream;
+		foreach ($svtplaystream AS $s) {
+			print_r($s);
+			if (matchMovieName($movie, $s["name"])) {
+				$streams["items"][0]["offers"][] = $s;
+			}
+		}
 	}
+
+	$svtplaystreamoriginal = getSvtPlayStreams($originaltitle, $year);
+	
+	if ($svtplaystreamoriginal) {
+		foreach ($svtplaystreamoriginal AS $s) {
+			print_r($s);
+			if (matchMovieName($movie, $s["name"])) {
+				$streams["items"][0]["offers"][] = $s;
+			}
+		}
+	}
+	
 	$cineasternastream = getCineasternaStreams($title, $year);
 	if ($cineasternastream) {
 		$streams["items"][0]["offers"][] = $cineasternastream;
 	}
-	$svtplaystreamoriginal = getSvtPlayStreams($originaltitle, $year);
-	if ($svtplaystreamoriginal) {
-		$streams["items"][0]["offers"][] = $svtplaystreamoriginal;
-		
-	}
-	print_r($svtplaystreamoriginal);
-	print_r($svtplaystream);
+
 	if (isset($_GET["updateinfo"])) {
 		print_r($streams);
 	}
@@ -1461,7 +1597,7 @@ function saveStreams($movie) {
 	}
 	//echo "<br>";
 
-	if ($cleandbtitle == $cleanstreamtitle && is_array($streams["items"][0]["offers"])) {
+	if (matchMovieName($movie, $streams["items"][0]["title"]) && is_array($streams["items"][0]["offers"])) {
 		//echo "Update with new streams";
 		$query = "DELETE FROM stream WHERE movieid = '$movieid'";
 
