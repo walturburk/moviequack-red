@@ -1,5 +1,5 @@
 <?php 
-
+//$searchPage = "My Left Foot The Story of Christy Brown 1989 film";
 $searchPage = "prometheus 2012 film";
 
 $endPoint = "https://en.wikipedia.org/w/api.php";
@@ -35,13 +35,13 @@ $params = [
     "prop" => "info"
 ];
 
-$params = [
+/*$params = [
     "action" => "parse",
     "format" => "json",
     "pageid" => $result["query"]["search"][0]["pageid"],
     "section" => "28"
     
-];
+];*/
 
 $url = $endPoint . "?" . http_build_query( $params );
 

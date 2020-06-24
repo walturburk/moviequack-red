@@ -45,6 +45,35 @@ $genre = $movie["genre"];
 $plot = $movie["overview"];
 
 
+$page = getWikipediaPage($movietitle, $year);
+$link = getWikipediaLink($page);
+addLinks($link, $movieid);
+$sections = getWikipediaSections($page);
+
+$sectionid = 1;
+
+foreach ($sections AS $id => $section) {
+	if ($section["line"] == "Plot" || $section["line"] == "Premise") {
+		//echo "SECTIONID:".print_r($section);
+		$sectionid = $section["index"];
+	} else {
+		//echo $section["line"];
+	}
+}
+
+
+$section_text = getWikipediaTextFromSection($page, $sectionid);
+$splittedtext = splitWikitext($section_text);
+addTag($movieid, $splittedtext, "wikiplot");
+?>
+<div style="display:none;white-space:pre-wrap">
+<?php
+//print_r($sections);
+print_r( $splittedtext );
+?>
+</div>
+<?php
+
 if (streamsAreOld($movieid) || isset($_REQUEST["updateinfo"])) {
 	?>
 	<div style="display:none;white-space:pre-wrap">

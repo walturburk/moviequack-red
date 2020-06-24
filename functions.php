@@ -201,7 +201,7 @@ function postMessage($id, $emoji, $movie, $msg, $user) {
 		$tag = strtolower($tag);
 		if (is_array($notallowed)) {
 			if (!in_array($tag, $notallowed)) {
-				addTag("", $tag);
+				addTag("", $tag, $_SESSION["user"]);
 			}
 		}
 	}
@@ -848,7 +848,7 @@ function addMovie($id) {
 			$arr = json_decode($json, true);
 			$id = $arr["movie_results"][0]["id"];
 			$mqid = "m".$id;
-			addTag($mqid, "bookmark");
+			addTag($mqid, "bookmark", $_SESSION["user"]);
 		}
 
 		/*$curl = curl_init();
@@ -923,16 +923,17 @@ if ($err) {
 		//$movie = $printablemovie;
 		
 	} else if ($isimdbid) {
-		addTag($movie["id"], "bookmark");
+		addTag($movie["id"], "bookmark", $_SESSION["user"]);
 	}
 	
 //$movie["mqid"] = $mqid;
 	return $mqid;
 }
 
-function getWikipediaLink($movie) {
+//enter movietitle and movieyear as params
+function getWikipediaPage($movietitle, $movieyear) {
 	$searchPage = "prometheus 2012 film";
-	$searchPage = $movie["title"]." ".$movie["year"]." film";
+	$searchPage = $movietitle." ".$movieyear." film";
 
 	$endPoint = "https://en.wikipedia.org/w/api.php";
 	$params = [
@@ -953,17 +954,22 @@ function getWikipediaLink($movie) {
 
 
 	if ($result["query"]["search"][0]["pageid"] > 0) {
-		echo "Got first hit page id";
+		return $result["query"]["search"][0];
 	} else {
-		print_r($result);
-		die ("No page id found from search");
+		//print_r($result);
+		//die ("No page id found from search");
+		return false;
 	}
+}
 
+//use the result from getWikipediaPage() as parameter for this function
+function getWikipediaLink($page) {
 
+	$endPoint = "https://en.wikipedia.org/w/api.php";
 	$params = [
 		"action" => "query",
 		"format" => "json",
-		"titles" => $result["query"]["search"][0]["title"],
+		"titles" => $page["title"],
 		"prop" => "info",
 		"inprop" => "url|talkid"
 	];
@@ -980,8 +986,93 @@ function getWikipediaLink($movie) {
 	//echo "https://en.wikipedia.org/wiki/".str_replace(" ", "_", $result["parse"]["title"]);
 
 
-	return $result2["query"]["pages"][$result["query"]["search"][0]["pageid"]]["fullurl"];
+	return $result2["query"]["pages"][$page["pageid"]]["fullurl"];
 
+}
+
+//enter result from getWikipediaPage()
+function getWikipediaSections($page) {
+
+	$endPoint = "https://en.wikipedia.org/w/api.php";
+	$params = [
+		"action" => "parse",
+		"format" => "json",
+		"page" => $page["title"], 
+		"prop" => "sections"
+	]; 
+	//?action=parse&page=Manual:Extensions&prop=sections
+
+	$url = $endPoint . "?" . http_build_query( $params );
+
+	$ch = curl_init( $url );
+	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+	$output = curl_exec( $ch );
+	curl_close( $ch );
+
+	$result = json_decode( $output, true );
+
+	//echo "https://en.wikipedia.org/wiki/".str_replace(" ", "_", $result["parse"]["title"]);
+
+
+	return $result["parse"]["sections"];
+
+}
+
+//enter result from getWikipediaPage()
+function getWikipediaTextFromSection($page, $section) {
+
+	$endPoint = "https://en.wikipedia.org/w/api.php";
+
+	/*$params = [
+		"action" => "query",
+		"format" => "json",
+		"titles" => $page["title"], 
+		"section" => $section, 
+		'prop' => 'extracts',
+		'explaintext' => "true"
+	]; */
+	
+	$params = [
+		"action" => "parse",
+		"format" => "json",
+		"page" => $page["title"], 
+		"prop" => "wikitext",
+		"section" => $section,
+		"disabletoc" => "1"
+	]; 
+	//api.php?action=parse&format=json&page=house&prop=text&section=3&disabletoc=1
+
+	$url = $endPoint . "?" . http_build_query( $params );
+
+	$ch = curl_init( $url );
+	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+	$output = curl_exec( $ch );
+	curl_close( $ch );
+
+	$result = json_decode( $output, true );
+
+	//echo "https://en.wikipedia.org/wiki/".str_replace(" ", "_", $result["parse"]["title"]);
+
+
+	return $result["parse"]["wikitext"]["*"];
+
+}
+
+function splitWikitext($text) {
+
+	$unwanted_array = array(    'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
+                            'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
+                            'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
+                            'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
+                            'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y' );
+$text = strtr( $text, $unwanted_array );
+
+	$text = str_replace("'s", "", $text);
+	$text = preg_replace('/[^a-zA-Z0-9]/', ' ', $text);
+	$text = preg_replace('/\s+/', ' ',$text);
+
+	$array = explode(" ", $text);
+	return $array;
 }
 
 
@@ -1082,21 +1173,25 @@ function addLinks($links, $movieid) {
 }
 
 
-function addTag($movie, $tag) {
+function addTag($movie, $tags, $user) {
 
-	$user = $_SESSION["user"];
-	$tag = trim($tag);
-	$tag = strtolower(preg_replace('/[^a-zA-Z0-9-_ @]/','', $tag));
-	if (strlen($tag) > 0) {
-	$time = time();
+	if (!is_array($tags)) {
+		$tags = array($tags);
+	}
 
-	$query = "INSERT INTO `".dbname."`.`tag` (`movie`, `user`, `tag`, `timestamp`) VALUES ('".$movie."', '".$user."', '".$tag."', '".$time."');";
+	foreach ($tags AS $tag) {
+		$tag = trim($tag);
+		$tag = strtolower(preg_replace('/[^a-zA-Z0-9-_ @]/','', $tag));
+		if (strlen($tag) > 0) {
+			$time = time();
 
-	db_query($query);
-	return $query;
-} else {
-	return false;
-}
+			$query = "INSERT INTO `".dbname."`.`tag` (`movie`, `user`, `tag`, `timestamp`) VALUES ('".$movie."', '".$user."', '".$tag."', '".$time."');";
+
+			$ret = db_query($query);
+			
+		}
+	}
+	return $ret;
 }
 
 function removeTag($movie, $tag) {
