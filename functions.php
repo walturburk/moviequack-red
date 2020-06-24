@@ -1416,33 +1416,38 @@ function getSvtPlayStreams($title, $year = null)
 	//print_r($result);
 	$result = json_decode($result, true);
 	
-foreach ($result["data"]["search"] AS $streams) {
-	//$streams = $result["data"]["search"][0];
+	foreach ($result["data"]["search"] AS $streams) {
+		//$streams = $result["data"]["search"][0];
 
 
 
-	$cleanstreamtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $streams["item"]["name"]));
+		$cleanstreamtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $streams["item"]["name"]));
 
-	
-	$cleandbtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $title));
+		
+		$cleandbtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $title));
 
-	
+		$longdescarr = explode("(", $streams["item"]["longDescription"]); //get original title from end of description
+		$originaltitle = str_replace(")", "", str_replace("(", "", end($longdescarr)));
 
-	if (strpos($streams["item"]["shortDescription"], "".$year) > 0) {
+		if ($cleandbtitle != $cleanstreamtitle) {
+			$streams["item"]["name"] = $originaltitle;
+		}
 
-		$stream = array();
-		$stream = $streams["item"];
-		$stream["monetization_type"] = "free";
-		$stream["provider_id"] = 901;
-		$stream["retail_price"] = 0;
-		$stream["currency"] = "SEK";
-		$stream["urls"]["standard_web"] = "https://www.svtplay.se".$streams["item"]["urls"]["svtplay"];
-		$stream["presentation_type"] = "HD";
-		$stream["date_provider_id"] = $streams["item"]["image"]["changed"]."_timestamp";
+		if (strpos($streams["item"]["shortDescription"], "".$year) > 0) {
 
-		$streamsarr[] = $stream;
+			$stream = array();
+			$stream = $streams["item"];
+			$stream["monetization_type"] = "free";
+			$stream["provider_id"] = 901;
+			$stream["retail_price"] = 0;
+			$stream["currency"] = "SEK";
+			$stream["urls"]["standard_web"] = "https://www.svtplay.se".$streams["item"]["urls"]["svtplay"];
+			$stream["presentation_type"] = "HD";
+			$stream["date_provider_id"] = $streams["item"]["image"]["changed"]."_timestamp";
+
+			$streamsarr[] = $stream;
+		}
 	}
-}
 
 	return $streamsarr;
 

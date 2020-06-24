@@ -32,7 +32,15 @@ $params = [
     "action" => "query",
     "format" => "json",
     "titles" => $result["query"]["search"][0]["title"],
-    "prop" => "extlinks"
+    "prop" => "info"
+];
+
+$params = [
+    "action" => "parse",
+    "format" => "json",
+    "pageid" => $result["query"]["search"][0]["pageid"],
+    "section" => "28"
+    
 ];
 
 $url = $endPoint . "?" . http_build_query( $params );
