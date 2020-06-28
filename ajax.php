@@ -141,6 +141,15 @@ switch ($mode) {
 		$tags = getTags($movie);
 		echo printTags($tags, $movie);
 		break;
+	case "ADDFILTER":
+		$word = $_REQUEST["q"];
+		$user = $_SESSION["user"];
+		echo addFilterWord($word, $user);
+		break;
+	case "REMOVEFILTER":
+		$word = $_REQUEST["q"];
+		echo removeFilterWord($word);
+		break;
 	case "RATEMOVIE":
 		$movie = $_REQUEST["movie"];
 		$user = $_SESSION["user"];

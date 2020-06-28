@@ -28,6 +28,7 @@ if (!$movie["id"]) {
 	$movie = addMovie($mid);
 	$movieinfo = db_select("SELECT * FROM  `movie` WHERE  `id` =  '".$id."' LIMIT 1");
 	$movie = $movieinfo[0];
+	$newmovie=true;
 }
 
 
@@ -45,26 +46,34 @@ $genre = $movie["genre"];
 $plot = $movie["overview"];
 
 
-$page = getWikipediaPage($movietitle, $year);
-$link = getWikipediaLink($page);
-addLinks($link, $movieid);
-$sections = getWikipediaSections($page);
 
-$sectionid = 1;
+if (isset($_REQUEST["updateinfo"]) || $newmovie==true) {
+	
+	$page = getWikipediaPage($movietitle, $year);
+	$link = getWikipediaLink($page);
+	addLinks($link, $movieid);
+	$sections = getWikipediaSections($page);
 
-foreach ($sections AS $id => $section) {
-	if ($section["line"] == "Plot" || $section["line"] == "Premise") {
-		//echo "SECTIONID:".print_r($section);
-		$sectionid = $section["index"];
-	} else {
-		//echo $section["line"];
+	$sectionid = 1;
+
+	foreach ($sections AS $id => $section) {
+		if ($section["line"] == "Plot" || $section["line"] == "Premise") {
+			//echo "SECTIONID:".print_r($section);
+			$sectionid = $section["index"];
+		} else {
+			//echo $section["line"];
+		}
 	}
+
+	$section_text = getWikipediaTextFromSection($page, $sectionid);
+	$splittedtext = splitWikitext($section_text);
+	$words = getFilteredWords();
+	$tagstoadd = array_diff($splittedtext, $words); //filters out all $words from the wikipedia words
+	addTag($movieid, $tagstoadd, "wikiplot");
 }
 
 
-$section_text = getWikipediaTextFromSection($page, $sectionid);
-$splittedtext = splitWikitext($section_text);
-addTag($movieid, $splittedtext, "wikiplot");
+
 ?>
 <div style="display:none;white-space:pre-wrap">
 <?php
@@ -108,7 +117,14 @@ if ($posts == "") {
 $webpagetitle = $movietitle;
 
 $tagsarr = getTags($movieid);
-$tags = printTags($tagsarr, $movieid);
+
+if ($_SESSION["user"] == "walturburk") {
+	$tags = '<button class="engage-filter-mode">Filter mode</button><br>';
+} else {
+	$tags = "";
+}
+
+$tags .= printTags($tagsarr, $movieid);
 $taglist = printAllTags($movieid);
 $friendstaglist = printAllFriendsTags($movieid);
 $streams = printStreams(getStreams($movieid));

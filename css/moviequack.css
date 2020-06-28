@@ -231,18 +231,29 @@ li.sortableli:hover .xinfo {
 	white-space:nowrap;
 	overflow-x:auto;
 }
-.tag {
+.tag, .filter-word {
 	padding:8px;
 	border:2px solid rgba(255,255,255,0);
 	cursor:pointer;
 	margin-bottom:3px;
 	vertical-align:top;
 }
+.filter-word {
+	margin-right:3px;
+	font-size:15px;
+	border-color:rgba(255,255,255,0.1);
+	display:inline-block;
+}
+
 .tag:hover {
 	border-color:white;
 }
 
 .tag.activebtn {
+	color:#fff;
+	background-color:#262D38;
+}
+.filter-word.activebtn {
 	color:#fff;
 	background-color:#262D38;
 }

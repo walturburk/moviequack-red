@@ -1075,6 +1075,29 @@ $text = strtr( $text, $unwanted_array );
 	return $array;
 }
 
+function getFilteredWords() {
+	$words = db_select("SELECT word FROM `filteredwords` ");
+	return array_column($words, 'word');
+}
+
+function filterWords($array) {
+	$sql = "DELETE FROM  `".dbname."`.`tag` WHERE `tag`.`tag` = '";
+	$sql .= implode("' OR `tag`.`tag` = '", $array);
+	$sql .= "'";
+	return db_query($sql);
+}
+
+function addFilterWord($word, $user = "") {
+	$query = "INSERT INTO `filteredwords` (`word`, `user`, `timestamp`) 
+		VALUES ('".$word."', '".$user."', ".time().");";
+	db_query($query);
+	return $query;
+}
+
+function removeFilterWord($word) {
+	$sql = "DELETE FROM  `".dbname."`.`filteredwords` WHERE `word` = '".$word."'";
+	return db_query($sql);
+}
 
 function matchMovieName($movie, $checknameo) {
 	
@@ -1201,7 +1224,7 @@ function removeTag($movie, $tag) {
 }
 
 function getAllTags() {
-	$tags = db_select("SELECT movie, user, tag, timestamp, COUNT(user) AS c FROM  `tag` GROUP BY tag ORDER BY tag ASC");
+	$tags = db_select("SELECT movie, user, tag, timestamp, COUNT(user) AS c FROM  `tag` GROUP BY tag ORDER BY c DESC");
 	return $tags;
 }
 
@@ -1393,6 +1416,20 @@ function printTags($tags, $movie) {
 
 	if (empty($tags)) {
 		$print = "";//<span class='white smalltext inblock padding0'>No tags</span>";
+	}
+	return $print;
+}
+
+function printTagsToFilter($tags) {
+	foreach ($tags AS $tag) {
+		$active = "activebtn";
+		$fontsize = 18+$tag["c"];
+		if ($fontsize > 24) {
+			$fontsize = 24;
+		}
+		$print .= "<div style='padding:0.25rem;font-size:".$fontsize."px' class='filter-word $active' data-tag='".$tag["tag"]."' >";
+		$print .= $tag["tag"];
+		$print .= "</div> ";
 	}
 	return $print;
 }
