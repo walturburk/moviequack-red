@@ -1357,7 +1357,7 @@ function getAllTagsByUser($user = NULL) {
 		} else {
 		$where = "WHERE user = '".$user."'";
 	}
-	$sql = "SELECT * FROM `tag` ".$where." GROUP BY tag ORDER BY `tag` DESC";
+	$sql = "SELECT * FROM `tag` ".$where." GROUP BY tag ORDER BY `tag` ASC";
 
 	$tags = db_select($sql);
 	
@@ -1424,11 +1424,13 @@ function printTagsToFilter($tags) {
 	foreach ($tags AS $tag) {
 		$active = "activebtn";
 		$fontsize = 18+$tag["c"];
-		if ($fontsize > 24) {
-			$fontsize = 24;
+		if ($fontsize > 36) {
+			$fontsize = 36;
 		}
-		$print .= "<div style='padding:0.25rem;font-size:".$fontsize."px' class='filter-word $active' data-tag='".$tag["tag"]."' >";
+		$print .= "<div style=';font-size:".$fontsize."px' class='filter-word $active' data-tag='".$tag["tag"]."' >";
+		
 		$print .= $tag["tag"];
+		$print .= "<span style='font-size:14; color:rgba(255,255,255,0.3)'>".$tag["c"]."</span>";
 		$print .= "</div> ";
 	}
 	return $print;

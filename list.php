@@ -62,6 +62,8 @@ $items = getFilteredItems($ischeckedu, $ischeckedt);
 
 if (empty($items) && $selectedlist != "") {
   $listitems = "<div style='' class='content narrow centeralign large'>This list is empty!</div>";
+} else if (empty($items)) {
+	$listitems = $tagsbuttons;
 } else if ($_REQUEST["view"] == "compact") {
 	$listitems .= "<ul class='clear floatleft sortablelist'>";
 	 foreach ($items AS $item) {

@@ -26,7 +26,10 @@ echo $foundation->output();
 
 if (isset($_REQUEST["getallplots"])) {
 
-    $movieinfo = db_select("SELECT id, title, year FROM  `movie`");
+    $movieinfo = db_select("SELECT m.id, m.title, m.year FROM  `movie` as m 
+    LEFT JOIN link AS l
+    ON m.id = l.movieid
+    WHERE url IS NULL");
     
     $words = getFilteredWords();
 
