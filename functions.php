@@ -810,6 +810,12 @@ function sortByGenre($movies) {
 	return $return;
 }
 
+function removeMovie($id) {
+
+	return db_query("DELETE FROM movie WHERE id = '".$id."'");
+
+}
+
 function reAddMovie($id) {
 	$sql = "SELECT * FROM  `movie` WHERE  `id` =  '".$id."'";
 	$movieinfo = db_select($sql);
@@ -954,7 +960,11 @@ function getWikipediaPage($movietitle, $movieyear) {
 
 
 	if ($result["query"]["search"][0]["pageid"] > 0) {
-		return $result["query"]["search"][0];
+		foreach ($result["query"]["search"] as $hit) {
+			if (strpos($hit["title"], $movietitle) !== false || strpos($movietitle, $hit["title"]) !== false) {
+				return $hit;
+			}
+		}
 	} else {
 		//print_r($result);
 		//die ("No page id found from search");
@@ -1185,12 +1195,12 @@ function addAkas($akas, $movieid) {
 	}
 }
 
-function addLinks($links, $movieid) {
+function addLinks($links, $movieid, $linkname = "") {
 	if (!is_array($links)) {
 		$links = array($links);
 	}
 	foreach ($links AS $l) {
-		$query = "INSERT INTO `link` (`movieid`, `linkname`, `url`, `timestamp`) VALUES ('".$movieid."', '', '".$l."', CURRENT_TIMESTAMP);";
+		$query = "INSERT INTO `link` (`movieid`, `linkname`, `url`, `timestamp`) VALUES ('".$movieid."', $linkname'', '".$l."', CURRENT_TIMESTAMP);";
 		db_query($query);
 	}
 }
@@ -1201,25 +1211,33 @@ function addTag($movie, $tags, $user) {
 	if (!is_array($tags)) {
 		$tags = array($tags);
 	}
-
+	$queryp = array();
+	$time = time();
 	foreach ($tags AS $tag) {
 		$tag = trim($tag);
 		$tag = strtolower(preg_replace('/[^a-zA-Z0-9-_ @]/','', $tag));
-		if (strlen($tag) > 0) {
-			$time = time();
-
-			$query = "INSERT INTO `".dbname."`.`tag` (`movie`, `user`, `tag`, `timestamp`) VALUES ('".$movie."', '".$user."', '".$tag."', '".$time."');";
-
-			$ret = db_query($query);
+		if (strlen($tag) > 1) {
 			
+			$queryp[] = "('".$movie."', '".$user."', '".$tag."', '".$time."')";
+
 		}
 	}
+
+	$query = "INSERT IGNORE INTO `".dbname."`.`tag` (`movie`, `user`, `tag`, `timestamp`) VALUES ".implode(", ", $queryp).";";
+	//echo $query;
+	$ret = db_query($query);
 	return $ret;
 }
 
 function removeTag($movie, $tag) {
 	$user = $_SESSION["user"];
 	$sql = "DELETE FROM  `".dbname."`.`tag` WHERE  `tag`.`user` =  '".$user."' AND  `tag`.`movie` =  '".$movie."' AND  `tag`.`tag` = '".$tag."' LIMIT 1";
+	return db_query($sql);
+}
+
+function removeWikiTagsByMovieovie ($movie) {
+	$user = $_SESSION["user"];
+	$sql = "DELETE FROM  `".dbname."`.`tag` WHERE  `tag`.`user` =  'wikiplot' AND  `tag`.`movie` =  '".$movie."'";
 	return db_query($sql);
 }
 
@@ -1236,7 +1254,7 @@ function getLinks($movieid) {
 function printLinks($links) {
 	$print = "";
 	foreach ($links AS $link) {
-		$print .= "<a class='link' href='".$link["url"]."' data-movie='".$link["movieid"]."'>";
+		$print .= "<a style='display:block' class='link' href='".$link["url"]."' data-movie='".$link["movieid"]."'>";
 		if ($link["linkname"] != "") {
 			$print .= $link["linkname"];
 		} else {
@@ -1349,7 +1367,7 @@ function getTagNamesByUser($movie, $user) {
 function getAllTagsByUser($user = NULL) {
 
 	if ($user == NULL) {
-		$where = "";
+		$where = "WHERE tag LIKE 'a%' ";
 	} else if (is_array($user)) {
 		$usersor = implode("' OR user = '", $user);
 		$where = "WHERE user = '".$usersor."' ";
@@ -2356,7 +2374,7 @@ function getFilteredItems($user, $tag, $options = array()) {
 
 	
 
-	$sql = "SELECT * 
+	/*$sql = "SELECT * 
 	FROM 
 	(SELECT tag.movie AS item, movie.*, count(*) as num_users 
 	FROM tag 
@@ -2365,7 +2383,7 @@ function getFilteredItems($user, $tag, $options = array()) {
 	AND (tag.tag = '$wtag') 
 	GROUP BY item ) 
 	as customtable
-	WHERE num_users >= ".count($users);
+	WHERE num_users >= ".count($users);*/
 
 	$sql = "SELECT * 
 	FROM 
@@ -2477,24 +2495,47 @@ function getStreamSites($user, $flatrate = true) {
 
 function getStreamableMovies($moviesarray, $tag = "bookmark") {
 
-$where_sql = implode("' OR s.movieid = '", $moviesarray);
+	$where_sql = implode("', '", $moviesarray);		
 
-	$sql = "SELECT * FROM ".dbname.".stream AS s
-LEFT JOIN ".dbname.".tag AS t
-ON t.movie = s.movieid
-LEFT JOIN ".dbname.".movie AS m
-ON s.movieid = m.id
-LEFT JOIN ".dbname.".provider AS p
-ON p.id = s.provider
-WHERE s.movieid = '".$where_sql."' 
-GROUP BY movieid, provider
-";
-//echo $sql;
+	$sql = "SELECT s.movieid, s.type, s.provider, m.poster, p.clear 
+	FROM ".dbname.".stream AS s
+	LEFT JOIN ".dbname.".tag AS t
+	ON t.movie = s.movieid
+	LEFT JOIN ".dbname.".movie AS m
+	ON s.movieid = m.id
+	LEFT JOIN ".dbname.".provider AS p
+	ON p.id = s.provider
+	WHERE s.movieid IN ('".$where_sql."') AND t.tag = '".$tag."' 
+	GROUP BY movieid, provider
+	";
+	//echo $sql;
+
 	$movies = db_select($sql);
 	
 	return $movies;
 
 }
+
+function getStreamableMoviesComplete($moviesarray, $tag = "bookmark") {
+
+	$where_sql = implode("' OR s.movieid = '", $moviesarray);
+	
+		$sql = "SELECT * FROM ".dbname.".stream AS s
+	LEFT JOIN ".dbname.".tag AS t
+	ON t.movie = s.movieid
+	LEFT JOIN ".dbname.".movie AS m
+	ON s.movieid = m.id
+	LEFT JOIN ".dbname.".provider AS p
+	ON p.id = s.provider
+	WHERE s.movieid = '".$where_sql."' 
+	GROUP BY movieid, provider
+	";
+	//echo $sql;
+		$movies = db_select($sql);
+		
+		return $movies;
+	
+	}
 
 
 

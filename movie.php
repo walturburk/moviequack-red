@@ -14,7 +14,8 @@ $user = $_SESSION["user"];
 $id = $_REQUEST["id"];
 
 if (isset($_REQUEST["updateinfo"])) {
-	reAddMovie($id);
+	removeMovie($id);
+	removeWikiTagsByMovieovie($id);
 }
 
 
@@ -51,7 +52,7 @@ if (isset($_REQUEST["updateinfo"]) || $newmovie==true) {
 	
 	$page = getWikipediaPage($movietitle, $year);
 	$link = getWikipediaLink($page);
-	addLinks($link, $movieid);
+	addLinks($link, $movieid, "Wikipedia");
 	$sections = getWikipediaSections($page);
 
 	$sectionid = 1;
@@ -66,9 +67,15 @@ if (isset($_REQUEST["updateinfo"]) || $newmovie==true) {
 	}
 
 	$section_text = getWikipediaTextFromSection($page, $sectionid);
+
 	$splittedtext = splitWikitext($section_text);
+
 	$words = getFilteredWords();
-	$tagstoadd = array_diff($splittedtext, $words); //filters out all $words from the wikipedia words
+
+	$tagstoadd = array_udiff($splittedtext, $words, "strcasecmp"); //filters out all $words from the wikipedia wordsc
+
+
+
 	addTag($movieid, $tagstoadd, "wikiplot");
 }
 

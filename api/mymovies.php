@@ -40,7 +40,11 @@ if ($_REQUEST["updateinfo"] == 1) {
 $movies = getStreamableMovies($moviesarray, "bookmark");
 
 
+
 foreach ($movies AS $movie) {
+  echo "<div style='white-space:nowrap'>";
+  print_r($movie);
+  echo "</div><br>";
   $streamsites[$movie["type"]][$movie["provider"]]["clear"] = $movie["clear"];
   $streamsites[$movie["type"]][$movie["provider"]]["count"] = 0+$streamsites[$movie["type"]][$movie["provider"]]["count"]+1;
   $streamsites[$movie["type"]][$movie["provider"]]["movie"][] = $movie;
