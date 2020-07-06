@@ -38,9 +38,24 @@ $movieid = $movie["id"];
 $movietitle = $movie["title"];
 $originaltitle = $movie["originaltitle"];
 $year = $movie["year"];
-$posterurl = baseposterurl.$movie["poster"];
+$posterurl = getPoster($movieid, 3);
+if (!$posterurl) {
+	$thumb = "thumb_".$movie["poster_path"];
+	$poster = "poster_".$movie["poster_path"];
+	$backdrop = "backdrop_".$movie["backdrop_path"]
+	addPoster($mqid, $thumb, 1);
+	downloadPosterToDir(basethumburl.$movie["poster_path"], $thumb);
+	addPoster($mqid, $poster, 3);
+	downloadPosterToDir(baseposterurl.$movie["poster_path"], $poster);
+	addPoster($mqid, $backdrop, 5);
+	downloadPosterToDir(basebackdropurl.$movie["backdrop_path"], $backdrop);
+}
+
 //$posterurl = checkImage($poster);
-$backdrop = $basebigbackdropurl.$movie["backdrop"];
+$backdrop = getPoster($movieid, 5);
+if (!$backdrop) {
+	$backdrop = $basebigbackdropurl.$movie["backdrop"];
+}
 
 $runtime = $movie["runtime"];
 $genre = $movie["genre"];
@@ -67,9 +82,9 @@ if (isset($_REQUEST["updateinfo"]) || $newmovie==true) {
 	}
 
 	$section_text = getWikipediaTextFromSection($page, $sectionid);
-
+//print_r($section_text);
 	$splittedtext = splitWikitext($section_text);
-
+//print_r($splittedtext);
 	$words = getFilteredWords();
 
 	$tagstoadd = array_udiff($splittedtext, $words, "strcasecmp"); //filters out all $words from the wikipedia wordsc
@@ -78,7 +93,6 @@ if (isset($_REQUEST["updateinfo"]) || $newmovie==true) {
 
 	addTag($movieid, $tagstoadd, "wikiplot");
 }
-
 
 
 ?>

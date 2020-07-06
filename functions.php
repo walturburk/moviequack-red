@@ -919,6 +919,17 @@ if ($err) {
 				'".$movie["revenue"]."', '".$movie["runtime"]."', '".$movie["status"]."', '".$movie["tagline"]."', '".$movie["id"]."', '".$searchstring."');";
 
 			db_query($query);
+			
+			$thumb = "thumb_".$movie["poster_path"];
+			$poster = "poster_".$movie["poster_path"];
+			$backdrop = "backdrop_".$movie["backdrop_path"]
+			addPoster($mqid, $thumb, 1);
+			downloadPosterToDir(basethumburl.$movie["poster_path"], $thumb);
+			addPoster($mqid, $poster, 3);
+			downloadPosterToDir(baseposterurl.$movie["poster_path"], $poster);
+			addPoster($mqid, $backdrop, 5);
+			downloadPosterToDir(basebackdropurl.$movie["backdrop_path"], $backdrop);
+			
 
 			addGenresForMovie($movie["genres"], $mqid);
 			addCompanies($movie["production_companies"], $mqid);
@@ -934,6 +945,49 @@ if ($err) {
 	
 //$movie["mqid"] = $mqid;
 	return $mqid;
+}
+
+function downloadPosterToDir($url, $filename = null) {
+	//$url = "https://image.tmdb.org/t/p/w342/6UTZmeQcxbtW32MyR5nKIx7ID4f.jpg";
+	
+	//if source url is set, proceed, otherwise return false
+	if ($url) { 
+		$dir = "/var/www/html/moviequack/img/posters/";
+	
+		//if filename is set, save as specific file
+		if ($filename) {
+			$cmd = 'wget -O '.$dir.$filename.' '.$url;
+		} else { //otherwise just save with sourcename
+			$cmd = 'wget -P '.$dir.' '.$url;
+		}
+	
+		return shell_exec($cmd);
+
+	} else {
+
+		return false;
+
+	}
+
+}
+
+function addPoster($movieid, $filename, $size) {
+
+	$query = "INSERT INTO `poster` (`movieid`, `filename`, `size`, `timestamp`) 
+	VALUES ('".$movieid."', '".$filename."', ".$size.", ".time().");";
+
+	return db_query($query);
+}
+
+function getPoster($movieid, $size) {
+	$dir = "/img/posters/";
+	$posters = db_select("SELECT filename FROM `poster` WHERE movieid = '".$movieid."' AND size = ".$size);
+	if ($posters) {
+		return $dir.$posters[0]["filename"];
+	} else {
+		return false;
+	}
+	
 }
 
 //enter movietitle and movieyear as params
@@ -961,7 +1015,9 @@ function getWikipediaPage($movietitle, $movieyear) {
 
 	if ($result["query"]["search"][0]["pageid"] > 0) {
 		foreach ($result["query"]["search"] as $hit) {
+			echo $hit["title"]."<br>".$movietitle;
 			if (strpos($hit["title"], $movietitle) !== false || strpos($movietitle, $hit["title"]) !== false) {
+			
 				return $hit;
 			}
 		}
@@ -1226,6 +1282,7 @@ function addTag($movie, $tags, $user) {
 	$query = "INSERT IGNORE INTO `".dbname."`.`tag` (`movie`, `user`, `tag`, `timestamp`) VALUES ".implode(", ", $queryp).";";
 	//echo $query;
 	$ret = db_query($query);
+	//echo $query;
 	return $ret;
 }
 
@@ -1851,7 +1908,7 @@ function printStreams($streams) {
 }
 
 
-function addPoster($link) {
+/*function addPoster($link) {
 	if ($link != null) {
 		$linkparts = explode("/", $link);
 		$filename = end($linkparts);
@@ -1862,7 +1919,7 @@ function addPoster($link) {
 		db_query("INSERT INTO poster (movie, filename, image) VALUES ('movie', '$filename', '$imageContentsEscaped')");
 		echo "<h1>".$imageContents."</h1>";
 	}
-}
+}*/
 
 function isVisitor($userid) {
 	if (strlen($userid) == 14 && substr($userid, 0, 1) == "u") {
