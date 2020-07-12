@@ -5,7 +5,7 @@
 <?php foreach ($shares as $share): ?>
 <div class="inblock">
 <a href="/movie/<?= $share["movieid"] ?>">
-    <img class="poster" src="<?= basethumburl.$share["poster"]; ?>">
+    <img class="poster" src="/img/posters/<?= $share["poster"]; ?>">
 </a>
 <a class="block small centeralign" href="/user/<?= $share["user1"] ?>"><?= $share["user1"] ?></a>
 </div>
@@ -21,7 +21,7 @@
 <?php foreach ($bookmarks as $bookmark): ?>
 <div class="inblock">
 <a href="/movie/<?= $bookmark["item"] ?>">
-    <img class="poster" src="<?= basethumburl.$bookmark["poster"]; ?>">
+    <img class="poster" src="/img/posters/<?= $bookmark["poster"]; ?>">
 </a>
 </div>
 <?php endforeach; ?>
@@ -33,10 +33,11 @@
 
 <h4>Algo</h4>
 
-<?php foreach ($suggested as $suggest): ?>
+<?php  foreach ($suggested as $suggest): ?>
+<?php print_r($suggest); ?>
 <div class="inblock">
-<a href="/movie/<?= $suggest["item"] ?>">
-    <img class="poster" src="<?= basethumburl.$suggest["poster"]; ?>">
+<a href="/movie/<?= $suggest["movieid"] ?>">
+    <img class="poster" src="/img/posters/<?= $suggest["poster"]; ?>">
 </a>
 </div>
 <?php endforeach; ?>

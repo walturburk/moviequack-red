@@ -14,7 +14,7 @@ $user = $_SESSION["user"];
 $shares = getShareFeed();
 $bookmarks = getFilteredItems($user, "bookmark");
 $suggested = getTopSuggestedMovies($user);
-
+//print_r($suggested);
 //printout
 echo $layoutpart[0];
 include("templates/dashboardpage.php");

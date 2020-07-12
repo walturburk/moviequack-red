@@ -10,6 +10,7 @@ if ($_SESSION["loggedin"]) {
 } else if (strpos($_SERVER['REQUEST_URI'], "welcome") > 0) {
 } else if (strpos($_SERVER['REQUEST_URI'], "login") > 0) {
 } else if (strpos($_SERVER['REQUEST_URI'], "join") > 0 && isset($_REQUEST["inv"])) {
+} else if (strpos($_SERVER['REQUEST_URI'], "massupdatestreams") > 0) {
 } else {
 	header("Location: /welcome");
 }
@@ -21,6 +22,7 @@ $baseposterurl = "https://image.tmdb.org/t/p/w342/";
 $basebackdropurl = "https://image.tmdb.org/t/p/w780/";
 $basebigbackdropurl = "https://image.tmdb.org/t/p/w1280/";
 
+define("apikey", "0a9b195ddb48019271ac2de755730dd4");
 define("basethumburl", "https://image.tmdb.org/t/p/w92/");
 define("basepostermurl", "https://image.tmdb.org/t/p/w185/");
 define("baseposterurl", "https://image.tmdb.org/t/p/w342/");
@@ -571,7 +573,7 @@ function getWeightedMovieRatings($user) {
 }
 
 function getTopSuggestedMovies($user) {
-	$sql = "SELECT movieinfo.*, overall, (overall+COALESCE(weighted_overall, 0)) as total_overall 
+	$sql = "SELECT movieinfo.id AS movieid, po.filename as poster, overall, (overall+COALESCE(weighted_overall, 0)) as total_overall 
 	FROM 
 	(SELECT movie AS movieid, rm.rating, SUM(rm.rating)/COUNT(rm.rating) as overall, SUM((tb.corr*(rm.rating-6))) / COUNT(rm.rating) AS weighted_overall
 	FROM ".dbname.".ratemovie as rm 
@@ -606,10 +608,14 @@ function getTopSuggestedMovies($user) {
 	) AS user1rate 
 	ON movieid = user1rate.movie 
 	LEFT JOIN ".dbname.".movie as movieinfo
-ON movieinfo.id = movieid 
-	WHERE user IS NULL 
+	ON movieinfo.id = movieid 
+	LEFT JOIN ".dbname.".poster as po
+	ON po.movieid = mega_table.movieid  AND po.size = 1 
+	LEFT JOIN tag 
+	ON tag.movie = mega_table.movieid AND tag.tag = 'bookmark' AND tag.user = '".$user."'
+	WHERE user1rate.user IS NULL 
+	AND tag.user IS NULL
 	ORDER BY total_overall DESC";
-
 	$movies = db_select($sql);
 	return $movies;
 }
@@ -919,10 +925,10 @@ if ($err) {
 				'".$movie["revenue"]."', '".$movie["runtime"]."', '".$movie["status"]."', '".$movie["tagline"]."', '".$movie["id"]."', '".$searchstring."');";
 
 			db_query($query);
-			
-			$thumb = "thumb_".$movie["poster_path"];
-			$poster = "poster_".$movie["poster_path"];
-			$backdrop = "backdrop_".$movie["backdrop_path"]
+
+			$thumb = $movie["poster_path"]."_thumb";
+			$poster = $movie["poster_path"]."_poster";
+			$backdrop = $movie["backdrop_path"]."_backdrop";
 			addPoster($mqid, $thumb, 1);
 			downloadPosterToDir(basethumburl.$movie["poster_path"], $thumb);
 			addPoster($mqid, $poster, 3);
@@ -1015,9 +1021,9 @@ function getWikipediaPage($movietitle, $movieyear) {
 
 	if ($result["query"]["search"][0]["pageid"] > 0) {
 		foreach ($result["query"]["search"] as $hit) {
+			$hit["title"] = explode("(", $hit["title"]);
 			echo $hit["title"]."<br>".$movietitle;
 			if (strpos($hit["title"], $movietitle) !== false || strpos($movietitle, $hit["title"]) !== false) {
-			
 				return $hit;
 			}
 		}
@@ -1445,7 +1451,7 @@ function getTags($movie) {
 	$user = $_SESSION["user"];
 	$sql1 = "SELECT movie, user, tag, timestamp, COUNT(user) AS c FROM  `tag` WHERE  `movie` =  '".$movie."' AND user = '".$user."' GROUP BY tag ORDER BY c DESC";
 	$tags1 = db_select($sql1);
-	$sql2 = "SELECT movie, user, tag, timestamp, COUNT(user) AS c FROM  `tag` WHERE  `movie` =  '".$movie."' GROUP BY tag ORDER BY c DESC";
+	$sql2 = "SELECT movie, user, tag, timestamp, COUNT(user) AS c FROM  `tag` WHERE  `movie` =  '".$movie."' GROUP BY tag ORDER BY c DESC, RAND()";
 	$tags2 = db_select($sql2);
 
 
@@ -1748,18 +1754,19 @@ function massUpdateStreams($movies) {
 
 	$sql = "SELECT s.*, m.title, m.year, m.id AS movieid
 	FROM ".dbname.".movie AS m
-LEFT JOIN ".dbname.".stream AS s
-ON s.movieid = m.id
-WHERE (m.id = '".$sqlpart."')
-AND (s.timestamp < ".$timeago." OR s.timestamp IS NULL)
-GROUP BY m.id";
-//echo $sql;
+	LEFT JOIN ".dbname.".stream AS s
+	ON s.movieid = m.id
+	WHERE (m.id = '".$sqlpart."')
+	AND (s.timestamp < ".$timeago." OR s.timestamp IS NULL)
+	GROUP BY m.id";
+	//echo $sql;
 	$streams = db_select($sql);
 
 	foreach ($streams AS $stream) {
-		//echo $stream["movieid"]." ".$stream["title"]." ".$stream["year"]."<br>";
+		echo $stream["movieid"]." ".$stream["title"]." ".$stream["year"]."<br>";
 		saveStreams($stream);
 	}
+	return $sql;
 }
 
 function saveStreams($movie) {
@@ -2058,12 +2065,14 @@ $postusersql = "";
 			$postusersql = " OR tag.tag LIKE '@".$_SESSION["user"]."'";
 		}
 
-$sql = "SELECT 'tag' AS feedtype, tag.tag AS tag, tag.user AS user1id, user.username AS user1, tag.movie, tag.timestamp, movie.id AS movieid, movie.title AS title, movie.poster, movie.backdrop AS backdrop
+$sql = "SELECT 'tag' AS feedtype, tag.tag AS tag, tag.user AS user1id, user.username AS user1, tag.movie, tag.timestamp, movie.id AS movieid, movie.title AS title, p.filename as poster, movie.backdrop AS backdrop
 				FROM `tag`
 				LEFT JOIN user
 				ON tag.user = user.username
 				LEFT JOIN movie
 				ON tag.movie = movie.id
+				LEFT JOIN poster as p
+				ON p.movieid = movie.id AND p.size = 1 
 				WHERE (tag.tag LIKE '@%' AND (user = 'start' $postusersql))
 				GROUP BY tag.movie
 				ORDER BY `tag`.`timestamp` DESC
@@ -2398,7 +2407,7 @@ $fdivend = "</div>";
 
 function getFilteredItems($user, $tag, $options = array()) {
 
-	if (empty($user)) {
+	if (empty($user) || $user == null) {
 		$wuser = "user != '1'";
 	} else if (is_array($user)) {
 		foreach ($user AS $u) {
@@ -2444,9 +2453,10 @@ function getFilteredItems($user, $tag, $options = array()) {
 
 	$sql = "SELECT * 
 	FROM 
-	(SELECT tag.movie AS item, movie.*, count(*) as num_users 
+	(SELECT tag.movie AS item, movie.title, poster.filename as poster, count(*) as num_users 
 	FROM tag 
 	LEFT JOIN movie ON movie.id = tag.movie 
+	LEFT JOIN poster ON poster.movieid = movie.id AND poster.size = 1
 	WHERE ($wuser) 
 	AND (tag.tag = '$wtag') 
 	GROUP BY item ) 
@@ -2468,23 +2478,13 @@ function removePost($post) {
 	return db_query($sql);
 }
 
-function checkImage($url) {
-
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_HEADER, 1);
-    curl_setopt($ch , CURLOPT_RETURNTRANSFER, 1);
-    $data = curl_exec($ch);
-    $headers = curl_getinfo($ch);
-    curl_close($ch);
-
-	if ($headers['http_code']) {
-		$return = $url;
-	} else {
-		$return = "https://images-na.ssl-images-amazon.com/images/M/MV5BMTUxMzQyNjA5MF5BMl5BanBnXkFtZTYwOTU2NTY3._V1_SX300.jpg";
-	}
-
-    return $return;
+function getMimeType($filename)
+{
+    $mimetype = false;
+    if(function_exists('mime_content_type')) {
+       $mimetype = mime_content_type($filename);
+    }
+    return $mimetype;
 }
 
 function checkImage2($posterurl) {
@@ -2554,14 +2554,16 @@ function getStreamableMovies($moviesarray, $tag = "bookmark") {
 
 	$where_sql = implode("', '", $moviesarray);		
 
-	$sql = "SELECT s.movieid, s.type, s.provider, m.poster, p.clear 
-	FROM ".dbname.".stream AS s
+	$sql = "SELECT s.movieid, s.type, s.provider, po.filename as poster, p.clear 
+	FROM ".dbname.".stream AS s 
 	LEFT JOIN ".dbname.".tag AS t
 	ON t.movie = s.movieid
 	LEFT JOIN ".dbname.".movie AS m
 	ON s.movieid = m.id
 	LEFT JOIN ".dbname.".provider AS p
 	ON p.id = s.provider
+	LEFT JOIN ".dbname.".poster AS po
+	ON po.movieid = m.id AND po.size = 1
 	WHERE s.movieid IN ('".$where_sql."') AND t.tag = '".$tag."' 
 	GROUP BY movieid, provider
 	";

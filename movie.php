@@ -40,15 +40,16 @@ $originaltitle = $movie["originaltitle"];
 $year = $movie["year"];
 $posterurl = getPoster($movieid, 3);
 if (!$posterurl) {
-	$thumb = "thumb_".$movie["poster_path"];
-	$poster = "poster_".$movie["poster_path"];
-	$backdrop = "backdrop_".$movie["backdrop_path"]
+	$thumb = $movie["poster"]."_thumb";
+	$poster = $movie["poster"]."_poster";
+	$backdrop = $movie["backdrop"]."_backdrop";
 	addPoster($mqid, $thumb, 1);
 	downloadPosterToDir(basethumburl.$movie["poster_path"], $thumb);
 	addPoster($mqid, $poster, 3);
 	downloadPosterToDir(baseposterurl.$movie["poster_path"], $poster);
 	addPoster($mqid, $backdrop, 5);
 	downloadPosterToDir(basebackdropurl.$movie["backdrop_path"], $backdrop);
+	$posterurl = getPoster($movieid, 3);
 }
 
 //$posterurl = checkImage($poster);
@@ -57,8 +58,14 @@ if (!$backdrop) {
 	$backdrop = $basebigbackdropurl.$movie["backdrop"];
 }
 
+$genrearr = getGenreNamesForMovie($movieid);
+foreach ($genrearr AS $name) {
+	$arry[] = $name["name"];
+}
+$genre = implode(", ", $arry);
+
 $runtime = $movie["runtime"];
-$genre = $movie["genre"];
+
 $plot = $movie["overview"];
 
 
@@ -146,7 +153,7 @@ if ($_SESSION["user"] == "walturburk") {
 }
 
 $tags .= printTags($tagsarr, $movieid);
-$taglist = printAllTags($movieid);
+//$taglist = printAllTags($movieid);
 $friendstaglist = printAllFriendsTags($movieid);
 $streams = printStreams(getStreams($movieid));
 $links = printLinks(getLinks($movieid));

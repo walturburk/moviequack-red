@@ -77,7 +77,7 @@ if (empty($items) && $selectedlist != "") {
     $listitems .= "<tr class='titleitem addremparent' id='".$item["item"]."'>";
 
 		$listitems .= "<td class='fixedcell'>";
-	$listitems .= "<a href='/movie/".$item["item"]."' class=''><img alt='".$item["title"]."' class='handle' src='".basethumburl.$item["poster"]."'></a>";
+	$listitems .= "<a href='/movie/".$item["item"]."' class=''><img alt='".$item["title"]."' class='handle' src='/img/posters/".$item["poster"]."'></a>";
 $listitems .= "</td>";
 $listitems .= "<td style='height:105px;min-width:70px;'> </td>";
 

@@ -220,6 +220,12 @@ li.sortableli:hover .xinfo {
 	background-color:rgba(0,0,0,0.5);
 	color:white;
 }
+#tagscontent {
+	max-height: 80px;
+	overflow: auto;
+	display: block;
+	white-space: nowrap;
+}
 .addtags .tag, #tagscontent .tag {
 	display:inline-block;
 }

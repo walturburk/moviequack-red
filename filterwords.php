@@ -13,9 +13,12 @@ if (isset($_REQUEST["removetags"])) {
     filterWords(getFilteredWords());
 }
 
+if (isset($_REQUEST["getalltags"])) {
+
 $alltags = getAllTags();
 $content = "<a href='?removetags'>Remove tags</a><br>".printTagsToFilter($alltags);
 
+}
 $body = $layout->output();
 echo $foundation->output();
 
@@ -64,6 +67,43 @@ if (isset($_REQUEST["getallplots"])) {
 
 
 */
+}
+
+//get all plots
+
+if (isset($_REQUEST["getallposters"])) {
+
+    $movieinfo = db_select("SELECT m.id, m.title, m.year FROM  `movie` as m 
+    LEFT JOIN poster AS p
+    ON m.id = p.movieid
+    WHERE p.filename IS NULL
+    LIMIT 250");
+
+print_r($movieinfo);
+    foreach ($movieinfo as $m) {
+        $movieid = ltrim($m["id"], 'm'); 
+        $url = "https://api.themoviedb.org/3/movie/".$movieid."?api_key=".apikey;
+		$json = file_get_contents($url);
+		//echo "<br>urlwithid:".$url."<br>";
+		
+		$movie = json_decode($json, true);
+        
+        $thumb = $m["id"]."_thumb";
+        $poster = $m["id"]."_poster";
+        $backdrop = $m["id"]."_backdrop";
+
+        /*echo $url;
+        echo "<br>thumb: ".$thumb;
+        echo "<br>poster: ".$poster;
+        echo "<br>backdrop: ".$backdrop;*/
+        echo "<br><img src='".basethumburl.$movie["poster_path"]."'><br>";
+        addPoster($m["id"], $thumb, 1);
+        downloadPosterToDir(basethumburl.$movie["poster_path"], $thumb);
+        addPoster($m["id"], $poster, 3);
+        downloadPosterToDir(baseposterurl.$movie["poster_path"], $poster);
+        addPoster($m["id"], $backdrop, 5);
+        downloadPosterToDir(basebackdropurl.$movie["backdrop_path"], $backdrop);
+    }
 }
 
 
