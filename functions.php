@@ -1560,22 +1560,23 @@ function saveStreams($movie) {
 	$year = $movie["year"];
 	
 	$streams = getExternalStreams($title, $year);
-	$svtplaystream = getSvtPlayStreams($title, $year);
+
+	$svtplaystream = getSvtPlayStreams($title, $year); //fetch streams by default movie title
 	
 	if ($svtplaystream) {
 		foreach ($svtplaystream AS $s) {
-			print_r($s);
+			//print_r($s);
 			if (matchMovieName($movie, $s["name"])) {
 				$streams["items"][0]["offers"][] = $s;
 			}
 		}
 	}
 
-	$svtplaystreamoriginal = getSvtPlayStreams($originaltitle, $year);
+	$svtplaystreamoriginal = getSvtPlayStreams($originaltitle, $year); //fetch streams by original movie title
 	
 	if ($svtplaystreamoriginal) {
 		foreach ($svtplaystreamoriginal AS $s) {
-			print_r($s);
+			//print_r($s);
 			if (matchMovieName($movie, $s["name"])) {
 				$streams["items"][0]["offers"][] = $s;
 			}
@@ -1587,30 +1588,19 @@ function saveStreams($movie) {
 		$streams["items"][0]["offers"][] = $cineasternastream;
 	}
 
-	if (isset($_GET["updateinfo"])) {
-		print_r($streams);
-	}
-
-	$cleandbtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $title));
-	$cleandboriginaltitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $originaltitle));
-	$cleanstreamtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $streams["items"][0]["title"]));
-	//echo "<br>";
-	if ($cleandbtitle == $cleanstreamtitle || $cleandboriginaltitle == $cleanstreamtitle) {
-		//echo "yes <br>".$cleandbtitle ."<br>". $cleanstreamtitle;
-	} else {
-		//echo "no <br>".$cleandbtitle ."<br>". $cleanstreamtitle;
-	}
-	//echo "<br>";
 
 	if (matchMovieName($movie, $streams["items"][0]["title"]) && is_array($streams["items"][0]["offers"])) {
 		//echo "Update with new streams";
+
+		//check if there was an old stream
+		//$sql = "SELECT link FROM stream WHERE movieid = '' ";
+		//$existing_streams = db_select($sql);
+
 		$query = "DELETE FROM stream WHERE movieid = '$movieid'";
 
 		db_query($query);
 
 		$streams = $streams["items"][0]["offers"];
-
-		//print_r($streams);
 
 		$timestamp = time();
 
@@ -1633,6 +1623,7 @@ function saveStreams($movie) {
 			//echo $query."<br>";
 			db_query($query);
 		}
+
 	} else {
 		//echo "Update empty";
 		$query = "DELETE FROM stream WHERE movieid = '$movieid'";
