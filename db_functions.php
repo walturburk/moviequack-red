@@ -76,18 +76,24 @@ function isDev() {
 }
 
 
-function getConfig() {
+function getConfig($config = null) {
 
-  if (isDev()) {
-    $config = parse_ini_file("config-dev.ini");
-    $config = parse_ini_file("../../config.ini");
-    if (!$config) {
+  if ($config == null) {
+    if (isDev()) {
+      $config = parse_ini_file("config-dev.ini");
       $config = parse_ini_file("../../config.ini");
+      if (!$config) {
+        $config = parse_ini_file("../../config.ini");
+      }
+    } else {
+      $config = parse_ini_file("../../config-live.ini");
+      if (!$config) {
+        $config = parse_ini_file("../../../config-live.ini");
+      }
+      $config["baseurl"] = "https://" . $_SERVER['SERVER_NAME'] ;
     }
-  } else {
-    $config = parse_ini_file("../../config-live.ini");
-    $config["baseurl"] = "https://" . $_SERVER['SERVER_NAME'] ;
   }
+ 
   
 
   return $config;

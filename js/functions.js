@@ -357,7 +357,34 @@ jQuery(document).on("click", ".postmessage .submit", function(e) {
 		postAjaxPhp(obj).done(function(result) {
 			jQuery("span#tagscontent").html(result);
 		});
-	});
+  });
+  
+  jQuery(document).on("click", ".filter-word", function(e) {
+		var word = jQuery(this).attr("data-tag");
+		var active = jQuery(this).hasClass("activebtn");
+
+		if (active) {
+			var mode = "ADDFILTER";
+			jQuery("[data-tag='"+word+"']").removeClass("activebtn");
+		} else {
+			var mode = "REMOVEFILTER";
+			jQuery("[data-tag='"+word+"']").addClass("activebtn");
+		}
+		obj = {
+			mode: mode,
+			q: word
+		};
+		postAjaxPhp(obj).done(function(result) {
+		  console.log(result);
+		});
+  });
+  
+  jQuery(document).on("click", ".engage-filter-mode", function() {
+
+    alert("Click tags to filter them out from future use");
+    jQuery(".tag").removeClass("tag").addClass("filter-word").addClass("activebtn");
+
+  });
 
 	jQuery(document).on("click", ".voteparent .votebtn", function() {
 

@@ -114,7 +114,7 @@ switch ($mode) {
 			$q = trim($q);
 			addLinks($q, $movie);
 		} else {
-			addTag($movie, $q);
+			addTag($movie, $q, $_SESSION["user"]);
 			$tags = getTags($movie);
 		}
 		
@@ -130,7 +130,7 @@ switch ($mode) {
 			$str = substr($q, 1);
 		}
 		if (checkIfUserExist($q)) {
-			addTag($movie, $atq);
+			addTag($movie, $atq, $_SESSION["user"]);
 		}
 		$tags = getTags($movie);
 		echo printTags($tags, $movie);
@@ -140,6 +140,15 @@ switch ($mode) {
 		removeTag($movie, $q);
 		$tags = getTags($movie);
 		echo printTags($tags, $movie);
+		break;
+	case "ADDFILTER":
+		$word = $_REQUEST["q"];
+		$user = $_SESSION["user"];
+		echo addFilterWord($word, $user);
+		break;
+	case "REMOVEFILTER":
+		$word = $_REQUEST["q"];
+		echo removeFilterWord($word);
 		break;
 	case "RATEMOVIE":
 		$movie = $_REQUEST["movie"];

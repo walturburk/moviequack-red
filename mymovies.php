@@ -89,7 +89,8 @@ foreach ($ss AS $key => $streamsite) {
         $style = "background-color:initial; opacity: ".(100/(count($ischeckedu)+1-($filteredmovies[$movie["movieid"]]["num_users"])))."%;";
       }
       //$print .= print_r($filteredmovies[$movie["movieid"]], true);
-      $print .= "<a class='$classes' style='$style' href='/movie/".$movie["movieid"]."'><img src='".basethumburl.$movie["poster"]."'/></a>";
+      $print .= "<a class='$classes' style='$style' href='/movie/".$movie["movieid"]."'><img src='/img/posters/".$movie["poster"]."'/></a>";
+      //$print .= print_r($movie, true);
     }
     $print .= "<div style='padding:2rem 0;'></div>";
   }
