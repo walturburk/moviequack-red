@@ -1896,16 +1896,17 @@ function newStreamNotification($movieid, $link, $providerid, $type) {
 	$sql = "SELECT title FROM movie WHERE id = '".$movieid."'";
 	$movie = db_select($sql)[0];
 
+	$provider["name"] = ucwords($provider["name"]);
 	// the subject 
 	$subject = $movie["title"]." is now available on ".$provider["name"];
 	// the message
-	$msg = $movie["title"]." is now available on ".$provider["name"]."\n<a href='".$link."'>Click here to stream</a>\n".$email_to;
+	$msg = $movie["title"]." is now available on ".$provider["name"]."\nLink: ".$link."\n"."Recipients: ".$email_to;
 
 	// use wordwrap() if lines are longer than 70 characters
 	$msg = wordwrap($msg,70);
 	echo "newstreamnot ";
 	echo $msg;
-	$headers = "From: streams@moviequack.com";
+	$headers = "From: moviequack.com <streams@moviequack.com>";
 
 	// send email
 	return mail("hietanen@gmail.com", $subject, $msg, $headers);
