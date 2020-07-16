@@ -161,6 +161,54 @@ function db_select($query) {
     return $rows;
 }
 
+function db_select_key($query, $key) {
+  $rows = array();
+  $result = db_query($query);
+
+  // If query failed, return `false`
+  if($result === false) {
+      return false;
+  }
+
+  // If query was successful, retrieve all the rows into an array
+  while ($row = mysqli_fetch_assoc($result)) {
+      $rows[$row[$key]] = $row;
+  }
+  return $rows;
+}
+
+function db_select_val($query, $val) {
+  $rows = array();
+  $result = db_query($query);
+
+  // If query failed, return `false`
+  if($result === false) {
+      return false;
+  }
+
+  // If query was successful, retrieve all the rows into an array
+  while ($row = mysqli_fetch_assoc($result)) {
+      $rows[] = $row[$val];
+  }
+  return $rows;
+}
+
+function db_select_key_val($query, $key, $val) {
+  $rows = array();
+  $result = db_query($query);
+
+  // If query failed, return `false`
+  if($result === false) {
+      return false;
+  }
+
+  // If query was successful, retrieve all the rows into an array
+  while ($row = mysqli_fetch_assoc($result)) {
+      $rows[$row[$key]] = $row[$val];
+  }
+  return $rows;
+}
+
 function formatTimestamp($time) {
 	$formatted = date("l jS \of F Y H:i:s", $time);
 	return $formatted;

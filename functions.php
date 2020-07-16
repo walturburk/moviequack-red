@@ -1809,18 +1809,19 @@ function saveStreams($movie) {
 		//echo "Update with new streams";
 
 		//check if there was an old stream
-		//$sql = "SELECT link FROM stream WHERE movieid = '' ";
-		//$existing_streams = db_select($sql);
+		$sql = "SELECT movieid, link FROM stream WHERE movieid = '$movieid' ";
+		$existing_streams = db_select_val($sql, "link");
+		print_r($existing_streams);
 
-		$query = "DELETE FROM stream WHERE movieid = '$movieid'";
-
-		db_query($query);
+		/*$query = "DELETE FROM stream WHERE movieid = '$movieid'";
+		db_query($query);*/
 
 		$streams = $streams["items"][0]["offers"];
 
 		$timestamp = time();
 
 		foreach($streams AS $stream) {
+
 			$region = "en_SE";
 			$type = $stream["monetization_type"];
 			$provider = $stream["provider_id"];
@@ -1831,13 +1832,23 @@ function saveStreams($movie) {
 			$cutproviderdate = explode("_", $stream["date_provider_id"]);
 			$dateproviderid = date("Y-m-d", strtotime($cutproviderdate[0]));
 
+			if (!in_array($link, $existing_streams)) { //if stream link does not exist before
+
+				newStreamNotification($movieid, $link, $provider, $type);
+
+			} else { //if stream link already exists, update timestamp to indicate it has been checked
+				$query = "UPDATE `".dbname."`.`stream` SET `timestamp` = ".$timestamp." WHERE link = '".$link."';";
+				$ret = db_query($query);
+			}
+
 			$query = "INSERT INTO `".dbname."`.`stream`
-			(`movieid`, `region`, `type`, `provider`, `price`, `currency`, `link`, `def`, `dateproviderid`, `timestamp`)
-			VALUES
-			('$movieid', '$region', '$type', '$provider', '$price', '$currency', '$link', '$def', '$dateproviderid', '$timestamp')
-				";
-			//echo $query."<br>";
-			db_query($query);
+				(`movieid`, `region`, `type`, `provider`, `price`, `currency`, `link`, `def`, `dateproviderid`, `timestamp`)
+				VALUES
+				('$movieid', '$region', '$type', '$provider', '$price', '$currency', '$link', '$def', '$dateproviderid', '$timestamp')
+					";
+				//echo $query."<br>";
+				$ret = db_query($query);
+			
 		}
 
 	} else {
@@ -1868,6 +1879,38 @@ function saveStreams($movie) {
 
 }
 
+function newStreamNotification($movieid, $link, $providerid, $type) {
+
+	$sql = "SELECT user.email as email
+	FROM `tag` 
+	LEFT JOIN `user`
+	ON `tag`.`user` = `user`.`username`
+	WHERE movie = '$movieid' AND tag = 'bookmark'";
+	$user = db_select_val($sql, "email");
+
+	$email_to = implode(",", $user);
+
+	$sql = "SELECT name FROM provider WHERE id = $providerid";
+	$provider = db_select($sql)[0];
+
+	$sql = "SELECT title FROM movie WHERE id = '".$movieid."'";
+	$movie = db_select($sql)[0];
+
+	// the subject 
+	$subject = $movie["title"]." is now available on ".$provider["name"];
+	// the message
+	$msg = $movie["title"]." is now available on ".$provider["name"]."\n<a href='".$link."'>Click here to stream</a>\n".$email_to;
+
+	// use wordwrap() if lines are longer than 70 characters
+	$msg = wordwrap($msg,70);
+	echo "newstreamnot ";
+	echo $msg;
+	$headers = "From: streams@moviequack.com";
+
+	// send email
+	return mail("hietanen@gmail.com", $subject, $msg, $headers);
+
+}
 
 function getStreams($movieid) {
 
