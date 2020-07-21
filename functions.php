@@ -1027,10 +1027,23 @@ function getWikipediaPage($movietitle, $movieyear) {
 
 	if ($result["query"]["search"][0]["pageid"] > 0) {
 		foreach ($result["query"]["search"] as $hit) {
-			$hit["title"] = explode("(", $hit["title"]);
-			echo $hit["title"]."<br>".$movietitle;
-			if (strpos($hit["title"], $movietitle) !== false || strpos($movietitle, $hit["title"]) !== false) {
+			$hit["title"] = explode("(", $hit["title"])[0];
+			//echo "wikipediapage: ".$hit["title"]."<br>".$movietitle;
+			if (trim(cleanTitle($hit["title"])) == trim(cleanTitle($movietitle))) {
+				echo "they exactly match";
 				return $hit;
+			} else {
+				echo "<br>they dont exactly match ".$hit["title"]." == ".$movietitle."<br>";
+			}
+		}
+		foreach ($result["query"]["search"] as $hit) {
+			$hit["title"] = explode("(", $hit["title"])[0];
+			//echo "wikipediapage: ".$hit["title"]."<br>".$movietitle;
+			if (strpos($hit["title"], $movietitle) !== false || strpos($movietitle, $hit["title"]) !== false) {
+				echo "they match ish";
+				return $hit;
+			} else {
+				echo "they dont even match ish";
 			}
 		}
 	} else {
@@ -1047,7 +1060,7 @@ function getWikipediaLink($page) {
 	$params = [
 		"action" => "query",
 		"format" => "json",
-		"titles" => $page["title"],
+		"pageids" => $page["pageid"],
 		"prop" => "info",
 		"inprop" => "url|talkid"
 	];
@@ -1062,7 +1075,11 @@ function getWikipediaLink($page) {
 	$result2 = json_decode( $output, true );
 
 	//echo "https://en.wikipedia.org/wiki/".str_replace(" ", "_", $result["parse"]["title"]);
-
+	echo "<div style='white-space:pre-line'>get wikipedia link";
+	print_r($result2);
+	print_r($page);
+	echo "</div>";
+	echo "the actual link:".$result2["query"]["pages"][$page["pageid"]]["fullurl"];
 
 	return $result2["query"]["pages"][$page["pageid"]]["fullurl"];
 
@@ -1268,9 +1285,10 @@ function addLinks($links, $movieid, $linkname = "") {
 		$links = array($links);
 	}
 	foreach ($links AS $l) {
-		$query = "INSERT INTO `link` (`movieid`, `linkname`, `url`, `timestamp`) VALUES ('".$movieid."', $linkname'', '".$l."', CURRENT_TIMESTAMP);";
+		$query = "INSERT INTO `link` (`movieid`, `linkname`, `url`, `timestamp`) VALUES ('".$movieid."', '$linkname', '".$l."', CURRENT_TIMESTAMP);";
 		db_query($query);
 	}
+	echo "save link query: ". $query;
 }
 
 
@@ -1323,7 +1341,7 @@ function getLinks($movieid) {
 function printLinks($links) {
 	$print = "";
 	foreach ($links AS $link) {
-		$print .= "<a style='display:block' class='link' href='".$link["url"]."' data-movie='".$link["movieid"]."'>";
+		$print .= "<a target='_blank' style='display:block' class='link' href='".$link["url"]."' data-movie='".$link["movieid"]."'>";
 		if ($link["linkname"] != "") {
 			$print .= $link["linkname"];
 		} else {
