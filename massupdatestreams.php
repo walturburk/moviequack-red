@@ -12,9 +12,14 @@ foreach ($allmovies AS $mov) {
     $moviesarray[] = $mov["item"];
   }
 
-
+?>
+<div style="white-space:pre-wrap">
+<?php
   print_r($allmovies);
-echo massUpdateStreams($moviesarray);
+  massUpdateStreams($moviesarray);
+?>
+</div>
+<?php
 
 $body = $layout->output();
 echo $foundation->output();

@@ -18,6 +18,12 @@ if (isset($_REQUEST["updateinfo"])) {
 	removeWikiTagsByMovieovie($id);
 }
 
+/*$starttime = time();
+	echo "<br>line:";
+	echo __LINE__;
+	echo "<br>starttime:";
+	echo time()-$starttime;
+	echo "<br>";*/
 
 $movieinfo = db_select("SELECT * FROM  `movie` WHERE  `id` =  '".$id."' LIMIT 1");
 $movie = $movieinfo[0];
@@ -51,6 +57,7 @@ if (!$posterurl) {
 	downloadPosterToDir(basebackdropurl.$movie["backdrop_path"], $backdrop);
 	$posterurl = getPoster($movieid, 3);
 }
+
 
 //$posterurl = checkImage($poster);
 $backdrop = getPoster($movieid, 5);
@@ -111,18 +118,23 @@ print_r( $splittedtext );
 </div>
 <?php
 
+
 if (streamsAreOld($movieid) || isset($_REQUEST["updateinfo"])) {
 	?>
 	<div style="display:none;white-space:pre-wrap">
 	<?php
+	echo "STREAMS ARE OLD";
+
 	$moviearr = $movie;
 	$moviearr["movieid"] = $movieid;
 	//getCineasternaStreams($movietitle, $year);
 	saveStreams($moviearr);
+
 	?>
 	</div>
 	<?php
 }
+
 
 
 
@@ -172,5 +184,7 @@ if ($rating > 0) {
 $content = $t->output();
 $body = $layout->output();
 echo $foundation->output();
+
+
 
 ?>

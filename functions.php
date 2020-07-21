@@ -958,7 +958,11 @@ function downloadPosterToDir($url, $filename = null) {
 	
 	//if source url is set, proceed, otherwise return false
 	if ($url) { 
-		$dir = "/var/www/html/moviequack/img/posters/";
+
+		//get headers and check filesize before attempting download
+		$headers = get_headers($url, true);
+		if ($headers['Content-Length'] > 0) {
+			$dir = "/var/www/html/moviequack/img/posters/";
 	
 		//if filename is set, save as specific file
 		if ($filename) {
@@ -968,6 +972,8 @@ function downloadPosterToDir($url, $filename = null) {
 		}
 	
 		return shell_exec($cmd);
+		}
+		
 
 	} else {
 
@@ -1702,24 +1708,18 @@ function getExternalStreams($title, $year = null)
 
 
 function streamsAreOld($movieid) {
-	$timeago = time() - (60 * 60 * 24 * 7);
+	$timeago = time() - (60 * 60 * 24 * 3);
 
-	$strms = getStreams($movieid);
-	
-	if ($strms) {
-		
-		//echo "<h3>streamtime: ".$strms[0]["timestamp"]." < ".time()." - ".$week."</h3>";
-		if ( $strms[0]["timestamp"] < $timeago ) {
-			//echo "areold";
-			return true;
-		} else {
-			//echo "<h3>streamtime: ".$strms[0]["timestamp"]." < ".time()." - ".$week."</h3>";
-			//echo "WEEKS OLD:".($strms[0]["timestamp"] < time() - $week);
-			return false;
-		}
-	} else {
-		return true;
-	}
+	$sql = "SELECT *
+	FROM  ".dbname.".`stream`
+	LEFT JOIN ".dbname.".provider
+	ON stream.provider = provider.id
+	WHERE stream.movieid = '$movieid' AND timestamp > $timeago 
+	GROUP BY short
+	ORDER BY  `stream`.`timestamp` DESC";
+
+	$streams = db_select($sql);
+	return empty($streams);
 }
 
 function timecodeConvert($time, $unit = "h") {
@@ -1748,7 +1748,7 @@ function timecodeHowLongAgo($time, $unit = "h") {
 }
 
 function massUpdateStreams($movies) {
-	$timeago = time() - (60 * 60 * 24 * 30);
+	$timeago = time() - (60 * 60 * 24 * 14);
 	$sqlpart = implode("' OR m.id = '", $movies);
 
 
@@ -1759,17 +1759,30 @@ function massUpdateStreams($movies) {
 	WHERE (m.id = '".$sqlpart."')
 	AND (s.timestamp < ".$timeago." OR s.timestamp IS NULL)
 	GROUP BY m.id";
-	//echo $sql;
+	echo "<br>".$sql."<br>";
 	$streams = db_select($sql);
+
+	$starttime = time();
+	echo "<br>line:";
+	echo __LINE__;
+	echo "<br>starttime:";
+	echo time()-$starttime;
+	echo "<br>";
 
 	foreach ($streams AS $stream) {
 		echo $stream["movieid"]." ".$stream["title"]." ".$stream["year"]."<br>";
 		saveStreams($stream);
+		echo "<br>line:";
+		echo __LINE__;
+		echo "<br>starttime:";
+		echo time()-$starttime;
+		echo "<br>";
 	}
 	return $sql;
 }
 
 function saveStreams($movie) {
+	echo "saveStreams";
 	$movieid = $movie["movieid"];
 	$title = $movie["title"];
 	$originaltitle = $movie["originaltitle"];
@@ -1806,19 +1819,27 @@ function saveStreams($movie) {
 
 
 	if (matchMovieName($movie, $streams["items"][0]["title"]) && is_array($streams["items"][0]["offers"])) {
-		//echo "Update with new streams";
+		echo "Update with new streams";
 
 		//check if there was an old stream
-		$sql = "SELECT movieid, link FROM stream WHERE movieid = '$movieid' ";
-		$existing_streams = db_select_val($sql, "link");
-		print_r($existing_streams);
-
+		$sql = "SELECT provider, type FROM stream WHERE movieid = '$movieid' ";
+		$exstrms = db_select($sql);
+		$existing_streams = array();
+		$existing_providers = array();
+		foreach ($exstrms AS $strm) {
+			$existing_streams[$strm["provider"]."_".$strm["type"]] = $strm;
+			$existing_providers[$strm["provider"]] = $strm["type"];
+		}
 		/*$query = "DELETE FROM stream WHERE movieid = '$movieid'";
 		db_query($query);*/
+
+		print_r($existing_streams);
 
 		$streams = $streams["items"][0]["offers"];
 
 		$timestamp = time();
+
+		$new_streams = array();
 
 		foreach($streams AS $stream) {
 
@@ -1832,13 +1853,32 @@ function saveStreams($movie) {
 			$cutproviderdate = explode("_", $stream["date_provider_id"]);
 			$dateproviderid = date("Y-m-d", strtotime($cutproviderdate[0]));
 
-			if (!in_array($link, $existing_streams)) { //if stream link does not exist before
+			if (!empty($existing_streams[$provider."_".$type])) { //if stream with same provider already exists and is same type (rent, buy etc) 
 
-				newStreamNotification($movieid, $link, $provider, $type);
-
-			} else { //if stream link already exists, update timestamp to indicate it has been checked
-				$query = "UPDATE `".dbname."`.`stream` SET `timestamp` = ".$timestamp." WHERE link = '".$link."';";
+				echo "<br>stream already exists so just update $type";
+				//DONT SEND NOTIFICATIONS but update timestamp to indicate it has been checked 
+				$query = "UPDATE `".dbname."`.`stream` SET `timestamp` = ".$timestamp." WHERE provider = '".$provider."' AND type = '".$type."' AND movieid = '".$movieid."';";
 				$ret = db_query($query);
+
+			} else if (empty($existing_providers[$provider]) && ($type == "flatrate" || $type == "free")) { //if stream provider didnt exist before, and new stream type is flatrate or free
+				
+				echo "<br>provider stream didnt exist, and type is $type";
+				$new_streams[$provider] = $type; //make notification for this
+				
+			} else if (in_array($type, $existing_providers) || !empty($existing_providers[$provider])) { //if this type (buy, rent etc) already exists or provider exists
+
+				//dont do shit
+				echo "<br>a stream with $type already exist, so dont notify ".in_array($type, $existing_streams);
+
+			} else { //if stream link does not exist before
+				
+				echo "<br>maked a notify of p:$provider t:$type";
+				$new_streams[$provider] = $type; //make notification for this
+
+			}
+
+			if (strlen($link) > 254) { //if its a long assed glitched url, 
+				$link = substr($link, 0, 254); //just cut the fucker by 254 (db column is varchar capped at 255)
 			}
 
 			$query = "INSERT INTO `".dbname."`.`stream`
@@ -1846,10 +1886,19 @@ function saveStreams($movie) {
 				VALUES
 				('$movieid', '$region', '$type', '$provider', '$price', '$currency', '$link', '$def', '$dateproviderid', '$timestamp')
 					";
-				//echo $query."<br>";
+				echo $query."<br>";
 				$ret = db_query($query);
 			
 		}
+
+		if (!empty($new_streams)) {
+			newStreamNotification($movieid, $new_streams);
+		}
+
+		$query = "DELETE FROM stream WHERE movieid = '$movieid' AND timestamp < $timestamp";
+
+		db_query($query);
+		
 
 	} else {
 		//echo "Update empty";
@@ -1872,44 +1921,72 @@ function saveStreams($movie) {
 		VALUES
 		('$movieid', '$region', '$type', '$provider', '$price', '$currency', '$link', '$def', '$dateproviderid', '$timestamp')
 			";
-		//echo $query."<br>";
+		echo $query."<br>";
 		db_query($query);
 
 	}
 
 }
 
-function newStreamNotification($movieid, $link, $providerid, $type) {
+function newStreamNotification($movieid, $new_streams) {
 
 	$sql = "SELECT user.email as email
 	FROM `tag` 
 	LEFT JOIN `user`
 	ON `tag`.`user` = `user`.`username`
 	WHERE movie = '$movieid' AND tag = 'bookmark'";
-	$user = db_select_val($sql, "email");
+	$users = db_select_val($sql, "email");
 
-	$email_to = implode(",", $user);
+	if (!empty($users)) {
+		
 
-	$sql = "SELECT name FROM provider WHERE id = $providerid";
-	$provider = db_select($sql)[0];
+		$sql = "SELECT title FROM movie WHERE id = '".$movieid."'";
+		$movie = db_select($sql)[0];
 
-	$sql = "SELECT title FROM movie WHERE id = '".$movieid."'";
-	$movie = db_select($sql)[0];
+		$sql = "SELECT id, clear FROM provider";
+		$provider = db_select_key_val($sql, "id", "clear");
 
-	$provider["name"] = ucwords($provider["name"]);
-	// the subject 
-	$subject = $movie["title"]." is now available on ".$provider["name"];
-	// the message
-	$msg = $movie["title"]." is now available on ".$provider["name"]."\nLink: ".$link."\n"."Recipients: ".$email_to;
+		$arra = array_intersect_key($provider, $new_streams);
 
-	// use wordwrap() if lines are longer than 70 characters
-	$msg = wordwrap($msg,70);
-	echo "newstreamnot ";
-	echo $msg;
-	$headers = "From: moviequack.com <streams@moviequack.com>";
+		$availableon = implode(", ", $arra);
 
-	// send email
-	return mail("hietanen@gmail.com", $subject, $msg, $headers);
+			// the subject 
+			$subject = $movie["title"]." is now available on ".$availableon;
+			// the message
+			$msg = $movie["title"]." is now available on \n";
+			foreach ($new_streams AS $provider_id => $type) {
+				$msg .= $provider[$provider_id]." ";
+				if ($type == "free") {
+					$msg .= "for free";
+				} else if ($type == "flatrate") {
+					$msg .= "through subscription";
+				} else {
+					$msg .= "to ".$type;
+				}
+				$msg .= "\n";
+			}
+			$msg .= "\nhttps://moviequack.com/movie/".$movieid;
+			
+
+			// use wordwrap() if lines are longer than 70 characters
+			$msg = wordwrap($msg,70);
+			//echo "newstreamnot ";
+			//echo $msg;
+			$headers = "From: moviequack.com <streams@moviequack.com>";
+
+
+
+			foreach ($users as $user) {
+				// send email
+				mail($user, $subject, $msg, $headers);
+			}
+		
+
+		return true;
+	} else {
+		return false;
+	}
+	
 
 }
 
@@ -1920,7 +1997,7 @@ FROM  ".dbname.".`stream`
 LEFT JOIN ".dbname.".provider
 ON stream.provider = provider.id
 WHERE stream.movieid = '$movieid'
-GROUP BY short
+GROUP BY IF(type='flatrate' || type='free', 1, 0), provider
 ORDER BY  `stream`.`price` ASC");
 
 	return $streams;
@@ -1929,7 +2006,7 @@ ORDER BY  `stream`.`price` ASC");
 function printStreams($streams) {
 
 	if (!empty($streams) && $streams[0]["link"]) {
-		//$print = "<h3 class='marginbottom'>This title is available for streaming</h3>";
+		$print = "";//<h3 class='marginbottom'>This title is available for streaming</h3>";
 		foreach ($streams AS $stream) {
 			$print .= "<a href='";
 			$print .= $stream["link"];
@@ -2584,7 +2661,104 @@ function getStreamSites($user, $flatrate = true) {
 }
 
 
+function getFilteredStreamableMovies($user, $tag) {
 
+	
+
+	if (is_array($tag)) {
+		foreach ($tag AS $t) {
+			if (is_array($t)) {
+				$tags[] = $t["tag"];
+			} else {
+				$tags[] = $t;
+			}
+		}
+		$wtag = implode("', '", $tags);
+	} else {
+		$wtag = $tag;
+	}
+
+	if (empty($user) || $user == null) {
+		$wuser = "tag.user != '1'";
+	} else if (is_array($user)) {
+		foreach ($user AS $u) {
+			if (is_array($u)) {
+				$users[] = $u["username"];
+			} else {
+				$users[] = $u;
+			}
+		}
+		$wuser = $users;
+	} else {
+		$wuser = $user;
+		$wuser = "tag.user ='$wuser'";
+	}
+
+	if (is_array($wuser)) {
+		foreach ($wuser as $wu) {
+			$where_sql[] = "SELECT tag.movie AS item 
+		FROM tag 
+		WHERE (tag.user = '$wu') 
+		AND tag.tag IN ('$wtag') 
+		GROUP BY item ";
+		}
+		
+	} else {
+		$where_sql[] = "SELECT tag.movie AS item 
+		FROM tag 
+		WHERE (tag.user = '$wuser') 
+		AND tag.tag IN ('$wtag') 
+		GROUP BY item ";
+	}
+	
+
+$sql = "SELECT s.movieid, s.type, s.provider, po.filename as poster, p.clear 
+FROM ".dbname.".stream AS s 
+LEFT JOIN ".dbname.".movie AS m
+ON s.movieid = m.id
+LEFT JOIN ".dbname.".provider AS p
+ON p.id = s.provider
+LEFT JOIN ".dbname.".poster AS po
+ON po.movieid = m.id AND po.size = 1
+WHERE s.movieid IN (".implode(" ) AND s.movieid IN (", $where_sql).") 
+GROUP BY s.movieid, provider
+";
+
+	//echo $sql;
+	
+	$items = db_select($sql);
+	return $items;
+
+	
+}
+
+
+
+function getStreamableMovies($moviesarray) {
+
+	$where_sql = implode("', '", $moviesarray);		
+
+	$sql = "SELECT s.movieid, s.type, s.provider, po.filename as poster, p.clear 
+	FROM ".dbname.".stream AS s 
+	LEFT JOIN ".dbname.".movie AS m
+	ON s.movieid = m.id
+	LEFT JOIN ".dbname.".provider AS p
+	ON p.id = s.provider
+	LEFT JOIN ".dbname.".poster AS po
+	ON po.movieid = m.id AND po.size = 1
+	WHERE s.movieid IN ('".$where_sql."') 
+	GROUP BY movieid, provider
+	";
+	echo $sql;
+
+	$movies = db_select($sql);
+	
+	return $movies;
+
+}
+
+/*
+old 
 function getStreamableMovies($moviesarray, $tag = "bookmark") {
 
 	$where_sql = implode("', '", $moviesarray);		
@@ -2592,23 +2766,23 @@ function getStreamableMovies($moviesarray, $tag = "bookmark") {
 	$sql = "SELECT s.movieid, s.type, s.provider, po.filename as poster, p.clear 
 	FROM ".dbname.".stream AS s 
 	LEFT JOIN ".dbname.".tag AS t
-	ON t.movie = s.movieid
+	ON t.movie = s.movieid AND t.tag = '".$tag."' AND user = '".$_SESSION["user"]."'
 	LEFT JOIN ".dbname.".movie AS m
 	ON s.movieid = m.id
 	LEFT JOIN ".dbname.".provider AS p
 	ON p.id = s.provider
 	LEFT JOIN ".dbname.".poster AS po
 	ON po.movieid = m.id AND po.size = 1
-	WHERE s.movieid IN ('".$where_sql."') AND t.tag = '".$tag."' 
+	WHERE s.movieid IN ('".$where_sql."') AND t.tag = '".$tag."'
 	GROUP BY movieid, provider
 	";
-	//echo $sql;
+	echo $sql;
 
 	$movies = db_select($sql);
 	
 	return $movies;
 
-}
+}*/
 
 function getStreamableMoviesComplete($moviesarray, $tag = "bookmark") {
 
