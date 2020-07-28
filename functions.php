@@ -892,7 +892,9 @@ if ($err) {
 		$json = file_get_contents($url);
 		//echo "<br>urlwithid:".$url."<br>";
 		
+		
 		$movie = json_decode($json, true);
+		//print_r($movie);
 		$movie = array_change_key_case($movie, CASE_LOWER);
 		$printablemovie = $movie;
 		//addPoster($movie["poster"]);
@@ -908,7 +910,17 @@ if ($err) {
 		}
 
 		$expdate = explode("-", $movie["release_date"]);
-		$year = $expdate[0];
+		
+		if ($expdate[0] > 0) {
+			$year = $expdate[0];
+		} else {
+			$year = 0000;
+		}
+		if (!$movie["release_date"]) {
+			$movie["release_date"] = "null";
+		} else {
+			$movie["release_date"] = "'".$movie["release_date"]."'";
+		}
 		$searcht = $movie["title"]." ".$movie["original_title"];
 		$searchstring = iconv('UTF-8', 'ASCII//TRANSLIT', $searcht);//strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $searcht));
 
@@ -919,12 +931,14 @@ if ($err) {
 			(`id`, `title`, `originaltitle`, `year`, `releasedate`, `backdrop`, `budget`, `homepage`,
 				`imdbid`, `language`, `overview`, `poster`, `revenue`, `runtime`, `status`, `tagline`, `tmdbid`, `searchstring`)
 				VALUES
-				('".$mqid."', '".$movie["title"]."', '".$movie["original_title"]."', '".$year."', '".$movie["release_date"]."',
+				('".$mqid."', '".$movie["title"]."', '".$movie["original_title"]."', ".$year.", ".$movie["release_date"].",
 				'".$movie["backdrop_path"]."', '".$movie["budget"]."', '".$movie["homepage"]."', '".$movie["imdb_id"]."',
 				'".$movie["original_language"]."', '".$movie["overview"]."', '".$movie["poster_path"]."',
 				'".$movie["revenue"]."', '".$movie["runtime"]."', '".$movie["status"]."', '".$movie["tagline"]."', '".$movie["id"]."', '".$searchstring."');";
 
 			db_query($query);
+
+			//echo "insaql:".$query; 
 
 			$thumb = $movie["poster_path"]."_thumb";
 			$poster = $movie["poster_path"]."_poster";
@@ -1002,16 +1016,21 @@ function getPoster($movieid, $size) {
 	
 }
 
-//enter movietitle and movieyear as params
-function getWikipediaPage($movietitle, $movieyear) {
-	$searchPage = "prometheus 2012 film";
-	$searchPage = $movietitle." ".$movieyear." film";
+//enter movie array and movieyear as params
+function getWikipediaPage($movie) {
+
+	$movietitle = cleanTitle($movie["title"]);
+	$movieyear = $movie["year"];
+	$origtitle = $movie["originaltitle"];
+
+	// searchstring will be formatted as such "prometheus 2012 film";
+	$searchstring = $origtitle." ".$movieyear." film";
 
 	$endPoint = "https://en.wikipedia.org/w/api.php";
 	$params = [
 		"action" => "query",
 		"list" => "search",
-		"srsearch" => $searchPage,
+		"srsearch" => $searchstring,
 		"format" => "json"
 	];
 
@@ -1025,25 +1044,82 @@ function getWikipediaPage($movietitle, $movieyear) {
 	$result = json_decode( $output, true );
 
 
+	//check if first result has a pageid i.e. if atleast one page was returned
+    if ($result["query"]["search"][0]["pageid"] > 0) {
+        //loop through all results
+        foreach ($result["query"]["search"] as $hit) {
+            //remove the parenthesis with year at the end of the page title "Prometheus (2012 film)" -> "Prometheus"
+            $hit["title"] = explode("(", $hit["title"])[0];
+            //echo "wikipediapage: ".$hit["title"]."<br>".$movietitle;
+
+                $imdbid = getImdbIdFromWiki($hit);
+				echo "<br> imdbid is:".$movie["imdbid"]." == ".$imdbid;
+				print_r($hit);
+                
+                if (strpos($imdbid, $movie["imdbid"])) {
+                    return $hit; //return if exact match
+                }
+
+        }
+	}
+	
+	// searchstring will be formatted as such "prometheus 2012 film";
+	$searchstring = $movietitle." ".$movieyear." film";
+
+	$endPoint = "https://en.wikipedia.org/w/api.php";
+	$params = [
+		"action" => "query",
+		"list" => "search",
+		"srsearch" => $searchstring,
+		"format" => "json"
+	];
+
+	$url = $endPoint . "?" . http_build_query( $params );
+
+	$ch = curl_init( $url );
+	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+	$output = curl_exec( $ch );
+	curl_close( $ch );
+
+	$result = json_decode( $output, true );
+
+
+	//check if first result has a pageid i.e. if atleast one page was returned
 	if ($result["query"]["search"][0]["pageid"] > 0) {
+		//loop through all results
 		foreach ($result["query"]["search"] as $hit) {
+			//remove the parenthesis with year at the end of the page title "Prometheus (2012 film)" -> "Prometheus"
 			$hit["title"] = explode("(", $hit["title"])[0];
 			//echo "wikipediapage: ".$hit["title"]."<br>".$movietitle;
+
+			//compare for exact match, first trim beginning and end of string and normalize/clean up title from special characters 
 			if (trim(cleanTitle($hit["title"])) == trim(cleanTitle($movietitle))) {
-				echo "they exactly match";
-				return $hit;
+				echo "t<br>hey exactly match";
+				$imdbid = getImdbIdFromWiki($hit);
+				echo "<br>imdbid is:".$movie["imdbid"]." == ".$imdbid;
+				
+				if (!$imdbid || strpos($imdbid, $movie["imdbid"])) {
+					return $hit; //return if exact match
+				}
 			} else {
 				echo "<br>they dont exactly match ".$hit["title"]." == ".$movietitle."<br>";
 			}
 		}
+
+		//if there was no exact match this loop will be executed too
+		//loop through results and check for partial matches om titles
 		foreach ($result["query"]["search"] as $hit) {
 			$hit["title"] = explode("(", $hit["title"])[0];
 			//echo "wikipediapage: ".$hit["title"]."<br>".$movietitle;
 			if (strpos($hit["title"], $movietitle) !== false || strpos($movietitle, $hit["title"]) !== false) {
-				echo "they match ish";
-				return $hit;
+				echo "<br>they match ish";
+				$imdbid = getImdbIdFromWiki($hit);
+				echo " imdbid is:".$movie["imdbid"]." == ".$imdbid;
+				if (!$imdbid || strpos($imdbid, $movie["imdbid"])) {
+					return $hit; //return if exact match
+				}
 			} else {
-				echo "they dont even match ish";
+				echo "<br>they dont even kindof match";
 			}
 		}
 	} else {
@@ -1051,6 +1127,32 @@ function getWikipediaPage($movietitle, $movieyear) {
 		//die ("No page id found from search");
 		return false;
 	}
+}
+
+function getImdbIdFromWiki($page) {
+	$endPoint = "https://en.wikipedia.org/w/api.php";
+	$params = [
+		"action" => "query",
+		"format" => "json",
+		"pageids" => $page["pageid"],
+		"prop" => "extlinks"
+	];
+
+	$url = $endPoint . "?" . http_build_query( $params );
+
+	$ch = curl_init( $url );
+	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+	$output = curl_exec( $ch );
+	curl_close( $ch );
+
+	$result = json_decode( $output, true );
+
+	foreach ($result["query"]["pages"][$page["pageid"]]["extlinks"] as $extlink) {
+		if (strpos($extlink["*"], "imdb.com/")) {
+			return $extlink["*"];
+		}
+	}
+	return false;
 }
 
 //use the result from getWikipediaPage() as parameter for this function
@@ -1075,11 +1177,11 @@ function getWikipediaLink($page) {
 	$result2 = json_decode( $output, true );
 
 	//echo "https://en.wikipedia.org/wiki/".str_replace(" ", "_", $result["parse"]["title"]);
-	echo "<div style='white-space:pre-line'>get wikipedia link";
+	/*echo "<div style='white-space:pre-line'>get wikipedia link";
 	print_r($result2);
 	print_r($page);
 	echo "</div>";
-	echo "the actual link:".$result2["query"]["pages"][$page["pageid"]]["fullurl"];
+	echo "the actual link:".$result2["query"]["pages"][$page["pageid"]]["fullurl"];*/
 
 	return $result2["query"]["pages"][$page["pageid"]]["fullurl"];
 
@@ -1092,7 +1194,7 @@ function getWikipediaSections($page) {
 	$params = [
 		"action" => "parse",
 		"format" => "json",
-		"page" => $page["title"], 
+		"pageid" => $page["pageid"], 
 		"prop" => "sections"
 	]; 
 	//?action=parse&page=Manual:Extensions&prop=sections
@@ -1106,7 +1208,6 @@ function getWikipediaSections($page) {
 
 	$result = json_decode( $output, true );
 
-	//echo "https://en.wikipedia.org/wiki/".str_replace(" ", "_", $result["parse"]["title"]);
 
 
 	return $result["parse"]["sections"];
@@ -1130,7 +1231,7 @@ function getWikipediaTextFromSection($page, $section) {
 	$params = [
 		"action" => "parse",
 		"format" => "json",
-		"page" => $page["title"], 
+		"pageid" => $page["pageid"], 
 		"prop" => "wikitext",
 		"section" => $section,
 		"disabletoc" => "1"
@@ -1168,6 +1269,36 @@ $text = strtr( $text, $unwanted_array );
 
 	$array = explode(" ", $text);
 	return $array;
+}
+
+function addPlotTextToTags($page, $movieid) {
+echo "addPlotTextToTags";
+print_r($page);
+	$sections = getWikipediaSections($page);
+
+	$sectionid = 1;
+
+	print_r($sections);
+	foreach ($sections AS $id => $section) {
+		if (cleanTitle($section["line"]) == "plot" || cleanTitle($section["line"]) == "premise") {
+			echo "SECTIONID:".print_r($section);
+			$sectionid = $section["index"];
+		} else {
+			echo $section["line"];
+		}
+	}
+
+	$section_text = getWikipediaTextFromSection($page, $sectionid);
+print_r($section_text);
+	$splittedtext = splitWikitext($section_text);
+print_r($splittedtext);
+	$words = getFilteredWords();
+
+	$tagstoadd = array_udiff($splittedtext, $words, "strcasecmp"); //filters out all $words from the wikipedia wordsc
+
+
+
+	return addTag($movieid, $tagstoadd, "wikiplot");
 }
 
 function getFilteredWords() {
@@ -1288,7 +1419,7 @@ function addLinks($links, $movieid, $linkname = "") {
 		$query = "INSERT INTO `link` (`movieid`, `linkname`, `url`, `timestamp`) VALUES ('".$movieid."', '$linkname', '".$l."', CURRENT_TIMESTAMP);";
 		db_query($query);
 	}
-	echo "save link query: ". $query;
+	//echo "save link query: ". $query;
 }
 
 
@@ -1322,7 +1453,7 @@ function removeTag($movie, $tag) {
 	return db_query($sql);
 }
 
-function removeWikiTagsByMovieovie ($movie) {
+function removeWikiTagsByMovie ($movie) {
 	$user = $_SESSION["user"];
 	$sql = "DELETE FROM  `".dbname."`.`tag` WHERE  `tag`.`user` =  'wikiplot' AND  `tag`.`movie` =  '".$movie."'";
 	return db_query($sql);
@@ -1554,6 +1685,89 @@ function printTagActive($tag) {
 	}
 }
 
+function getStreamsFromGoogle($title, $year, $site = "any") {
+	//api key: AIzaSyAyaAwVTlkpwwTNHDn5Z7Xj6cNlOgsoTjU
+}
+
+function getViaplayStreams($title, $imdbid)
+{
+	//https://content.viaplay.se/pcdash-se/search?query=den%20skyldige
+	
+    $data = array("variables" => array("queryString" => $title));//"query" => $title, "release_year_from" => $year, "release_year_until" => $year);
+	$data_string = json_encode($data);
+
+	//get a list of titles https://backend.cineasterna.com/library/title/get_selected_titles?library_id=6&num_titles=10
+	$url = 'https://content.viaplay.se/pcdash-se/search?query='.urlencode($title).'';
+	
+	// create curl resource
+	$ch = curl_init();
+
+	// set url
+	curl_setopt($ch, CURLOPT_URL, $url);
+
+	//return the transfer as a string
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+	//problem with user agent
+	curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)');
+	curl_setopt($ch, CURLOPT_REFERER, 'https://www.moviequack.com/');
+
+	// $output contains the output string
+	$resultc = curl_exec($ch);
+
+	// close curl resource to free up system resources
+	curl_close($ch);      
+
+
+
+	
+	$result = json_decode($resultc, true);
+	$searchresults = $result["_embedded"]["viaplay:blocks"][0]["_embedded"]["viaplay:products"];
+	
+	$viaplayflatrate = "https://viaplay.se/film/";
+	$viaplaybuy = "https://viaplay.se/store/";
+	print_r($searchresults);
+	$ret = false;
+	foreach ($searchresults as $hit) {
+		if ($hit["content"]["imdb"]["id"] == $imdbid) {
+			
+			$type = "flatrate";
+			$price = 0;
+			$viaplaybasepath = $viaplayflatrate;
+			if ($hit["system"]["availability"]["planInfo"]["isRental"] || $hit["system"]["availability"]["planInfo"]["isPurchase"]) {
+				foreach ($hit["system"]["availability"] as $vod) {
+				
+					if ($vod["planInfo"]["isPurchase"]) {
+						$type = "buy";
+						$price = $vod["planInfo"]["price"];
+						$time = $vod["start"];
+						$viaplaybasepath = $viaplaybuy;
+					} else if ($vod["planInfo"]["isRental"]) {
+						$type = "rent";
+						$price = $vod["planInfo"]["price"];
+						$time = $vod["start"];
+						$viaplaybasepath = $viaplaybuy;
+					}
+				}
+			}
+			
+			
+		$stream = array();
+		$stream["monetization_type"] = $type;
+		$stream["provider_id"] = 76;
+		$stream["retail_price"] = $price;
+		$stream["currency"] = "SEK";
+		$stream["urls"]["standard_web"] = $viaplaybasepath.$hit["publicPath"];
+		$stream["presentation_type"] = "HD";
+		$stream["date_provider_id"] = $time."_timestamp";
+		
+
+		}
+		
+	}
+	return $stream;
+}
+
 function getCineasternaStreams($title, $year = null)
 {
 
@@ -1594,10 +1808,10 @@ function getCineasternaStreams($title, $year = null)
 	
 	$streams = $result["titles"][0];
 
-	$cleanstreamtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $streams["name_en"]));
-	$cleanstreamtitleswe = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $streams["name"]));
+	$cleanstreamtitle = cleanTitle($streams["name_en"]);
+	$cleanstreamtitleswe = cleanTitle($streams["name"]);
 	
-	$cleandbtitle = strtolower(preg_replace('/[^a-zA-Z0-9-_\.]/','', $title));
+	$cleandbtitle = cleanTitle($title);
 
 	if (strpos($streams["release_date"], "".$year) > -1 && ($cleandbtitle == $cleanstreamtitle || $cleandbtitle == $cleanstreamtitleswe)) {
 		
@@ -1806,7 +2020,10 @@ function saveStreams($movie) {
 	$originaltitle = $movie["originaltitle"];
 	$year = $movie["year"];
 	
-	$streams = getExternalStreams($title, $year);
+	$justwatchstreams = getExternalStreams($title, $year);
+	if (matchMovieName($movie, $justwatchstreams["items"][0]["title"])) {
+		$streams = $justwatchstreams;
+	}
 
 	$svtplaystream = getSvtPlayStreams($title, $year); //fetch streams by default movie title
 	
@@ -1835,8 +2052,12 @@ function saveStreams($movie) {
 		$streams["items"][0]["offers"][] = $cineasternastream;
 	}
 
+	$viaplaystream = getViaplayStreams($originaltitle, $movie["imdbid"]);
+	if ($viaplaystream) {
+		$streams["items"][0]["offers"][] = $viaplaystream;
+	}
 
-	if (matchMovieName($movie, $streams["items"][0]["title"]) && is_array($streams["items"][0]["offers"])) {
+	if (is_array($streams["items"][0]["offers"])) {
 		echo "Update with new streams";
 
 		//check if there was an old stream
@@ -1919,7 +2140,7 @@ function saveStreams($movie) {
 		
 
 	} else {
-		//echo "Update empty";
+		echo "Streammovie dont match, delete streams ".print_r($movie, true)." == ".$streams["items"][0]["title"]." = ". matchMovieName($movie, $streams["items"][0]["title"]);
 		$query = "DELETE FROM stream WHERE movieid = '$movieid'";
 
 		db_query($query);

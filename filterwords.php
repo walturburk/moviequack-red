@@ -29,7 +29,8 @@ echo $foundation->output();
 
 if (isset($_REQUEST["getallplots"])) {
 
-    $movieinfo = db_select("SELECT m.id, m.title, m.year FROM  `movie` as m 
+    $movieinfo = db_select("SELECT m.id, m.title, m.year, m.imdbid 
+    FROM  `movie` as m 
     LEFT JOIN link AS l
     ON m.id = l.movieid
     WHERE url IS NULL");
@@ -41,7 +42,7 @@ if (isset($_REQUEST["getallplots"])) {
         $year = $movie["year"];
         $movieid = $movie["id"];
 
-        $page = getWikipediaPage($movietitle, $year);
+        $page = getWikipediaPage($movie);
         $link = getWikipediaLink($page);
         addLinks($link, $movieid);
         $sections = getWikipediaSections($page);

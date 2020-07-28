@@ -15,7 +15,7 @@ $id = $_REQUEST["id"];
 
 if (isset($_REQUEST["updateinfo"])) {
 	removeMovie($id);
-	removeWikiTagsByMovieovie($id);
+	removeWikiTagsByMovie($id);
 }
 
 /*$starttime = time();
@@ -45,6 +45,7 @@ $movietitle = $movie["title"];
 $originaltitle = $movie["originaltitle"];
 $year = $movie["year"];
 $posterurl = getPoster($movieid, 3);
+$imdbid = $movie["imdbid"];
 if (!$posterurl) {
 	$thumb = $movie["poster"]."_thumb";
 	$poster = $movie["poster"]."_poster";
@@ -75,48 +76,27 @@ $runtime = $movie["runtime"];
 
 $plot = $movie["overview"];
 
-
-
-if (isset($_REQUEST["updateinfo"]) || $newmovie==true) {
-	
-	$page = getWikipediaPage($movietitle, $year);
-	$link = getWikipediaLink($page);
-	addLinks($link, $movieid, "Wikipedia");
-	$sections = getWikipediaSections($page);
-
-	$sectionid = 1;
-
-	foreach ($sections AS $id => $section) {
-		if ($section["line"] == "Plot" || $section["line"] == "Premise") {
-			//echo "SECTIONID:".print_r($section);
-			$sectionid = $section["index"];
-		} else {
-			//echo $section["line"];
-		}
-	}
-
-	$section_text = getWikipediaTextFromSection($page, $sectionid);
-//print_r($section_text);
-	$splittedtext = splitWikitext($section_text);
-//print_r($splittedtext);
-	$words = getFilteredWords();
-
-	$tagstoadd = array_udiff($splittedtext, $words, "strcasecmp"); //filters out all $words from the wikipedia wordsc
-
-
-
-	addTag($movieid, $tagstoadd, "wikiplot");
-}
-
-
 ?>
 <div style="display:none;white-space:pre-wrap">
 <?php
+
+print_r(getViaplayStreams($originaltitle, $imdbid));
+
+if (isset($_REQUEST["updateinfo"]) || $newmovie==true) {
+	
+	$page = getWikipediaPage($movie);
+	$link = getWikipediaLink($page);
+	addLinks($link, $movieid, "Wikipedia");
+	addPlotTextToTags($page, $movieid);
+
+	
+}
+
+
+
 //print_r($sections);
-print_r( $splittedtext );
-?>
-</div>
-<?php
+//print_r( $splittedtext );
+
 
 
 if (streamsAreOld($movieid) || isset($_REQUEST["updateinfo"])) {
@@ -135,7 +115,9 @@ if (streamsAreOld($movieid) || isset($_REQUEST["updateinfo"])) {
 	<?php
 }
 
-
+?>
+</div>
+<?php
 
 
 $upvoteactive = getVotebtnActive($movieid, true);
