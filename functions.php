@@ -1686,7 +1686,8 @@ function printTagActive($tag) {
 }
 
 function getStreamsFromGoogle($title, $year, $site = "any") {
-	//api key: AIzaSyAyaAwVTlkpwwTNHDn5Z7Xj6cNlOgsoTjU
+	//api key: AIzaSyAyaAwVTlkpww
+	//TNHDn5Z7Xj6cNlOgsoTjU
 }
 
 function getViaplayStreams($title, $imdbid)
