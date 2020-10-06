@@ -1727,7 +1727,7 @@ function getViaplayStreams($title, $imdbid)
 	
 	$viaplayflatrate = "https://viaplay.se/film/";
 	$viaplaybuy = "https://viaplay.se/store/";
-	print_r($searchresults);
+	
 	$ret = false;
 	foreach ($searchresults as $hit) {
 		if ($hit["content"]["imdb"]["id"] == $imdbid) {
@@ -1738,36 +1738,43 @@ function getViaplayStreams($title, $imdbid)
 			if ($hit["system"]["availability"]["planInfo"]["isRental"] || $hit["system"]["availability"]["planInfo"]["isPurchase"]) {
 				foreach ($hit["system"]["availability"] as $vod) {
 				
-					if ($vod["planInfo"]["isPurchase"]) {
+					if ($vod["planInfo"]["isPurchase"] && empty($streamsarr["buy"])) {
 						$type = "buy";
 						$price = $vod["planInfo"]["price"];
 						$time = $vod["start"];
 						$viaplaybasepath = $viaplaybuy;
-					} else if ($vod["planInfo"]["isRental"]) {
+					} else if ($vod["planInfo"]["isRental"] && empty($streamsarr["rent"])) {
 						$type = "rent";
 						$price = $vod["planInfo"]["price"];
 						$time = $vod["start"];
 						$viaplaybasepath = $viaplaybuy;
 					}
+
+					$stream = array();
+					$stream["monetization_type"] = $type;
+					$stream["provider_id"] = 76;
+					$stream["retail_price"] = $price;
+					$stream["currency"] = "SEK";
+					$stream["urls"]["standard_web"] = $viaplaybasepath.$hit["publicPath"];
+					$stream["presentation_type"] = "HD";
+					$stream["date_provider_id"] = $time."_timestamp";
+					
+					$streamsarr[$type] = $stream;
+
 				}
 			}
+
 			
-			
-		$stream = array();
-		$stream["monetization_type"] = $type;
-		$stream["provider_id"] = 76;
-		$stream["retail_price"] = $price;
-		$stream["currency"] = "SEK";
-		$stream["urls"]["standard_web"] = $viaplaybasepath.$hit["publicPath"];
-		$stream["presentation_type"] = "HD";
-		$stream["date_provider_id"] = $time."_timestamp";
 		
 
 		}
 		
 	}
-	return $stream;
+	print_r($streamsarr);
+	return $streamsarr;
 }
+
+
 
 function getCineasternaStreams($title, $year = null)
 {
@@ -2055,7 +2062,10 @@ function saveStreams($movie) {
 
 	$viaplaystream = getViaplayStreams($originaltitle, $movie["imdbid"]);
 	if ($viaplaystream) {
-		$streams["items"][0]["offers"][] = $viaplaystream;
+		foreach ($viaplaystream as $vps) {
+			$streams["items"][0]["offers"][] = $vps;
+		}
+		
 	}
 
 	if (is_array($streams["items"][0]["offers"])) {
