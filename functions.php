@@ -1825,7 +1825,7 @@ function getCineasternaStreams($title, $year = null)
 		
 		$stream = array();
 		$stream["monetization_type"] = "free";
-		$stream["provider_id"] = 902;
+		$stream["provider_id"] = 496;
 		$stream["retail_price"] = 0;
 		$stream["currency"] = "SEK";
 		$stream["urls"]["standard_web"] = "https://www.cineasterna.com/sv/library/".$library_id."/title/".$streams["id"];
