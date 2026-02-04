@@ -1006,7 +1006,7 @@ function addPoster($movieid, $filename, $size) {
 }
 
 function getPoster($movieid, $size) {
-	$dir = "/img/posters/";
+	$dir = "/img/posters";
 	$posters = db_select("SELECT filename FROM `poster` WHERE movieid = '".$movieid."' AND size = ".$size);
 	if ($posters) {
 		return $dir.$posters[0]["filename"];
