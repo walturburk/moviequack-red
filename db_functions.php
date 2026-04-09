@@ -90,6 +90,9 @@ function getConfig($config = null) {
       if (!$config) {
         $config = parse_ini_file(__DIR__ . "/../config-live.ini");
       }
+      if (!$config) {
+        $config = parse_ini_file("/var/www/config-live.ini");
+      }
       $config["baseurl"] = "https://" . $_SERVER['SERVER_NAME'] ;
     }
   }
