@@ -2,6 +2,11 @@ RewriteEngine on
 
 RewriteEngine On
 RewriteBase /
+
+# ── REST API v1 ───────────────────────────────────────────────────────────────
+# Route all /api/v1/* requests to the single router entry point.
+RewriteRule ^api/v1/(.*)$ api/v1/index.php [QSA,L]
+# ─────────────────────────────────────────────────────────────────────────────
 RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
 RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
 

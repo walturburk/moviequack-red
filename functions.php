@@ -11,6 +11,8 @@ if ($_SESSION["loggedin"]) {
 } else if (strpos($_SERVER['REQUEST_URI'], "login") > 0) {
 } else if (strpos($_SERVER['REQUEST_URI'], "join") > 0 && isset($_REQUEST["inv"])) {
 } else if (strpos($_SERVER['REQUEST_URI'], "massupdatestreams") > 0) {
+} else if (strpos($_SERVER['REQUEST_URI'], '/api/') !== false) {
+	// REST API requests — authentication is handled via JWT in api/v1/base.php
 } else {
 	header("Location: /welcome");
 }
