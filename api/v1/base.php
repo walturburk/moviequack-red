@@ -23,19 +23,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 // ── Response helpers ──────────────────────────────────────────────────────────
 
-function respond(array $data, int $status = 200): void {
+function respond($data, $status = 200) {
     http_response_code($status);
     echo json_encode($data);
     exit;
 }
 
-function respond_error(string $message, int $status = 400): void {
+function respond_error($message, $status = 400) {
     respond(['error' => $message], $status);
 }
 
 // ── Request helpers ───────────────────────────────────────────────────────────
 
-function request_body(): array {
+function request_body() {
     $raw = file_get_contents('php://input');
     $json = json_decode($raw, true);
     if (is_array($json)) {
@@ -45,7 +45,7 @@ function request_body(): array {
     return $_REQUEST;
 }
 
-function method(): string {
+function method() {
     return $_SERVER['REQUEST_METHOD'];
 }
 
@@ -57,7 +57,7 @@ function method(): string {
  *
  * Returns the username string on success, or calls respond_error + exit on failure.
  */
-function require_auth(): string {
+function require_auth() {
     $header = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
 
     // Some PHP setups expose it via a different key
@@ -87,7 +87,7 @@ function require_auth(): string {
 /**
  * Like require_auth() but returns null instead of halting for optional auth.
  */
-function optional_auth(): ?string {
+function optional_auth() {
     $header = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
     if (!$header && function_exists('apache_request_headers')) {
         $headers = apache_request_headers();
