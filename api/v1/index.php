@@ -4,6 +4,22 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Debug log — remove when fixed
+$_log = fopen('/tmp/api_debug.log', 'a');
+fwrite($_log, "\n--- " . date('H:i:s') . " ---\n");
+fwrite($_log, "URI: " . $_SERVER['REQUEST_URI'] . "\n");
+fwrite($_log, "METHOD: " . $_SERVER['REQUEST_METHOD'] . "\n");
+fwrite($_log, "PHP: " . phpversion() . "\n");
+
+register_shutdown_function(function() {
+    global $_log;
+    $err = error_get_last();
+    if ($err) {
+        fwrite($_log, "FATAL: " . $err['message'] . " in " . $err['file'] . " line " . $err['line'] . "\n");
+    }
+    fclose($_log);
+});
+
 /**
  * MovieQuack REST API v1 — entry point / router
  *
@@ -36,11 +52,14 @@ set_exception_handler(function($e) {
 });
 
 // Bootstrap: session + db + app functions
+fwrite($_log, "Loading db_functions.php\n");
 require_once __DIR__ . '/../../db_functions.php';
+fwrite($_log, "Loading functions.php\n");
 require_once __DIR__ . '/../../functions.php';
-
+fwrite($_log, "Loading base.php\n");
 // API utilities (CORS headers sent here, preflight handled here)
 require_once __DIR__ . '/base.php';
+fwrite($_log, "Bootstrap done, resource: ");
 
 // Parse path segments after /api/v1/
 $uri      = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -52,7 +71,8 @@ if (strpos($uri, $base) === 0) {
 $relative = trim($relative, '/');
 $segments = $relative !== '' ? explode('/', $relative) : [];
 
-$resource = $segments[0] ?? '';
+$resource = isset($segments[0]) ? $segments[0] : '';
+fwrite($_log, $resource . "\n");
 
 switch ($resource) {
     case 'auth':
