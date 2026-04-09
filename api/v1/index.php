@@ -40,9 +40,17 @@ register_shutdown_function(function() {
  */
 
 set_error_handler(function($errno, $errstr, $errfile, $errline) {
-    header('Content-Type: application/json');
-    echo json_encode(array('error' => 'PHP error', 'errno' => $errno, 'message' => $errstr, 'file' => $errfile, 'line' => $errline));
-    exit(1);
+    global $_log;
+    // Only halt on fatal-level errors; log notices/warnings and continue
+    if ($errno & (E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR)) {
+        header('Content-Type: application/json');
+        echo json_encode(array('error' => 'PHP error', 'errno' => $errno, 'message' => $errstr, 'file' => $errfile, 'line' => $errline));
+        exit(1);
+    }
+    if (isset($_log)) {
+        fwrite($_log, "WARNING($errno): $errstr in $errfile line $errline\n");
+    }
+    return true;
 });
 
 set_exception_handler(function($e) {
