@@ -3001,16 +3001,15 @@ function getStreamableMovies($moviesarray) {
 	WHERE s.movieid IN ('".$where_sql."') 
 	GROUP BY movieid, provider
 	";
-	echo $sql;
 
 	$movies = db_select($sql);
-	
+
 	return $movies;
 
 }
 
 /*
-old 
+old
 function getStreamableMovies($moviesarray, $tag = "bookmark") {
 
 	$where_sql = implode("', '", $moviesarray);		
