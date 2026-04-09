@@ -1,7 +1,14 @@
-RewriteEngine on
-
 RewriteEngine On
-RewriteBase /
+RewriteBase /moviequack-dev/
+
+# CORS — allow all origins (dev only)
+Header always set Access-Control-Allow-Origin "*"
+Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+Header always set Access-Control-Allow-Headers "Authorization, Content-Type"
+
+# Handle preflight without hitting PHP
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^ - [R=204,L]
 
 # ── REST API v1 ───────────────────────────────────────────────────────────────
 # Route all /api/v1/* requests to the single router entry point.
