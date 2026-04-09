@@ -62,7 +62,7 @@ $ss = [
 ];
 
 foreach ($ss as $key => $group) {
-    usort($ss[$key], fn($a, $b) => $b['count'] <=> $a['count']);
+    usort($ss[$key], function($a, $b) { return $b['count'] - $a['count']; });
 }
 
 respond($ss);
