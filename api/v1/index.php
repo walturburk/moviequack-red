@@ -1,5 +1,9 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 /**
  * MovieQuack REST API v1 — entry point / router
  *
@@ -18,6 +22,18 @@
  *   /api/v1/buffet        → buffet.php
  *   /api/v1/list          → list.php
  */
+
+set_error_handler(function($errno, $errstr, $errfile, $errline) {
+    header('Content-Type: application/json');
+    echo json_encode(array('error' => 'PHP error', 'errno' => $errno, 'message' => $errstr, 'file' => $errfile, 'line' => $errline));
+    exit(1);
+});
+
+set_exception_handler(function($e) {
+    header('Content-Type: application/json');
+    echo json_encode(array('error' => 'Uncaught exception', 'message' => $e->getMessage(), 'file' => $e->getFile(), 'line' => $e->getLine()));
+    exit(1);
+});
 
 // Bootstrap: session + db + app functions
 require_once __DIR__ . '/../../db_functions.php';
