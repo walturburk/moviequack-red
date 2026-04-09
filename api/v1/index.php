@@ -71,10 +71,11 @@ fwrite($_log, "Bootstrap done, resource: ");
 
 // Parse path segments after /api/v1/
 $uri      = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$base     = '/api/v1/';
 $relative = '';
-if (strpos($uri, $base) === 0) {
-    $relative = substr($uri, strlen($base));
+// Strip any leading path prefix up to and including /api/v1/
+$apiPos = strpos($uri, '/api/v1/');
+if ($apiPos !== false) {
+    $relative = substr($uri, $apiPos + strlen('/api/v1/'));
 }
 $relative = trim($relative, '/');
 $segments = $relative !== '' ? explode('/', $relative) : [];
